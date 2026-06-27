@@ -1,13 +1,25 @@
-<div class="lg:bg-white p-6 lg:p-15 rounded-xl lg:shadow-sm">
-  <div class="lg:text-center py-6">
-    <h2 class="text-headline-lg font-semibold text-seconder-800 ">Welcome Back</h2>
-    <p class="text-seconder-500 font-[400]">Please enter your details to access your workspace</p>
+<div class="lg:bg-white p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F]">
+ <app-header-auth [title]="'Welcome Back'" [text]="'Please enter your details to access your workspace'"></app-header-auth>
+  <div class="pb-4">
+    <form  class="flex flex-col gap-6">
+       <!-- email -->
+         <app-rusable-input [type]="'email'" [placholder]="'yourname@company.com'" [label]="'email'" [id]="'email'">
+         </app-rusable-input>
+        <!-- password -->
+          <app-rusable-input [type]="'password'" [placholder]="'yourname@company.com'" [label]="'Password'" [id]="'password'">
+      
+          </app-rusable-input>
+          <!-- Button -->
+        <div>
+
+         <button class="btn-Primary  bg-linear-to-r from-primary to-primary-container w-full">Create Account</button>
+        </div>
+    </form>
+<div class="mt-3">
+    <p class="pt-8 text-center text-[14px] leading-5 tracking-normal"><span class="satuld ">Don't have an account? ? </span>
+        <a class="text-primary font-semibold" routerLink="/sign-up">Sign Up</a></p>
+</div>
   </div>
-  <form action="">
-      <app-rusable-input [type]="'text'" [placholder]="'Enter your full name'" [label]="'Name'"></app-rusable-input>
-
-
-  </form>
 </div>
 
 

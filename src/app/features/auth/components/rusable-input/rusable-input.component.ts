@@ -42,4 +42,12 @@ onInput(event: Event): void {
   this.onTouched();
 }
 
+  flag = true;
+  toggle() {
+    if (this.id == 'password' || this.id == 'rePassword') {
+      this.flag = !this.flag;
+      this.type = this.flag ? 'password' : 'text';
+    }
+  }
+
 }

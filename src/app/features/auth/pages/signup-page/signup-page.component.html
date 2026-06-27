@@ -1,1 +1,53 @@
-<p>signup-page works!</p>
+<div class="lg:bg-white p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F]">
+ <app-header-auth [title]="'Create your workspace'" [text]="'Join the editorial approach to task management.'"></app-header-auth>
+  <div class="pb-4">
+    <form  class="flex flex-col gap-6" [formGroup]="signUpForm" (ngSubmit)="signUP()">
+        <!-- name -->
+           <div formGroupName="data">
+            
+           </div>
+           <div formGroupName="data">
+               <app-rusable-input [type]="'text'" [placholder]="'Enter your full name'" [label]="'Name'" [id]="'name'"
+                [control]="signUpForm.get('name')" formControlName="name"> </app-rusable-input>
+               <!-- email -->
+                 <!-- job title -->
+              <app-rusable-input [type]="'text'" [placholder]="'e.g. Project Manager'" [label]="'Job Title (Optional)'" 
+              [control]="signUpForm.get('job_title')" formControlName="job_title"
+              [id]="'jobTitle'">
+       
+           </app-rusable-input>
+
+           </div>
+         <app-rusable-input [type]="'email'" [placholder]="'yourname@company.com'"
+         [control]="signUpForm.get('email')" formControlName="email"
+          [label]="'email'" [id]="'email'">
+
+    </app-rusable-input>
+   
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+        <!-- password -->
+          <app-rusable-input [type]="'password'" [placholder]="'yourname@company.com'"
+            [control]="signUpForm.get('password')" formControlName="password"
+           [label]="'Password'" [id]="'password'">
+      
+          </app-rusable-input>
+          <!-- confirm Password -->
+             <app-rusable-input [type]="'password'" [placholder]="'Repeat your password'" 
+             
+             [label]="'Confirm Password'" [id]="'rePassword'">
+      
+          </app-rusable-input>
+          
+        </div>
+        <!-- Button -->
+        <div>
+
+            <button class="btn-Primary  bg-linear-to-r from-primary to-primary-container w-full">Create Account</button>
+        </div>
+    </form>
+<div>
+    <p class="pt-8 text-center text-[14px] leading-5 tracking-normal"><span class="satuld ">Already have an account? </span>
+        <a class="text-primary font-semibold" routerLink="/login">Log in</a></p>
+</div>
+  </div>
+</div>

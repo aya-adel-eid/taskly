@@ -1,6 +1,6 @@
 @theme{
     --color-primary:#003D9B;
-  --color-primary-containerr:#0052CC;
+  --color-primary-container:#0052CC;
   --color-surface-highest:#D7E2FF;
    --color-surface-low:#F1F3FF;
     --color-bg:#F9F9FF;
@@ -13,7 +13,7 @@
   --font-sans: "Inter", sans-serif;
   --text-display-lg:56px;
    --text-display-lg--line-height:56px;
-    --text-headline-lg: 32px;
+    --text-headline-lg: 30px;
      --text-headline-lg--line-height:40px;
 
        --text-title-md: 18px;
