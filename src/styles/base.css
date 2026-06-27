@@ -10,10 +10,10 @@
         @apply  py-2.5 px-6  text-body-md leading-5 text-satuld tracking-normal rounded-xs;
     }
     .input-control{
-        @apply bg-surface-highest placeholder:text-[#6B7280]  px-4 pt-3 pb-3.5 rounded-sm
+        @apply bg-surface-highest placeholder:text-[#6B7280]  px-4 pt-3 pb-3.5 rounded-sm outline-none border-0
     }
     .label-input{
-        @apply text-[#737685] text-label-sm leading-4 uppercase tracking-[1px] font-bold 
+        @apply text-[#737685] text-label-sm leading-4 uppercase tracking-[1px] font-bold  ps-1
     }
      .label-error{
         @apply text-error text-label-sm leading-4 uppercase tracking-[1px] font-bold 

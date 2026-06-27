@@ -3,7 +3,8 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     // auth
 {
-    path:'',loadComponent:()=>import('./core/layout/auth-layout/auth-layout.component').then(c=>c.AuthLayoutComponent)
+    path:'',loadComponent:()=>import('./core/layout/auth-layout/auth-layout.component').then(c=>c.AuthLayoutComponent),
+    loadChildren:()=>import('./features/auth/auth.routes').then(c=>c.AUTH_ROUTES)
 
 },
 // user

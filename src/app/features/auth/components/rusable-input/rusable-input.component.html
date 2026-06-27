@@ -1,0 +1,5 @@
+<div class="flex flex-col mb-3">
+    <label class="label-input">{{label}}</label>
+    <input class="input-control"   [type]="type" [placeholder]="placholder" [value]="value"
+       (input)="onInput($event)"  [disabled]="disabled" (blur)="onTouched()"/>
+</div>
