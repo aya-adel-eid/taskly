@@ -27,8 +27,8 @@ getUserInfo(){
 }
 // logOut
 logOut(){
-  return this.httpClient.post(APIS_KEYS.AUTH.logOut,'').subscribe({
-    next:(resp)=>{
+  return this.httpClient.post(APIS_KEYS.AUTH.logOut,{}).subscribe({
+    next:()=>{
        this.router.navigateByUrl('/login')
        this.clearSession()
       //  localStorage.removeItem(StORED_KEYS.userToken)

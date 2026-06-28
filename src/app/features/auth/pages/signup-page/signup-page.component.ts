@@ -74,7 +74,7 @@ signUP(){
 const {confirmPassword,...userData}=this.signUpForm.value
 if (this.signUpForm.valid) {
   this.authService.signUp(userData).subscribe(({
-    next:(resp)=>{
+    next:(resp:any)=>{
 this.router.navigateByUrl('/project')
 
     },

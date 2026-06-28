@@ -3,6 +3,7 @@ import { AsidBarService } from '../../services/helper/asid-bar.service';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServicesService } from '../../../features/auth/services/auth-services.service';
+import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
 
 @Component({
   selector: 'app-side-bar',
@@ -72,7 +73,7 @@ export class SideBarComponent implements OnInit {
 
   getUserInfo() {
     this.authService.getUserInfo().subscribe({
-      next: (resp) => {
+      next: (resp:UserInfo) => {
         this.userName = resp.user_metadata.name;
         this.userDepartment = resp.user_metadata.job_title;
         const words = resp.user_metadata.name.split(/\s+/);

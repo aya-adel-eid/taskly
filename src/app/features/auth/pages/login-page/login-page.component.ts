@@ -6,6 +6,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
+import { ISignIn } from '../../interfaces/IUserData';
 
 @Component({
   selector: 'app-login-page',
@@ -34,7 +35,7 @@ login(){
   const {rememberMe,...userData}=this.loginForm.value
 if (this.loginForm.valid) {
   this.authService.signIn(userData).subscribe({
-    next:(resp)=>{
+    next:(resp:ISignIn)=>{
       this.authService.storeSession(resp,rememberMe!)
       this.router.navigateByUrl('/project')
     // localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
