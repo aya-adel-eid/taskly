@@ -4,6 +4,7 @@
         <input class="input-control w-full block" [id]="id"   [type]="type" [placeholder]="placholder" [value]="value"
            (input)="onInput($event)"  [disabled]="disabled" (blur)="onTouched()"/>
              <button (click)="toggle()" class="absolute top-1/2 inset-e-4 -translate-y-1/2 cursor-pointer" type="button">
+              
         @if(id=='password'||id=="rePassword"||id=='passwordd'){
     
         @if (flag) {
@@ -16,6 +17,9 @@
         }
       </button>
     </div>
+    @if (id=='name') {
+                <span class="text-[#C3C6D6] text-[11px]  block py-1.5 leading-4 tracking-normal">3-50 characters, letters only.</span>
+              }
 </div>
 @if (control?.touched&&control?.errors) {
   <div>

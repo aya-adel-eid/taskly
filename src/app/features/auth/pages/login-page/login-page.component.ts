@@ -38,8 +38,8 @@ if (this.loginForm.valid) {
     next:(resp:ISignIn)=>{
       this.authService.storeSession(resp,rememberMe!)
       this.router.navigateByUrl('/project')
-    // localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
-    // localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
+    localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
+    localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
       
     },
     error:(error:HttpErrorResponse)=>{
