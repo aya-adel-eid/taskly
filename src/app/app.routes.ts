@@ -9,6 +9,7 @@ export const routes: Routes = [
 },
 // user
 {
-    path:'',loadComponent:()=>import('./core/layout/main-layout/main-layout.component').then(c=>c.MainLayoutComponent)
+    path:'',loadComponent:()=>import('./core/layout/main-layout/main-layout.component').then(c=>c.MainLayoutComponent),
+    loadChildren:()=>import('./features/projects/projects.routes').then(c=>c.PROJECTS_ROUtES)
 }
 ];

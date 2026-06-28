@@ -1,0 +1,137 @@
+
+<nav
+  class="fixed top-0 right-0 z-50 bg-bg px-8"
+  [class]="
+    isDesktop()
+      ? (isCollapsed ? 'left-20 w-[calc(100%-5rem)]' : 'left-64 w-[calc(100%-16rem)]')
+      : 'left-0 w-full'
+  "
+>
+  <div class="px-3 py-3 lg:px-5 lg:pl-3">
+    <div class="flex items-center justify-between lg:justify-end">
+
+      <!-- mobile only -->
+      <div class="lg:hidden flex items-center space-x-3.5">
+        <button class="cursor-pointer" (click)="toggleMobileMenu()">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <span class="text-[20px] font-bold leading-7 tracking-[-0.5] text-muted">Taskly</span>
+      </div>
+
+      <div class="flex items-center">
+        <div class="flex items-center ms-3">
+          <div class="flex items-center justify-between">
+            <!-- name + department -->
+            <div class="flex-row text-sm gap-4 hidden lg:block">
+              <h3 class="text-[14px] font-semibold leading-5 tracking-normal text-muted text-center">{{userName}}</h3>
+              <span class="uppercase text-primary text-xxs font-bold tracking-[1px] leading-5">{{userDepartment}}</span>
+            </div>
+
+            <div class="ms-2 bg-[#0052CC] rounded-sm w-9 h-9 flex items-center justify-center">
+              <span class="text-white text-[1rem] font-medium">{{userInitials}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+
+@if (isMobileMenuOpen) {
+<div
+  class="fixed inset-0 z-30 bg-black/50 lg:hidden"
+  (click)="toggleMobileMenu()"
+></div>
+}
+
+
+<aside
+  class="fixed top-0 left-0 z-40 h-full transition-all duration-300 bg-surface-low outline-none border-0 lg:block"
+  [class]="
+    (isMobileMenuOpen ? 'block w-64' : 'hidden') + ' ' +
+    (isCollapsed ? 'lg:w-20' : 'lg:w-64')
+  "
+>
+  <div class="flex flex-col h-full bg-SurfaceLow">
+
+    <div class="flex-1 px-3 py-2 overflow-y-auto justify-center">
+      <a href="https://flowbite.com" class="flex pb-8 justify-center lg:justify-start">
+        @if (isCollapsed && isDesktop()) {
+          <img src="/assets/images/Container.png" class="size-12" alt="Taskly Logo" />
+        } @else {
+          <img src="/assets/images/Logo.png" class="h-6 me-3 ms-2" alt="Taskly Logo" />
+        }
+      </a>
+
+      <ul class="space-y-2 font-medium">
+        @for (item of asidBarItems; track $index) {
+        <li   [class]="item.isActive?'bg-white text-primary':''">
+          <a
+            [class.opacity-50]="item.disabled"
+            [class.pointer-events-none]="item.disabled"
+            [class.cursor-not-allowed]="item.disabled"
+          
+            class="flex text-[.875rem] leading-5 tracking-normal
+             font-medium items-center px-3 py-2.5 text-[#041B3C] rounded-xs hover:bg-white hover:text-primary group"
+          >
+            <span [class]="isCollapsed && isDesktop() ? 'text-[#041B3C99]' : 'text-[#041B3C]'">
+              <i [class]="item.icon"></i>
+            </span>
+            @if (!isCollapsed || !isDesktop()) {
+            <span class="ms-3">{{item.label}}</span>
+            }
+          </a>
+        </li>
+        }
+      </ul>
+    </div>
+
+    <div class="px-3 py-8 border-t border-t-[#C3C6D633] mx-3">
+      <ul class="space-y-2">
+        <li>
+          
+          <button
+            class="hidden lg:flex text-[.875rem] items-center font-medium py-2.5 text-seconder-800 rounded-xs cursor-pointer"
+            (click)="toggleCollapse()"
+          >
+            @if (!isCollapsed) {
+              <span><i class="fa-solid fa-angle-left"></i></span>
+              <span class="ms-3">Collapse</span>
+            } @else {
+              <span><i class="fa-solid fa-angle-right"></i></span>
+            }
+          </button>
+        </li>
+        <li>
+          <button
+            class="text-[#BA1A1A] flex text-[.875rem] items-center font-medium cursor-pointer"
+            (click)="logOut()"
+          >
+            <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+            @if (!isCollapsed || !isDesktop()) {
+              <span class="ms-3">Logout</span>
+            }
+          </button>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+</aside>
+
+<!-- only mobile -->
+<nav
+  class="fixed bottom-0 left-0 z-20 w-full bg-bg border-t border-[#C3C6D633] lg:hidden"
+  [class]="isMobileMenuOpen ? 'hidden' : 'flex'"
+>
+  <ul class="flex w-full justify-between px-2 py-2">
+    @for (item of asidBarItems; track $index) {
+    <li class="flex flex-col items-center flex-1 text-[14px] text-[#041B3C99]" [class]="item.isActive?'text-primary':'text-[#041B3C99]'">
+      <i [class]="item.icon"></i>
+      <span class="mt-1">{{item.label.split(' ').pop()}}</span>
+    </li>
+    }
+  </ul>
+</nav>

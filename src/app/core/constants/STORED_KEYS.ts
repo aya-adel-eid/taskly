@@ -1,3 +1,4 @@
 export const StORED_KEYS={
-    userToken:'userToken'
+    userToken:'userToken',
+    refresh_token:'refresh_token'
 }

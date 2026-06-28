@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { HeaderAuthComponent } from "../../components/header-auth/header-auth.component";
 import { RusableInputComponent } from "../../components/rusable-input/rusable-input.component";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class SignupPageComponent {
 public readonly fb=inject(FormBuilder);
 private readonly authService=inject(AuthServicesService)
+private readonly router=inject(Router)
 // form group
 signUpForm=this.fb.group({
   email:[null,[Validators.email,Validators.required]],
@@ -73,7 +74,7 @@ const {confirmPassword,...userData}=this.signUpForm.value
 if (this.signUpForm.valid) {
   this.authService.signUp(userData).subscribe(({
     next:(resp)=>{
-console.log(resp);
+this.router.navigateByUrl('/project')
 
     },
     error:(error:HttpErrorResponse)=>{

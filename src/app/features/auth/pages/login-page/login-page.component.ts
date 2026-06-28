@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RusableInputComponent } from "../../components/rusable-input/rusable-input.component";
 import { HeaderAuthComponent } from "../../components/header-auth/header-auth.component";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 })
 export class LoginPageComponent {
   private readonly authService=inject(AuthServicesService)
+  private readonly router=inject(Router)
   // build form
 private readonly fb=inject(FormBuilder)
 loginForm=this.fb.group({
@@ -30,7 +31,9 @@ login(){
 if (this.loginForm.valid) {
   this.authService.signIn(this.loginForm.value).subscribe({
     next:(resp)=>{
+      this.router.navigateByUrl('/project')
     localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
+    localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
       
     },
     error:(error:HttpErrorResponse)=>{
