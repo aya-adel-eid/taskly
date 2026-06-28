@@ -44,7 +44,7 @@ onInput(event: Event): void {
 
   flag = true;
   toggle() {
-    if (this.id == 'password' || this.id == 'rePassword') {
+    if (this.id == 'password' || this.id == 'rePassword'||this.id == 'passwordd') {
       this.flag = !this.flag;
       this.type = this.flag ? 'password' : 'text';
     }

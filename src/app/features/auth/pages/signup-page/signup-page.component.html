@@ -85,6 +85,10 @@
             <button class="btn-Primary  bg-linear-to-r from-primary to-primary-container w-full">Create Account</button>
         </div>
     </form>
+     @if (errorMessage) {
+
+      <p class="alert-error mt-1.5 text-center">{{errorMessage}}</p>
+    }
 <div>
     <p class="pt-8 text-center text-[14px] leading-5 tracking-normal"><span class="satuld ">Already have an account? </span>
         <a class="text-primary font-semibold" routerLink="/login">Log in</a></p>

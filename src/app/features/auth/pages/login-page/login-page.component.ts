@@ -17,11 +17,13 @@ import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 export class LoginPageComponent {
   private readonly authService=inject(AuthServicesService)
   private readonly router=inject(Router)
+  errorMessage!:string;
   // build form
 private readonly fb=inject(FormBuilder)
 loginForm=this.fb.group({
   email:[null,[Validators.required,Validators.email]],
-  password:[null,[Validators.required]],
+  password:[null,[Validators.required,Validators.minLength(8),
+    Validators.maxLength(64),Validators.pattern( /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])\S{8,64}$/)]],
    rememberMe: [false],
 })
 
@@ -40,7 +42,8 @@ if (this.loginForm.valid) {
       
     },
     error:(error:HttpErrorResponse)=>{
-      console.log(error);
+    this.errorMessage=error.error.msg
+      console.log(error.error.msg);
       
     }
   })

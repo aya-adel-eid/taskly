@@ -17,6 +17,7 @@ export class SignupPageComponent {
 public readonly fb=inject(FormBuilder);
 private readonly authService=inject(AuthServicesService)
 private readonly router=inject(Router)
+errorMessage!:string;
 // form group
 signUpForm=this.fb.group({
   email:[null,[Validators.email,Validators.required]],
@@ -79,6 +80,7 @@ this.router.navigateByUrl('/project')
     },
     error:(error:HttpErrorResponse)=>{
       console.log(error);
+      this.errorMessage=error.error.msg
       
     }
   }))
