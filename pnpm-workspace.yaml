@@ -1,3 +1,3 @@
 allowBuilds:
-  esbuild: set this to true or false
-  nice-napi: set this to true or false
+  esbuild: true
+  nice-napi: true
