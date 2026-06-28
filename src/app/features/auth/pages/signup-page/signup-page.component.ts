@@ -23,17 +23,54 @@ signUpForm=this.fb.group({
     Validators.maxLength(64),Validators.pattern( /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])\S{8,64}$/)]],
     data:this.fb.group(
       {
-        name:[null,[Validators.required]],
+        name:[null,[Validators.required,  
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(50),
+    Validators.pattern(/^(?!.*\s{2,})[\p{L}]+(?: [\p{L}]+)*$/u)
+  ]],
         job_title:[null]
       },
       
     ),
     confirmPassword:[null]
 },{Validators:this.confirmPassword})
+
+// rule
+get password() {
+  return this.signUpForm.get('password');
+}
+
+get passwordValue(): string {
+  return this.password?.value || '';
+}
+
+rules = {
+  length: false,
+  upperLowerNumber: false,
+  special: false
+};
+
+ngOnInit() {
+  this.password?.valueChanges.subscribe((value: string) => {
+    value = value || '';
+
+    this.rules.length = value.length >= 8;
+
+    this.rules.upperLowerNumber =
+      /[A-Z]/.test(value) &&
+      /[a-z]/.test(value) &&
+      /\d/.test(value);
+
+    this.rules.special =
+      /[!@#$%^&*]/.test(value);
+  });
+}
 // send Data
 
 signUP(){
 const {confirmPassword,...userData}=this.signUpForm.value
+if (this.signUpForm.valid) {
   this.authService.signUp(userData).subscribe(({
     next:(resp)=>{
 console.log(resp);
@@ -44,7 +81,9 @@ console.log(resp);
       
     }
   }))
-  console.log(this.signUpForm.value);
+  
+}
+
   
 }
 // confirm password
@@ -56,4 +95,5 @@ confirmPassword(control:AbstractControl){
   return { mismatch: true };
  }
 }
+
 }

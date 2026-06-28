@@ -15,6 +15,39 @@
         }
         }
       </button>
-
     </div>
 </div>
+@if (control?.touched&&control?.errors) {
+  <div>
+  <ul>
+  @if (control?.getError('required')&&id!='password') {
+    <li class="alert-error">This field is required.</li>
+  }
+   @if (control?.getError('email')) {
+      <li class="alert-error">Please enter a valid email address.</li>
+      }
+  @if (control?.getError('minlength')&&id=='name') {
+      <li class="alert-error">Minimum length is 3 characters.</li>
+  }
+   
+   @if (control?.getError('maxlength')&&id=='name') {
+      <li class="alert-error">Maximum length is 50 characters.</li>
+  }
+  @if (control?.getError('pattern')&&id=='name') {
+      <li class="alert-error">Name must contain only letters, may include single spaces between words, and cannot contain numbers or special characters.</li>
+  }
+
+<!-- password -->
+
+  @if(control?.getError('pattern')&&id==='password'){
+      <li class="alert-error lg:hidden">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, with no spaces.</li>
+      }
+
+    @if(group?.errors){
+      <li class="alert-error lg:hidden"> Password Confirmation incorrect</li>
+      }
+
+  </ul>
+  </div>
+
+}

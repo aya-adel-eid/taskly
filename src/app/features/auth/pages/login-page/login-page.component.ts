@@ -5,6 +5,7 @@ import { RouterLink } from "@angular/router";
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 
 @Component({
   selector: 'app-login-page',
@@ -15,24 +16,30 @@ import { HttpErrorResponse } from '@angular/common/http';
 })
 export class LoginPageComponent {
   private readonly authService=inject(AuthServicesService)
+  // build form
 private readonly fb=inject(FormBuilder)
 loginForm=this.fb.group({
   email:[null,[Validators.required,Validators.email]],
   password:[null,[Validators.required]]
 })
+
+
+
 // log in
 login(){
-  console.log(this.loginForm.value);
+if (this.loginForm.valid) {
+  this.authService.signIn(this.loginForm.value).subscribe({
+    next:(resp)=>{
+    localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
+      
+    },
+    error:(error:HttpErrorResponse)=>{
+      console.log(error);
+      
+    }
+  })
   
-this.authService.signIn(this.loginForm.value).subscribe({
-  next:(resp)=>{
-    console.log(resp);
-    
-  },
-  error:(error:HttpErrorResponse)=>{
-    console.log(error);
-    
-  }
-})
+}
+  
 }
 }

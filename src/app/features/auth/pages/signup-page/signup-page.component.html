@@ -6,13 +6,13 @@
            <div formGroupName="data">
             
            </div>
-           <div formGroupName="data">
+           <div formGroupName="data" class="">
                <app-rusable-input [type]="'text'" [placholder]="'Enter your full name'" [label]="'Name'" [id]="'name'"
-                [control]="signUpForm.get('name')" formControlName="name"> </app-rusable-input>
+                [control]="signUpForm.get('data.name')" formControlName="name"> </app-rusable-input>
                <!-- email -->
                  <!-- job title -->
               <app-rusable-input [type]="'text'" [placholder]="'e.g. Project Manager'" [label]="'Job Title (Optional)'" 
-              [control]="signUpForm.get('job_title')" formControlName="job_title"
+              [control]="signUpForm.get('data.job_title')" formControlName="job_title"
               [id]="'jobTitle'">
        
            </app-rusable-input>
@@ -39,6 +39,46 @@
           </app-rusable-input>
           
         </div>
+     <div
+  class="rounded-md bg-surface-highest p-3 space-y-2 text-xs w-full hidden lg:block">
+
+  <div class="flex items-center gap-2 w-full text-[#434654]">
+    <i
+      class="fa-regular"
+      [class.fa-circle]="!rules.length"
+      [class.fa-circle-check]="rules.length"
+      [class.text-[#004E32]]="rules.length"
+      [class.text-gray-400]="!rules.length">
+    </i>
+
+    <span>At least 8 characters</span>
+  </div>
+
+  <div class="flex items-center gap-2 text-[#434654]">
+    <i
+      class="fa-regular"
+      [class.fa-circle]="!rules.upperLowerNumber"
+      [class.fa-circle-check]="rules.upperLowerNumber"
+      [class.text-[#004E32]]="rules.upperLowerNumber"
+      [class.text-gray-400]="!rules.upperLowerNumber">
+    </i>
+
+    <span>One uppercase, lowercase, and digit</span>
+  </div>
+
+  <div class="flex items-center gap-2 text-[#434654]">
+    <i
+      class="fa-regular"
+      [class.fa-circle]="!rules.special"
+      [class.fa-circle-check]="rules.special"
+      [class.text-[#004E32]]="rules.special"
+      [class.text-gray-400]="!rules.special">
+    </i>
+
+    <span>One special character</span>
+  </div>
+
+</div>
         <!-- Button -->
         <div>
 
