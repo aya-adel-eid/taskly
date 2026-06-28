@@ -5,6 +5,7 @@ import { Router, RouterLink } from "@angular/router";
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ISignUp } from '../../interfaces/ISignUp';
 
 @Component({
   selector: 'app-signup-page',
@@ -74,7 +75,7 @@ signUP(){
 const {confirmPassword,...userData}=this.signUpForm.value
 if (this.signUpForm.valid) {
   this.authService.signUp(userData).subscribe(({
-    next:(resp:any)=>{
+    next:(resp:ISignUp)=>{
 this.router.navigateByUrl('/project')
 
     },

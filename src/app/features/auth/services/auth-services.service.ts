@@ -1,21 +1,23 @@
 import { inject, Injectable } from '@angular/core';
-import { BaseHttpClientService } from '../../../core/services/Utilites/base-http-client.service';
+
 import { APIS_KEYS } from '../../../core/constants/APIS_KEYS';
 import { ISignIn } from '../interfaces/IUserData';
 import { UserInfo } from '../interfaces/UserInfo';
 import { Router } from '@angular/router';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../core/constants/STORED_KEYS';
+import { ISignUp } from '../interfaces/ISignUp';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServicesService  extends BaseHttpClientService{
+export class AuthServicesService {
+  private readonly httpClient=inject(HttpClient)
   private readonly router=inject(Router)
     private readonly REMEMBER_ME_DAYS = 30;
 // sign up
 signUp(userData:{}){
-  return this.httpClient.post(APIS_KEYS.AUTH.signUp,userData)
+  return this.httpClient.post<ISignUp>(APIS_KEYS.AUTH.signUp,userData)
 }
 // login
 signIn(userData:{}){
