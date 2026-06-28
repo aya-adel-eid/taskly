@@ -21,19 +21,22 @@ export class LoginPageComponent {
 private readonly fb=inject(FormBuilder)
 loginForm=this.fb.group({
   email:[null,[Validators.required,Validators.email]],
-  password:[null,[Validators.required]]
+  password:[null,[Validators.required]],
+   rememberMe: [false],
 })
 
 
 
 // log in
 login(){
+  const {rememberMe,...userData}=this.loginForm.value
 if (this.loginForm.valid) {
-  this.authService.signIn(this.loginForm.value).subscribe({
+  this.authService.signIn(userData).subscribe({
     next:(resp)=>{
+      this.authService.storeSession(resp,rememberMe!)
       this.router.navigateByUrl('/project')
-    localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
-    localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
+    // localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
+    // localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
       
     },
     error:(error:HttpErrorResponse)=>{
