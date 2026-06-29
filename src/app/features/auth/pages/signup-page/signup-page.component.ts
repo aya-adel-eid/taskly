@@ -40,7 +40,8 @@ signUpForm=this.fb.group({
       
     ),
     confirmPassword:[null]
-},{Validators:this.confirmPassword})
+},{  validators: this.confirmPassword
+})
 
 // rule
 get password() {
@@ -58,19 +59,19 @@ rules = {
 };
 
 ngOnInit() {
-  this.password?.valueChanges.subscribe((value: string) => {
-    value = value || '';
+ this.password?.valueChanges.subscribe((value: string | null) => {
+  value = value ?? '';
 
-    this.rules.length = value.length >= 8;
+  this.rules.length = value.length >= 8;
 
-    this.rules.upperLowerNumber =
-      /[A-Z]/.test(value) &&
-      /[a-z]/.test(value) &&
-      /\d/.test(value);
+  this.rules.upperLowerNumber =
+    /[A-Z]/.test(value) &&
+    /[a-z]/.test(value) &&
+    /\d/.test(value);
 
-    this.rules.special =
-      /[!@#$%^&*]/.test(value);
-  });
+  this.rules.special =
+    /[!@#$%^&*]/.test(value);
+});
 }
 // send Data
 

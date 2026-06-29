@@ -34,7 +34,7 @@
           <!-- confirm Password -->
              <app-rusable-input [type]="'password'" [placholder]="'Repeat your password'" 
              
-             [label]="'Confirm Password'" [id]="'rePassword'" [group]="signUpForm">
+             [label]="'Confirm Password'" [id]="'rePassword'" [group]="signUpForm"  formControlName="confirmPassword">
       
           </app-rusable-input>
           
@@ -86,7 +86,7 @@
         </div>
     </form>
     @if (successMessage) {
-        <p class="alert-success mt-1.5 text-center">{{successMessage}}</p>
+        <p class="alert-success mt-1.5 text-center">{{successMessage }}</p>
     }
      @if (errorMessage) {
 

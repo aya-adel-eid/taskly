@@ -48,7 +48,7 @@
       <li class="alert-error lg:hidden">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, with no spaces.</li>
       }
 
-    @if(group?.errors){
+    @if(group?.getError('mismatch')){
       <li class="alert-error lg:hidden"> Password Confirmation incorrect</li>
       }
 

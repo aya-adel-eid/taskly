@@ -1,9 +1,10 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
 import { AsidBarService } from '../../services/helper/asid-bar.service';
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServicesService } from '../../../features/auth/services/auth-services.service';
 import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-side-bar',
@@ -12,10 +13,10 @@ import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
   templateUrl: './side-bar.component.html',
   styleUrl: './side-bar.component.css'
 })
-export class SideBarComponent implements OnInit {
+export class SideBarComponent implements OnInit ,OnDestroy {
   private readonly asidBar = inject(AsidBarService)
   private readonly authService = inject(AuthServicesService)
-
+private destroy$ = new Subject<void>();
   isMobileMenuOpen = false;
   isCollapsed = this.asidBar.isCollapsed;
 
@@ -72,7 +73,7 @@ export class SideBarComponent implements OnInit {
   }
 
   getUserInfo() {
-    this.authService.getUserInfo().subscribe({
+    this.authService.getUserInfo().pipe(takeUntil(this.destroy$)).subscribe({
       next: (resp:UserInfo) => {
         this.userName = resp.user_metadata.name;
         this.userDepartment = resp.user_metadata.job_title;
@@ -92,4 +93,9 @@ export class SideBarComponent implements OnInit {
   logOut() {
     this.authService.logOut();
    }
+   ngOnDestroy() {
+  this.destroy$.next();
+  this.destroy$.complete();
 }
+}
+
