@@ -27,6 +27,9 @@
          <button class="btn-Primary  bg-linear-to-r from-primary to-primary-container w-full">Log In</button>
         </div>
     </form>
+     @if (successMessage) {
+        <p class="alert-success mt-1.5 text-center">{{successMessage}}</p>
+    }
     @if (errorMessage) {
 
       <p class="alert-error mt-1.5 text-center">{{errorMessage}}</p>

@@ -7,6 +7,7 @@ import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ISignIn } from '../../interfaces/IUserData';
+import { interval, take, timer } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -19,6 +20,7 @@ export class LoginPageComponent {
   private readonly authService=inject(AuthServicesService)
   private readonly router=inject(Router)
   errorMessage!:string;
+  successMessage!:string;
   // build form
 private readonly fb=inject(FormBuilder)
 loginForm=this.fb.group({
@@ -36,8 +38,13 @@ login(){
 if (this.loginForm.valid) {
   this.authService.signIn(userData).subscribe({
     next:(resp:ISignIn)=>{
+      this.successMessage='Your sign In successfully. You will be redirected to the Projects page.'
+      timer(5000).subscribe(()=>{
+      
+              this.router.navigateByUrl('/project')
+            })
       this.authService.storeSession(resp,rememberMe!)
-      this.router.navigateByUrl('/project')
+   
     localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
     localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
       

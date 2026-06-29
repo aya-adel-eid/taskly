@@ -6,6 +6,8 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ISignUp } from '../../interfaces/ISignUp';
+import { interval, take, timer } from 'rxjs';
+import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 
 @Component({
   selector: 'app-signup-page',
@@ -19,6 +21,7 @@ public readonly fb=inject(FormBuilder);
 private readonly authService=inject(AuthServicesService)
 private readonly router=inject(Router)
 errorMessage!:string;
+successMessage!:string;
 // form group
 signUpForm=this.fb.group({
   email:[null,[Validators.email,Validators.required]],
@@ -75,8 +78,15 @@ signUP(){
 const {confirmPassword,...userData}=this.signUpForm.value
 if (this.signUpForm.valid) {
   this.authService.signUp(userData).subscribe(({
+  
     next:(resp:ISignUp)=>{
-this.router.navigateByUrl('/project')
+        localStorage.setItem(StORED_KEYS.userToken,resp.access_token)
+          localStorage.setItem(StORED_KEYS.refresh_token,resp.refresh_token)
+          this.successMessage='Your account has been created successfully. You will be redirected to the Projects page.'
+      timer(5000).subscribe(()=>{
+
+        this.router.navigateByUrl('/project')
+      })
 
     },
     error:(error:HttpErrorResponse)=>{
