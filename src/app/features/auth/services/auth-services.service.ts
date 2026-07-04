@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../core/constants/STORED_KEYS';
 import { ISignUp } from '../interfaces/ISignUp';
+import { environment } from '../../../../environments/environment';
+import { IResetPassword } from '../interfaces/ResetPassword';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +76,26 @@ logOut(){
     localStorage.removeItem(StORED_KEYS.rememberMeExpiry);
     sessionStorage.removeItem(StORED_KEYS.userToken);
     sessionStorage.removeItem(StORED_KEYS.refresh_token);
+  }
+
+
+  // forget password
+  forgetPassword(email:{}){
+return this.httpClient.post(APIS_KEYS.AUTH.forgetpassword,email)
+  }
+  // update pass
+  updatePassword(password:{},token:string){
+    return this.httpClient.put(APIS_KEYS.AUTH.resetPassword,password,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+          apikey: environment.apiKey,
+        'Content-Type': 'application/json'
+      }
+    })
+  }
+  // refresh Toekn
+  refreshToken(refreshToken:{}){
+return this.httpClient.post<IResetPassword>(APIS_KEYS.AUTH.refreshToken,refreshToken)
   }
 
 }

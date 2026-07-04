@@ -28,7 +28,7 @@ private destroy$ = new Subject<void>();
 
   asidBarItems = [
     {
-      icon: this.asidBar.isCollapsed ? `fa-regular fa-folder-open` : `fa-solid fa-cubes`,
+      icon: this.asidBar.isCollapsed() ? `fa-regular fa-folder-open` : `fa-solid fa-cubes`,
       label: `Projects`,
       route: `/project`,
       disabled: false,
@@ -60,11 +60,11 @@ private destroy$ = new Subject<void>();
     return this.isDesktopView;
   }
 
-  toggleCollapse() {
-    if (this.isDesktop()) {
-      this.isCollapsed = !this.isCollapsed;
-    }
+toggleCollapse() {
+  if (this.isDesktop()) {
+    this.asidBar.toggleCollapse();
   }
+}
 
   toggleMobileMenu() {
     if (!this.isDesktop()) {

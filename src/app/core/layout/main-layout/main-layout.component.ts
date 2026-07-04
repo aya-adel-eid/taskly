@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SideBarComponent } from "../../components/side-bar/side-bar.component";
+import { AsidBarService } from '../../services/helper/asid-bar.service';
 
 
 @Component({
@@ -11,5 +12,5 @@ import { SideBarComponent } from "../../components/side-bar/side-bar.component";
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent {
-
+asidBar=inject(AsidBarService)
 }

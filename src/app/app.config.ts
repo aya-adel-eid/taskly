@@ -4,10 +4,11 @@ import { provideRouter, withHashLocation, withInMemoryScrolling, withViewTransit
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { apiKeyInterceptor } from './core/interceptors/interceptors/api-key.interceptor';
+import { refreshTokenInterceptor } from './core/interceptors/refresh-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes  , withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
       withViewTransitions(),
-      withHashLocation()),
-    provideHttpClient(withFetch(),withInterceptors([apiKeyInterceptor]))]
+    ),
+    provideHttpClient(withFetch(),withInterceptors([apiKeyInterceptor,refreshTokenInterceptor]))]
 };

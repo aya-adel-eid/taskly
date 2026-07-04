@@ -1,2 +1,14 @@
 <app-side-bar></app-side-bar>
-<router-outlet></router-outlet>
+
+<main
+  class="transition-all duration-300 pt-16 min-h-screen bg-[#F8F9FC]"
+  [class]="
+    asidBar.isCollapsed()
+      ? 'lg:ml-20'
+      : 'lg:ml-64'
+  "
+>
+  <div class="p-6">
+    <router-outlet></router-outlet>
+  </div>
+</main>

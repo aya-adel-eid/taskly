@@ -3,7 +3,7 @@
   class="fixed top-0 right-0 z-50 bg-bg px-8 border-b border-b-[#0000001A]"
   [class]="
     isDesktop()
-      ? (isCollapsed ? 'left-20 w-[calc(100%-5rem)]' : 'left-64 w-[calc(100%-16rem)]')
+      ? (isCollapsed() ? 'left-20 w-[calc(100%-5rem)]' : 'left-64 w-[calc(100%-16rem)]')
       : 'left-0 w-full'
   "
 >
@@ -51,14 +51,14 @@
   class="fixed top-0 left-0 z-40 h-full transition-all duration-300 bg-surface-low outline-none border-0 lg:block"
   [class]="
     (isMobileMenuOpen ? 'block w-64' : 'hidden') + ' ' +
-    (isCollapsed ? 'lg:w-20' : 'lg:w-64')
+    (isCollapsed ()? 'lg:w-20' : 'lg:w-64')
   "
 >
   <div class="flex flex-col h-full bg-SurfaceLow">
 
     <div class="flex-1 px-3 py-2 overflow-y-auto justify-center">
       <a routerLink="/project" class="flex pb-8 justify-center lg:justify-start pt-2">
-        @if (isCollapsed && isDesktop()) {
+        @if (isCollapsed() && isDesktop()) {
           <img src="/assets/images/Container.png" class="size-12" alt="Taskly Logo" />
         } @else {
           <img src="/assets/images/Logo.png" class="h-6 me-3 ms-2" alt="Taskly Logo" />
@@ -76,10 +76,10 @@
             class="flex text-[.875rem] leading-5 tracking-normal
              font-medium items-center px-3 py-2.5 text-[#041B3C] rounded-xs hover:bg-white hover:text-primary group"
           >
-            <span [class]="isCollapsed && isDesktop() ? 'text-[#041B3C99]' : 'text-[#041B3C]'">
+            <span [class]="isCollapsed() && isDesktop() ? 'text-[#041B3C99]' : 'text-[#041B3C]'">
               <i [class]="item.icon"></i>
             </span>
-            @if (!isCollapsed || !isDesktop()) {
+            @if (!isCollapsed() || !isDesktop()) {
             <span class="ms-3">{{item.label}}</span>
             }
           </a>
@@ -96,7 +96,7 @@
             class="hidden lg:flex text-[.875rem] items-center font-medium py-2.5 text-seconder-800 rounded-xs cursor-pointer"
             (click)="toggleCollapse()"
           >
-            @if (!isCollapsed) {
+            @if (!isCollapsed()) {
               <span><i class="fa-solid fa-angle-left"></i></span>
               <span class="ms-3">Collapse</span>
             } @else {
@@ -110,7 +110,7 @@
             (click)="logOut()"
           >
             <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
-            @if (!isCollapsed || !isDesktop()) {
+            @if (!isCollapsed() || !isDesktop()) {
               <span class="ms-3">Logout</span>
             }
           </button>
