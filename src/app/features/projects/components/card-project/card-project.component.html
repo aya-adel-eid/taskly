@@ -1,1 +1,26 @@
-<p>card-project works!</p>
+<div class="rounded-lg bg-white p-6 min-h-55 flex flex-col justify-between cusror-pointer"  (click)="selectProject(project()!)"
+  [class.border-blue]="selected()"
+  [class.border-transparent]="!selected()">
+  <div>
+    <div class="flex justify-between">
+      <h3 class="text-lg font-medium text-seconder-800 leading-6 lg:leading-7 pb-4">{{project()?.name}}</h3>
+  
+
+
+    
+    </div>
+    <p class="text-[.875rem] text-seconderText leading-5.5">{{project()?.description}}</p>
+  </div>
+
+  <div class="pt-4 border-t border-t-[#C3C6D61A] flex justify-between">
+    <span class="text-[#737685] font-bold text-[.6875rem] leading-4 tracking-[-0.55] uppercase hidden lg:block">CREATED
+      AT</span>
+    <span class="text-seconder-800 leading-4 lg:leading-5 text-xs lg:text-[.875rem] font-medium">
+      <span class="lg:hidden">
+
+        <i class="fa-regular fa-calendar "></i>
+      </span>
+      {{project()?.created_at |date
+      :'mediumDate'}}</span>
+  </div>
+</div>

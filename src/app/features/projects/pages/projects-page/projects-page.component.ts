@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-projects-page',
   standalone: true,
-  imports: [],
+  imports: [RouterOutlet],
   templateUrl: './projects-page.component.html',
   styleUrl: './projects-page.component.css'
 })

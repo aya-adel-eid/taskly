@@ -1,0 +1,43 @@
+<div class="w-full">
+  <div class="bg-neutral-primary-soft shadow-xs rounded-xl border w-full lg:max-w-195 px-2 border-default">
+
+    <!-- Header - lg only -->
+    <div class="bg-[#E0E8FF4D] border-b border-default grid-cols-[2fr_1fr_1fr] px-6 py-3 hidden lg:grid">
+      <div class="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>
+      <div class="h-3 w-10 bg-gray-200 rounded animate-pulse"></div>
+      <div class="h-3 w-10 bg-gray-200 rounded animate-pulse"></div>
+    </div>
+
+    <!-- Row -->
+    @for (item of [1,2,3,4]; track $index) {
+
+    <div
+      class="border-b border-[#E8EDFF] px-6 py-4 flex items-center justify-between lg:grid lg:grid-cols-[2fr_1fr_1fr]">
+
+      <!-- Name -->
+      <div class="flex gap-4 items-center">
+        <div class="bg-gray-200 rounded-xl w-12 h-12 shrink-0 animate-pulse"></div>
+        <div class="flex flex-col gap-2">
+          <div class="h-3 w-32 bg-gray-200 rounded animate-pulse"></div>
+          <div class="h-2.5 w-44 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+      </div>
+
+      <!-- Role + Actions -->
+      <div class="lg:contents flex flex-row items-center gap-4">
+
+        <!-- Role -->
+        <div class="h-5 w-14 bg-gray-200 rounded-full animate-pulse"></div>
+
+        <!-- Actions -->
+        <div class="lg:flex lg:justify-center">
+          <div class="h-4 w-1 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+
+      </div>
+
+    </div>
+    }
+
+  </div>
+</div>

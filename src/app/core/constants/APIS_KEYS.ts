@@ -9,6 +9,13 @@ export const APIS_KEYS={
         forgetpassword:`${environment.baseUrRL}/auth/v1/recover`,
         resetPassword:`${environment.baseUrRL}/auth/v1/user`,
         refreshToken:`${environment.baseUrRL}/auth/v1/token?grant_type=refresh_token`,
-        allProjects:`${environment.baseUrRL}/rest/v1/rpc/get_projects`
-    }
+        allProjects:`${environment.baseUrRL}/rest/v1/rpc/get_projects`,
+        
+    },
+    projects:{
+        createnewProject:`${environment.baseUrRL}/rest/v1/projects`,
+        listProjects:`${environment.baseUrRL}/rest/v1/rpc/get_projects`,
+        editProject:`${environment.baseUrRL}/rest/v1/projects`,
+        allMembers:`${environment.baseUrRL}/rest/v1/get_project_members`
+}
 }

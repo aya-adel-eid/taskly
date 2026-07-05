@@ -1,10 +1,11 @@
-import { Component, HostListener, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, HostListener, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { AsidBarService } from '../../services/helper/asid-bar.service';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServicesService } from '../../../features/auth/services/auth-services.service';
 import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
 import { Subject, takeUntil } from 'rxjs';
+import { ProjectsService } from '../../../features/projects/services/projects.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -16,6 +17,8 @@ import { Subject, takeUntil } from 'rxjs';
 export class SideBarComponent implements OnInit ,OnDestroy {
   private readonly asidBar = inject(AsidBarService)
   private readonly authService = inject(AuthServicesService)
+  private readonly activeRoute=inject(ActivatedRoute)
+  private readonly projectServices=inject(ProjectsService)
 private destroy$ = new Subject<void>();
   isMobileMenuOpen = false;
   isCollapsed = this.asidBar.isCollapsed;
@@ -25,21 +28,58 @@ private destroy$ = new Subject<void>();
   userName!: string;
   userInitials!: string;
   userDepartment!: string;
+projectId = this.projectServices.selectedProjectId;
+route=inject(ActivatedRoute)
 
-  asidBarItems = [
-    {
-      icon: this.asidBar.isCollapsed() ? `fa-regular fa-folder-open` : `fa-solid fa-cubes`,
-      label: `Projects`,
-      route: `/project`,
-      disabled: false,
-      isActive:true
-    },
-    { icon: `fa-solid fa-code-branch`, label: `Project Epics` },
-    { icon: `fa-solid fa-list-check`, label: `Project Tasks` },
-    { icon: `fa-solid fa-user-group`, label: `Project Members` },
-    { icon: `fa-solid fa-circle-info`, label: `Project Details` },
-  ]
+private readonly router = inject(Router);
 
+selectedItem = signal('Projects');
+
+// sideBarItems = computed(() => {
+//   const id = this.projectId();
+//   console.log(id);
+  
+
+//   return [
+//     {
+//       icon: this.asidBar.isCollapsed()
+//         ? 'fa-regular fa-folder-open'
+//         : 'fa-solid fa-cubes',
+//       label: 'Projects',
+//       route: '/project',
+//       disabled: false,
+//     },
+//     {
+//       icon: 'fa-solid fa-code-branch',
+//       label: 'Project Epics',
+//       route: id ? `/project/${id}/epics` : null,
+//       disabled: !id,
+//     },
+//     {
+//       icon: 'fa-solid fa-list-check',
+//       label: 'Project Tasks',
+//       route: id ? `/project/${id}/tasks` : null,
+//       disabled: !id,
+//     },
+//     {
+//       icon: 'fa-solid fa-user-group',
+//       label: 'Project Members',
+//       route: id ? `/project/${id}/members` : null,
+//       disabled: !id,
+//     },
+//     {
+//       icon: 'fa-solid fa-circle-info',
+//       label: 'Project Details',
+//       route: id ? `/project/${id}/edit` : null,
+//       disabled: !id,
+//     },
+//   ];
+// });
+
+isActive(route: string | null): boolean {
+  if (!route) return false;
+  return this.router.url.startsWith(route);
+}
   ngOnInit(): void {
     this.getUserInfo()
   }

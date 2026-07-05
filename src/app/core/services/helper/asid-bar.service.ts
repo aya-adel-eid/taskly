@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root'
 })
 export class AsidBarService {
-
+  projectId=signal<string>('');
   isCollapsed = signal(false);
 
   toggleCollapse() {
