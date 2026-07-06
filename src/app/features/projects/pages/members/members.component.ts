@@ -6,11 +6,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { MemberCardSkelttonComponent } from "../../components/member-card-skeltton/member-card-skeltton.component";
 import { MemberCardComponent } from "../../components/member-card/member-card.component";
 import { HandleErrorComponent } from "../../components/handle-error/handle-error.component";
+import { BreadcrumbComponent } from "../../../../shared/components/breadcrumb/breadcrumb.component";
 
 @Component({
   selector: 'app-members',
   standalone: true,
-  imports: [MemberCardSkelttonComponent, MemberCardComponent, HandleErrorComponent],
+  imports: [MemberCardSkelttonComponent, MemberCardComponent, HandleErrorComponent, BreadcrumbComponent],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css'
 })

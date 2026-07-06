@@ -1,0 +1,51 @@
+<div class=" rounded-3xl w-fit ">
+
+  <nav class="flex  " aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+      <li class="inline-flex items-center">
+        <a routerLink="/project"
+          class="inline-flex items-center font-bold  leading-3.5 tracking-[1.2px] uppercase text-[12px]  text-[#43465499]/60 hover:text-gray-700">
+          
+          Home
+        </a>
+      </li>
+    @for (path of arrPaths(); track $index; let last = $last) {
+
+<li>
+  <div class="flex items-center space-x-1.5">
+
+    <svg class="w-3.5 h-3.5 rtl:rotate-180 text-body"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24">
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="m9 5 7 7-7 7" />
+    </svg>
+
+    @if (!last) {
+      <a
+        [routerLink]="'/' + path.toLowerCase()"
+        class="inline-flex items-center font-bold leading-3.5 tracking-[1.2px] uppercase text-[12px] text-[#43465499]/60 hover:text-main-700">
+        {{ path }}
+      </a>
+    } @else {
+      <span
+        class="inline-flex items-center font-bold leading-3.5 tracking-[1.2px] uppercase text-[12px] text-primary">
+        {{ path }}
+      </span>
+    }
+
+  </div>
+</li>
+
+}
+    
+    </ol>
+  </nav>
+</div>
