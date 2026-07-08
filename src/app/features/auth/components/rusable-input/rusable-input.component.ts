@@ -18,7 +18,7 @@ export class RusableInputComponent implements ControlValueAccessor{
 @Input()id!:string;
   @Input() control: AbstractControl | null = null;
     @Input() group: FormGroup | null = null;
-value:string='';
+value='';
  onChange = (value: string) => {};
   disabled = false;
   onTouched = () => {};

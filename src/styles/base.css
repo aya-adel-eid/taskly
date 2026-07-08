@@ -1,33 +1,34 @@
 /*  bg-gradient-to-r from-primary to-primary-container */
-@layer components{
-    .btn-Primary{
-        @apply py-2.5 px-6 rounded-sm cursor-pointer    text-body-md leading-5 text-white tracking-normal;
-    }
-    .btn-Secondary{
-        @apply py-2.5 px-6  text-body-md leading-5 text-primary tracking-normal rounded-xs;
-    }
-    .btn-Ghost{
-        @apply  py-2.5 px-6  text-body-md leading-5 text-satuld tracking-normal rounded-xs;
-    }
-    .input-control{
-        @apply bg-surface-highest placeholder:text-[#6B7280]  px-4 pt-3 pb-3.5 rounded-sm outline-none border-0 placeholder:text-[14px]
-    }
-    .label-input{
-        @apply text-[#737685] text-label-sm leading-4 uppercase tracking-[1px] font-bold  ps-1
-    }
-     .label-error{
-        @apply text-error text-label-sm leading-4 uppercase tracking-[1px] font-bold 
-    }
-    .alert-error{
-        @apply text-[#93000A] bg-[#FFDAD6] px-4 py-3 rounded-sm;
-    }
-    .alert-success{
-        @apply text-[#1b421a] bg-[#75c86f] px-4 py-3 rounded-sm;
-    }
-    .badge{
-        @apply bg-success py-1 px-2 text-[10px] text-[#002113] font-bold uppercase leading-3.5
-    }
-    .layoutSection{
-        @apply p-8
-    }
+@layer components {
+  .btn-Primary {
+    @apply py-2.5 px-6 rounded-sm cursor-pointer    text-body-md leading-5 text-white tracking-normal;
+  }
+  .btn-Secondary {
+    @apply py-2.5 px-6  text-body-md leading-5 text-primary tracking-normal rounded-xs;
+  }
+  .btn-Ghost {
+    @apply py-2.5 px-6  text-body-md leading-5 text-satuld tracking-normal rounded-xs;
+  }
+  .input-control {
+    @apply bg-surface-highest placeholder:text-[#6B7280] placeholder:leading-[100%] placeholder:tracking-normal 
+     placeholder:p-0 px-4  py-3.5 rounded-sm outline-none border-0 placeholder:text-[16px];
+  }
+  .label-input {
+    @apply text-[#737685] text-label-sm  uppercase tracking-[0.55px] font-bold  ps-1 leading-[16.5px];
+  }
+  .label-error {
+    @apply text-error text-label-sm leading-4 uppercase tracking-[1px] font-bold;
+  }
+  .alert-error {
+    @apply text-[#93000A] bg-[#FFDAD6] px-4 py-3 rounded-sm;
+  }
+  .alert-success {
+    @apply text-[#1b421a] bg-[#75c86f] px-4 py-3 rounded-sm;
+  }
+  .badge {
+    @apply bg-success py-1 px-2 text-[10px] text-[#002113] font-bold uppercase leading-3.5;
+  }
+  .layoutSection {
+    @apply p-8;
+  }
 }

@@ -1,58 +1,72 @@
-<div class="flex flex-col mb-3 ">
-    <label class="label-input mb-1" [for]="id"> {{label}}</label>
-    <div class="relative ">
-        <input class="input-control w-full block" [id]="id"   [type]="type" [placeholder]="placholder" [value]="value"
-           (input)="onInput($event)"  [disabled]="disabled" (blur)="onTouched()"/>
-             <button (click)="toggle()" class="absolute top-1/2 inset-e-4 -translate-y-1/2 cursor-pointer" type="button">
-              
-        @if(id=='password'||id=="rePassword"||id=='passwordd'){
-    
+<div class="flex flex-col mb-3">
+  <label class="label-input mb-1" [for]="id"> {{ label }}</label>
+  <div class="relative">
+    <input
+      class="input-control w-full block"
+      [id]="id"
+      [type]="type"
+      [placeholder]="placholder"
+      [value]="value"
+      (input)="onInput($event)"
+      [disabled]="disabled"
+      (blur)="onTouched()"
+    />
+    <button
+      (click)="toggle()"
+      class="absolute top-1/2 inset-e-4 -translate-y-1/2 cursor-pointer"
+      type="button"
+    >
+      @if (id === 'password' || id === 'rePassword' || id === 'passwordd') {
         @if (flag) {
-      <i class="fa-regular fa-eye-slash text-[#737685]"></i>
+          <i class="fa-regular fa-eye-slash text-[#737685]"></i>
+        } @else {
+          <i class="fa-regular fa-eye text-[#737685]"></i>
         }
-        @else {
-    
-      <i class="fa-regular fa-eye text-[#737685]"></i>
-        }
-        }
-      </button>
-    </div>
-    @if (id=='name') {
-                <span class="text-[#C3C6D6] text-[11px]  block py-1.5 leading-4 tracking-normal">3-50 characters, letters only.</span>
-              }
-</div>
-@if (control?.touched&&control?.errors) {
-  <div>
-  <ul>
-  @if (control?.getError('required')&&id!='password') {
-    <li class="alert-error">This field is required.</li>
-  }
-  
-   @if (control?.getError('email')) {
-      <li class="alert-error">Please enter a valid email address.</li>
       }
-  @if (control?.getError('minlength')&&id=='name') {
-      <li class="alert-error">Minimum length is 3 characters.</li>
-  }
-   
-   @if (control?.getError('maxlength')&&id=='name') {
-      <li class="alert-error">Maximum length is 50 characters.</li>
-  }
-  @if (control?.getError('pattern')&&id=='name') {
-      <li class="alert-error">Name must contain only letters, may include single spaces between words, and cannot contain numbers or special characters.</li>
-  }
-
-<!-- password -->
-
-  @if(control?.getError('pattern')&&id==='password'){
-      <li class="alert-error lg:hidden">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character, with no spaces.</li>
-      }
-
-    @if(group?.getError('mismatch')){
-      <li class="alert-error lg:hidden"> Password Confirmation incorrect</li>
-      }
-
-  </ul>
+    </button>
   </div>
+  @if (id === 'name') {
+    <span class="text-[#C3C6D6] text-[11px] block py-0.5 leading-[16.5px] tracking-normal"
+      >3-50 characters, letters only.</span
+    >
+  }
+</div>
+@if (control?.touched && control?.errors) {
+  <div>
+    <ul>
+      @if (control?.getError('required') && id !== 'password') {
+        <li class="alert-error">This field is required.</li>
+      }
 
+      @if (control?.getError('email')) {
+        <li class="alert-error">Please enter a valid email address.</li>
+      }
+      @if (control?.getError('minlength') && id === 'name') {
+        <li class="alert-error">Minimum length is 3 characters.</li>
+      }
+
+      @if (control?.getError('maxlength') && id === 'name') {
+        <li class="alert-error">Maximum length is 50 characters.</li>
+      }
+      @if (control?.getError('pattern') && id === 'name') {
+        <li class="alert-error">
+          Name must contain only letters, may include single spaces between words, and cannot
+          contain numbers or special characters.
+        </li>
+      }
+
+      <!-- password -->
+
+      @if (control?.getError('pattern') && id === 'password') {
+        <li class="alert-error lg:hidden">
+          Password must contain at least one uppercase letter, one lowercase letter, one number, and
+          one special character, with no spaces.
+        </li>
+      }
+
+      @if (group?.getError('mismatch')) {
+        <li class="alert-error lg:hidden">Password Confirmation incorrect</li>
+      }
+    </ul>
+  </div>
 }

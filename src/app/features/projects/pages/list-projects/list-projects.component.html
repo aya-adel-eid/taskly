@@ -1,102 +1,104 @@
 <!-- list of projects -->
 @if (hasError()) {
-    <app-handle-error></app-handle-error>
-} 
-@else {
-
-    @if (allProjects() !== null &&allProjects()?.length===0) {
-
-
-        <app-empty-project-card></app-empty-project-card>
-    }
-    @else {
-
-        <section>
-            <div class="p-8 flex flex-col gap-10">
-                <!-- header -->
-                 <div class="flex justify-between items-center">
-                     <div>
-                        <h2 class="  text-[24px]  font-bold leading-8 tracking-[-0.6]  lg:text-[30px] lg:leading-9 lg:font-semibold lg:tracking-[-0.75px] text-[#041B3C]">Projects</h2>
-                        <p class="text-[16px] tracking-normal leading-6 text-[#434654]">
-                            Manage and curate your projects
-                        </p>
-                     </div>
-                     @if (allProjects()) {
-                         <a  routerLink="/project/add"  class="btn-Primary  bg-linear-to-r from-primary to-primary-container flex  gap-2 pt-3 px-6 items-center">
-                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white"/>
-            </svg>
-            <span class="hidden lg:block">Create New Project</span>
-                            </a>
-
-                     }
-                       @else {
-      <div class="animate-pulse bg-skeleton rounded-md py-3 px-6 w-40 h-10.5 hidden lg:inline"></div>
-      }
-                </div>
-                <!-- list of projects -->
-                 <div class=" grid grid-cols-1 lg:grid-cols-3 gap-4">
-                  @if (isLoading()) {
-  @for (item of [1,2,3,4,5,6]; track $index) {
-    <app-project-card-skeltton />
-  }
-}
-@else {
-  @for (project of allProjects(); track project.id) {
-    <app-card-project [project]="project"  [selected]="selectedProjectId() === project.id"></app-card-project>
-  }
-
-  <app-card-add-project-static />
-}
-        
-                 </div>
-        
-            </div>
-            @if (allProjects()) {
-
-              <div class="lg:flex items-center justify-end gap-2 p-8 mb-4 hidden">
-
-  <!-- Previous -->
-  <button
-    (click)="changePage(page() - 1)"
-    [disabled]="page() === 1"
-    class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition">
-    <i class="fa-solid fa-chevron-left"></i>
-  </button>
-
-  <!-- Numbers -->
-  @for (pageNumber of pages; track pageNumber) {
-    <button
-      (click)="changePage(pageNumber)"
-      class="w-10 h-10 rounded-lg border transition"
-      [class.bg-blue-600]="page() === pageNumber"
-      [class.text-white]="page() === pageNumber"
-      [class.border-blue-600]="page() === pageNumber"
-      [class.bg-white]="page() !== pageNumber"
-      [class.border-gray-200]="page() !== pageNumber"
-      [class.hover:bg-gray-50]="page() !== pageNumber">
-
-      {{ pageNumber }}
-
-    </button>
-  }
-
-  <!-- Next -->
-  <button
-    (click)="changePage(page() + 1)"
-    [disabled]="page() === pages.length"
-    class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition">
-    <i class="fa-solid fa-chevron-right"></i>
-  </button>
-
-</div>
+  <app-handle-error></app-handle-error>
+} @else {
+  @if (allProjects() !== null && allProjects()?.length === 0) {
+    <app-empty-project-card></app-empty-project-card>
+  } @else {
+    <section>
+      <div class="p-8 flex flex-col gap-10">
+        <!-- header -->
+        <div class="flex justify-between items-center">
+          <div>
+            <h2
+              class="text-[24px] font-bold leading-8 tracking-[-0.6] lg:text-[30px] lg:leading-9 lg:font-semibold lg:tracking-[-0.75px] text-[#041B3C]"
+            >
+              Projects
+            </h2>
+            <p class="text-[16px] tracking-normal leading-6 text-[#434654]">
+              Manage and curate your projects
+            </p>
+          </div>
+          @if (allProjects()) {
+            <a
+              routerLink="/project/add"
+              class="btn-Primary bg-linear-to-r from-primary to-primary-container flex gap-2 pt-3 px-6 items-center"
+            >
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 11 11"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z"
+                  fill="white"
+                />
+              </svg>
+              <span class="hidden lg:block">Create New Project</span>
+            </a>
+          } @else {
+            <div
+              class="animate-pulse bg-skeleton rounded-md py-3 px-6 w-40 h-10.5 hidden lg:inline"
+            ></div>
+          }
+        </div>
+        <!-- list of projects -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          @if (isLoading()) {
+            @for (item of [1, 2, 3, 4, 5, 6]; track $index) {
+              <app-project-card-skeltton />
             }
-         </section>
+          } @else {
+            @for (project of allProjects(); track project.id) {
+              <app-card-project
+                [project]="project"
+                [selected]="selectedProjectId() === project.id"
+              ></app-card-project>
+            }
 
+            <app-card-add-project-static />
+          }
+        </div>
+      </div>
+      @if (allProjects()) {
+        <div class="lg:flex items-center justify-end gap-2 p-8 mb-4 hidden">
+          <!-- Previous -->
+          <button
+            (click)="changePage(page() - 1)"
+            [disabled]="page() === 1"
+            class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+          >
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
 
+          <!-- Numbers -->
+          @for (pageNumber of pages; track pageNumber) {
+            <button
+              (click)="changePage(pageNumber)"
+              class="w-10 h-10 rounded-lg border transition"
+              [class.bg-blue-600]="page() === pageNumber"
+              [class.text-white]="page() === pageNumber"
+              [class.border-blue-600]="page() === pageNumber"
+              [class.bg-white]="page() !== pageNumber"
+              [class.border-gray-200]="page() !== pageNumber"
+              [class.hover:bg-gray-50]="page() !== pageNumber"
+            >
+              {{ pageNumber }}
+            </button>
+          }
 
-
-    }
+          <!-- Next -->
+          <button
+            (click)="changePage(page() + 1)"
+            [disabled]="page() === pages.length"
+            class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+      }
+    </section>
+  }
 }
-
-

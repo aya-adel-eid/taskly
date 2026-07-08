@@ -1,100 +1,128 @@
-<div class="lg:bg-white md:p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F]">
- <app-header-auth [title]="'Create your workspace'" [text]="'Join the editorial approach to task management.'"></app-header-auth>
+<div
+  class="lg:bg-white lg:w-xl md:p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F] h-[89.49vh]"
+>
+  <app-header-auth
+    [title]="'Create your workspace'"
+    [text]="'Join the editorial approach to task management.'"
+  ></app-header-auth>
   <div class="pb-4">
-    <form  class="flex flex-col gap-6" [formGroup]="signUpForm" (ngSubmit)="signUP()">
-        <!-- name -->
-           <div formGroupName="data">
-            
-           </div>
-           <div formGroupName="data" class="">
-               <app-rusable-input [type]="'text'" [placholder]="'Enter your full name'" [label]="'Name'" [id]="'name'"
-                [control]="signUpForm.get('data.name')" formControlName="name"> </app-rusable-input>
-               <!-- email -->
-                 <!-- job title -->
-              <app-rusable-input [type]="'text'" [placholder]="'e.g. Project Manager'" [label]="'Job Title (Optional)'" 
-              [control]="signUpForm.get('data.job_title')" formControlName="job_title"
-              [id]="'jobTitle'">
-       
-           </app-rusable-input>
+    <form class="flex flex-col gap-6" [formGroup]="signUpForm" (ngSubmit)="signUP()">
+      <!-- name -->
+      <div formGroupName="data"></div>
+      <div formGroupName="data" class="">
+        <app-rusable-input
+          [type]="'text'"
+          [placholder]="'Enter your full name'"
+          [label]="'Name'"
+          [id]="'name'"
+          [control]="signUpForm.get('data.name')"
+          formControlName="name"
+        >
+        </app-rusable-input>
+        <!-- email -->
+        <!-- job title -->
+        <app-rusable-input
+          [type]="'text'"
+          [placholder]="'e.g. Project Manager'"
+          [label]="'Job Title (Optional)'"
+          [control]="signUpForm.get('data.job_title')"
+          formControlName="job_title"
+          [id]="'jobTitle'"
+        >
+        </app-rusable-input>
+      </div>
+      <app-rusable-input
+        [type]="'email'"
+        [placholder]="'yourname@company.com'"
+        [control]="signUpForm.get('email')"
+        formControlName="email"
+        [label]="'email'"
+        [id]="'email'"
+      >
+      </app-rusable-input>
 
-           </div>
-         <app-rusable-input [type]="'email'" [placholder]="'yourname@company.com'"
-         [control]="signUpForm.get('email')" formControlName="email"
-          [label]="'email'" [id]="'email'">
-
-    </app-rusable-input>
-   
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
         <!-- password -->
-          <app-rusable-input [type]="'password'" [placholder]="'yourname@company.com'"
-            [control]="signUpForm.get('password')" formControlName="password"
-           [label]="'Password'" [id]="'password'">
-      
-          </app-rusable-input>
-          <!-- confirm Password -->
-             <app-rusable-input [type]="'password'" [placholder]="'Repeat your password'" 
-             
-             [label]="'Confirm Password'" [id]="'rePassword'" [group]="signUpForm"  formControlName="confirmPassword">
-      
-          </app-rusable-input>
-          
+        <app-rusable-input
+          [type]="'password'"
+          [placholder]="'yourname@company.com'"
+          [control]="signUpForm.get('password')"
+          formControlName="password"
+          [label]="'Password'"
+          [id]="'password'"
+        >
+        </app-rusable-input>
+        <!-- confirm Password -->
+        <app-rusable-input
+          [type]="'password'"
+          [placholder]="'Repeat your password'"
+          [label]="'Confirm Password'"
+          [id]="'rePassword'"
+          [group]="signUpForm"
+          formControlName="confirmPassword"
+        >
+        </app-rusable-input>
+      </div>
+      <div class="rounded-md bg-surface-highest p-3 space-y-2 text-xs w-full hidden lg:block">
+        <div class="flex items-center gap-2 w-full text-[#434654]">
+          <i
+            class="fa-regular"
+            [class.fa-circle]="!rules.length"
+            [class.fa-circle-check]="rules.length"
+            [class.text-[#004E32]]="rules.length"
+            [class.text-gray-400]="!rules.length"
+          >
+          </i>
+
+          <span>At least 8 characters</span>
         </div>
-     <div
-  class="rounded-md bg-surface-highest p-3 space-y-2 text-xs w-full hidden lg:block">
 
-  <div class="flex items-center gap-2 w-full text-[#434654]">
-    <i
-      class="fa-regular"
-      [class.fa-circle]="!rules.length"
-      [class.fa-circle-check]="rules.length"
-      [class.text-[#004E32]]="rules.length"
-      [class.text-gray-400]="!rules.length">
-    </i>
+        <div class="flex items-center gap-2 text-[#434654]">
+          <i
+            class="fa-regular"
+            [class.fa-circle]="!rules.upperLowerNumber"
+            [class.fa-circle-check]="rules.upperLowerNumber"
+            [class.text-[#004E32]]="rules.upperLowerNumber"
+            [class.text-gray-400]="!rules.upperLowerNumber"
+          >
+          </i>
 
-    <span>At least 8 characters</span>
-  </div>
-
-  <div class="flex items-center gap-2 text-[#434654]">
-    <i
-      class="fa-regular"
-      [class.fa-circle]="!rules.upperLowerNumber"
-      [class.fa-circle-check]="rules.upperLowerNumber"
-      [class.text-[#004E32]]="rules.upperLowerNumber"
-      [class.text-gray-400]="!rules.upperLowerNumber">
-    </i>
-
-    <span>One uppercase, lowercase, and digit</span>
-  </div>
-
-  <div class="flex items-center gap-2 text-[#434654]">
-    <i
-      class="fa-regular"
-      [class.fa-circle]="!rules.special"
-      [class.fa-circle-check]="rules.special"
-      [class.text-[#004E32]]="rules.special"
-      [class.text-gray-400]="!rules.special">
-    </i>
-
-    <span>One special character</span>
-  </div>
-
-</div>
-        <!-- Button -->
-        <div>
-
-            <button class="btn-Primary  bg-linear-to-r from-primary to-primary-container w-full">Create Account</button>
+          <span>One uppercase, lowercase, and digit</span>
         </div>
+
+        <div class="flex items-center gap-2 text-[#434654]">
+          <i
+            class="fa-regular"
+            [class.fa-circle]="!rules.special"
+            [class.fa-circle-check]="rules.special"
+            [class.text-[#004E32]]="rules.special"
+            [class.text-gray-400]="!rules.special"
+          >
+          </i>
+
+          <span>One special character</span>
+        </div>
+      </div>
+      <!-- Button -->
+      <div>
+        <button class="btn-Primary bg-linear-to-r from-primary to-primary-container w-full">
+          Create Account
+        </button>
+      </div>
     </form>
     @if (successMessage) {
-        <p class="bg-success/20 text-[#005235] mt-1.5 text-center px-3 py-2.5">{{successMessage }}</p>
+      <p class="bg-success/20 text-[#005235] mt-1.5 text-center px-3 py-2.5">
+        {{ successMessage }}
+      </p>
     }
-     @if (errorMessage) {
-
-      <p class="alert-error mt-1.5 text-center">{{errorMessage}}</p>
+    @if (errorMessage) {
+      <p class="alert-error mt-1.5 text-center">{{ errorMessage }}</p>
     }
-<div>
-    <p class="pt-8 text-center text-[14px] leading-5 tracking-normal"><span class="satuld ">Already have an account? </span>
-        <a class="text-primary font-semibold" routerLink="/login">Log in</a></p>
-</div>
+    <div>
+      <p class="pt-8 text-center text-[14px] leading-5 tracking-normal">
+        <span class="satuld">Already have an account? </span>
+        <a class="text-primary font-semibold" routerLink="/login">Log in</a>
+      </p>
+    </div>
   </div>
 </div>

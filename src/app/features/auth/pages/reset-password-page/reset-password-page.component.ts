@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { RusableInputComponent } from "../../components/rusable-input/rusable-input.component";
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
@@ -13,7 +13,7 @@ import { Router, RouterLink } from '@angular/router';
   templateUrl: './reset-password-page.component.html',
   styleUrl: './reset-password-page.component.css'
 })
-export class ResetPasswordPageComponent {
+export class ResetPasswordPageComponent implements OnInit {
   private readonly fb=inject(FormBuilder)
   private readonly authServices=inject(AuthServicesService);
   private readonly router=inject(Router)

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HeaderAuthComponent } from "../../components/header-auth/header-auth.component";
 import { RusableInputComponent } from "../../components/rusable-input/rusable-input.component";
 import { Router, RouterLink } from "@angular/router";
@@ -16,7 +16,7 @@ import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
   templateUrl: './signup-page.component.html',
   styleUrl: './signup-page.component.css'
 })
-export class SignupPageComponent {
+export class SignupPageComponent implements OnInit {
 public readonly fb=inject(FormBuilder);
 private readonly authService=inject(AuthServicesService)
 private readonly router=inject(Router)

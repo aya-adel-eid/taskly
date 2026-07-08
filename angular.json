@@ -7,20 +7,19 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "type": "Component","skipTests": true
-        }
-        ,
-        "@schematics/angular:service": {
-        
+          "type": "Component",
           "skipTests": true
-          
+        },
+        "@schematics/angular:service": {
+          "skipTests": true
         },
         "@schematics/angular:directive": {
           "skipTests": true
-        },"@schematics/angular:guard": {
+        },
+        "@schematics/angular:guard": {
           "skipTests": true
-          
-        },"@schematics/angular:interceptor": {
+        },
+        "@schematics/angular:interceptor": {
           "skipTests": true
         }
       },
@@ -112,6 +111,15 @@
               "src/styles.css"
             ],
             "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
