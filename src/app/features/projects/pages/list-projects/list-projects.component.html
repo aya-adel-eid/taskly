@@ -6,7 +6,7 @@
     <app-empty-project-card></app-empty-project-card>
   } @else {
     <section>
-      <div class="p-8 flex flex-col gap-10">
+      <div class="p-8 flex flex-col gap-10 mb-6">
         <!-- header -->
         <div class="flex justify-between items-center">
           <div>
@@ -22,7 +22,7 @@
           @if (allProjects()) {
             <a
               routerLink="/project/add"
-              class="btn-Primary bg-linear-to-r from-primary to-primary-container flex gap-2 pt-3 px-6 items-center"
+              class="btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center flex"
             >
               <svg
                 width="11"
@@ -31,10 +31,7 @@
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path
-                  d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z"
-                  fill="white"
-                />
+                <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
               </svg>
               <span class="hidden lg:block">Create New Project</span>
             </a>
@@ -63,40 +60,53 @@
         </div>
       </div>
       @if (allProjects()) {
-        <div class="lg:flex items-center justify-end gap-2 p-8 mb-4 hidden">
-          <!-- Previous -->
-          <button
-            (click)="changePage(page() - 1)"
-            [disabled]="page() === 1"
-            class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
-          >
-            <i class="fa-solid fa-chevron-left"></i>
-          </button>
+        <div
+          class="lg:flex justify-between items-center ps-8 text-[#434654 text-xs leading-3.5 hidden"
+        >
+          <div>
+            <p>
+              <span>Showing</span>
+              <span>{{ limit() }}</span>
+              from
+              <span>{{ totalCount() }}</span>
+            </p>
+          </div>
 
-          <!-- Numbers -->
-          @for (pageNumber of pages; track pageNumber) {
+          <div class="lg:flex items-center justify-end gap-2 p-8 mb-4">
+            <!-- Previous -->
             <button
-              (click)="changePage(pageNumber)"
-              class="w-10 h-10 rounded-lg border transition"
-              [class.bg-blue-600]="page() === pageNumber"
-              [class.text-white]="page() === pageNumber"
-              [class.border-blue-600]="page() === pageNumber"
-              [class.bg-white]="page() !== pageNumber"
-              [class.border-gray-200]="page() !== pageNumber"
-              [class.hover:bg-gray-50]="page() !== pageNumber"
+              (click)="changePage(page() - 1)"
+              [disabled]="page() === 1"
+              class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
             >
-              {{ pageNumber }}
+              <i class="fa-solid fa-chevron-left"></i>
             </button>
-          }
 
-          <!-- Next -->
-          <button
-            (click)="changePage(page() + 1)"
-            [disabled]="page() === pages.length"
-            class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
-          >
-            <i class="fa-solid fa-chevron-right"></i>
-          </button>
+            <!-- Numbers -->
+            @for (pageNumber of pages; track pageNumber) {
+              <button
+                (click)="changePage(pageNumber)"
+                class="w-10 h-10 rounded-lg border transition"
+                [class.bg-blue-600]="page() === pageNumber"
+                [class.text-white]="page() === pageNumber"
+                [class.border-blue-600]="page() === pageNumber"
+                [class.bg-white]="page() !== pageNumber"
+                [class.border-gray-200]="page() !== pageNumber"
+                [class.hover:bg-gray-50]="page() !== pageNumber"
+              >
+                {{ pageNumber }}
+              </button>
+            }
+
+            <!-- Next -->
+            <button
+              (click)="changePage(page() + 1)"
+              [disabled]="page() === pages.length"
+              class="w-10 h-10 rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       }
     </section>

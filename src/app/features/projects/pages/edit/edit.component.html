@@ -1,16 +1,19 @@
 <div>
-    <!-- @if (toastMessage()) {
+  <!-- @if (toastMessage()) {
 
         <app-toast-massage [message]="toastMessage()"></app-toast-massage>
     } -->
+  <div class="py-4 hidden lg:block">
+    <app-breadcrumb [arrPaths]="arrPath"></app-breadcrumb>
+  </div>
 
-    <h2 class="text-[36px] font-semibold  leading-10 tracking-[-0.9px] text-[#041B3C] hidden lg:block">Edit Project</h2>
-  
-    <!-- <h2 class="text-[24px] tracking-normal leading-8 font-semibold text-[#041B3C] block lg:hidden"></h2>
+  <h2 class="text-[36px] font-semibold leading-10 tracking-[-0.9px] text-[#041B3C] hidden lg:block">
+    Edit Project
+  </h2>
+
+  <!-- <h2 class="text-[24px] tracking-normal leading-8 font-semibold text-[#041B3C] block lg:hidden"></h2>
     <p class="text-sm leading-5 tracking-normal text-[#4F5F7B] block lg:hidden">Define the scope and foundational details of your project.</p> -->
-<div class="flex justify-center items-center py-10">
-
-   <app-project-form [title]="'Edit Project'" [titleButton]="'Save Changes'"></app-project-form>
-</div>
-
+  <div class="flex justify-center items-center py-10">
+    <app-project-form [title]="'Edit Project'" [titleButton]="'Save Changes'"></app-project-form>
+  </div>
 </div>

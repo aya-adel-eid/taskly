@@ -1,0 +1,8 @@
+.image {
+  background-image: url('/assets/images/emptyProject.png');
+  width: 288px;
+  height: 288px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

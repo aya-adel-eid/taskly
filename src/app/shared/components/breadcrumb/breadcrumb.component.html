@@ -1,8 +1,6 @@
 <div class="rounded-3xl w-fit">
   <nav class="flex" aria-label="Breadcrumb">
-    <ol
-      class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse"
-    >
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
       <li class="inline-flex items-center">
         <a
           routerLink="/project"
@@ -11,7 +9,7 @@
           Home
         </a>
       </li>
-      @for (path of arrPaths(); track $index; let last = $last) {
+      @for (item of arrPaths(); track $index; let last = $last) {
         <li>
           <div class="flex items-center space-x-1.5">
             <svg
@@ -33,16 +31,16 @@
 
             @if (!last) {
               <a
-                [routerLink]="'/' + path.toLowerCase()"
-                class="inline-flex items-center font-bold leading-3.5 tracking-[1.2px] uppercase text-[12px] text-[#43465499]/60 hover:text-main-700"
+                [routerLink]="item.path"
+                class="inline-flex items-center font-bold cursor-pointer leading-3.5 tracking-[1.2px] uppercase text-[12px] text-[#43465499]/60 hover:text-main-700"
               >
-                {{ path }}
+                {{ item.label }}
               </a>
             } @else {
               <span
                 class="inline-flex items-center font-bold leading-3.5 tracking-[1.2px] uppercase text-[12px] text-primary"
               >
-                {{ path }}
+                {{ item.label }}
               </span>
             }
           </div>

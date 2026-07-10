@@ -1,17 +1,19 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from 'rxjs';
 import { AuthServicesService } from '../../features/auth/services/auth-services.service';
 import { environment } from '../../../environments/environment';
 import { StORED_KEYS } from '../constants/STORED_KEYS';
+
+// متشاركين بره الـ function عشان يفضلوا نفس القيمة بين كل الـ requests
+let isRefreshing = false;
+const refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
 export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthServicesService);
 
   const token = localStorage.getItem(StORED_KEYS.userToken);
-  const refreshToken = localStorage.getItem(StORED_KEYS.refresh_token);
 
-  // متضيفش Authorization على Request الـ refresh نفسه
   if (!req.url.includes('/auth/v1/token') && token) {
     req = req.clone({
       setHeaders: {
@@ -23,44 +25,63 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // لو الـ refresh نفسه فشل متعملش retry
-      if (
-        req.url.includes('/auth/v1/token') ||
-        error.status !== 401
-      ) {
+      if (req.url.includes('/auth/v1/token') || error.status !== 401) {
         return throwError(() => error);
       }
 
+      const refreshToken = localStorage.getItem(StORED_KEYS.refresh_token);
       if (!refreshToken) {
         return throwError(() => error);
       }
 
-      return authService.refreshToken(refreshToken).pipe(
-        switchMap((res) => {
-          localStorage.setItem(
-            StORED_KEYS.userToken,
-            res.access_token
-          );
+      // لو مفيش refresh شغال دلوقتي، ابدئي واحد واحفظي إنك بتعملي refresh
+      if (!isRefreshing) {
+        isRefreshing = true;
+        refreshTokenSubject.next(null); // نظّفي القيمة القديمة
 
-          localStorage.setItem(
-            StORED_KEYS.refresh_token,
-            res.refresh_token
-          );
+        return authService.refreshToken(refreshToken).pipe(
+          switchMap((res) => {
+            isRefreshing = false;
 
+            localStorage.setItem(StORED_KEYS.userToken, res.access_token);
+            localStorage.setItem(StORED_KEYS.refresh_token, res.refresh_token);
+
+            // بلّغي كل الـ requests المنتظرة إن التوكن الجديد جاهز
+            refreshTokenSubject.next(res.access_token);
+
+            const retryRequest = req.clone({
+              setHeaders: {
+                apikey: environment.apiKey,
+                Authorization: `Bearer ${res.access_token}`,
+              },
+            });
+
+            return next(retryRequest);
+          }),
+          catchError((refreshError) => {
+            isRefreshing = false;
+            refreshTokenSubject.next(null);
+
+            localStorage.removeItem(StORED_KEYS.userToken);
+            localStorage.removeItem(StORED_KEYS.refresh_token);
+
+            return throwError(() => refreshError);
+          })
+        );
+      }
+
+      // لو الـ refresh شغال بالفعل، استنّي لحد ما يخلص واستخدمي التوكن الجديد
+      return refreshTokenSubject.pipe(
+        filter((newToken) => newToken !== null),
+        take(1),
+        switchMap((newToken) => {
           const retryRequest = req.clone({
             setHeaders: {
               apikey: environment.apiKey,
-              Authorization: `Bearer ${res.access_token}`,
+              Authorization: `Bearer ${newToken}`,
             },
           });
-
           return next(retryRequest);
-        }),
-        catchError((refreshError) => {
-          localStorage.removeItem(StORED_KEYS.userToken);
-          localStorage.removeItem(StORED_KEYS.refresh_token);
-
-          return throwError(() => refreshError);
         })
       );
     })

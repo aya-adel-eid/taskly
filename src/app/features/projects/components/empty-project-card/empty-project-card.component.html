@@ -1,37 +1,47 @@
 <section class="flex flex-col items-center justify-center py-16">
-  <div class="relative  mb-8 image pt-3 pl-3">
-
-
-
-    <div class=" bg-[#F1F3FF] h-full">
-
+  <div class="relative mb-8 image pt-3 pl-3">
+    <div class="bg-[#F1F3FF] h-full">
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-        <img src="/images/Center Icon with tonal depth.png" alt="" class="w-17.5">
+        <img src="/assets/images/Center.png" alt="" class="w-17.5" />
       </div>
-
 
       <div class="absolute right-7 top-6">
-        <img src="/images/Floating secondary icons for asymmetric interest.png" alt="" class="w-12">
+        <img src="/assets/images/Floating.png" alt="" class="w-12" />
       </div>
-
 
       <div class="absolute bottom-6 left-7">
-        <img src="/images/Background+Shadow.png" alt="" class="w-10">
+        <img src="/assets/images/Background+Shadow.png" alt="" class="w-10" />
       </div>
     </div>
-
-
   </div>
   <div class="flex flex-col justify-center items-center">
-
-    <h3 class="text-[2.25rem] font-semibold text-seconder-800 mb-2">No Projects</h3>
-    <p class="text-[1.125rem] text-seconderText text-center max-w-105  mb-6 leading-7">
-      You don't have any projects yet. Start by defining your first architectural workspace to begin tracking tasks and
-      epics.
+    <h3 class="text-[2.25rem] font-semibold text-seconder-800 mb-2 leading-10 tracking-[-0.9px]">
+      No Projects
+    </h3>
+    <p
+      class="text-[1.125rem] text-center max-w-[434.4200134277344px] mb-6 leading-7.5 tracking-normal text-[#434654]"
+    >
+      You don't have any projects yet. Start by defining your first architectural workspace to begin
+      tracking tasks and epics.
     </p>
-    <button class="btnSend font-medium py-3 px-3 shadow-md text-sm">
-      <!-- <span><i class="fa-solid fa-plus"></i></span> -->
+    <a
+      routerLink="/project/add"
+      class="btn-Primary bg-linear-to-r from-primary to-primary-container flex justify-center items-center space-x-1.5"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M9 15H11V11H15V9H11V5H9V9H5V11H9V15ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
+          fill="white"
+        />
+      </svg>
+
       <span>Create New Project</span>
-    </button>
+    </a>
   </div>
 </section>

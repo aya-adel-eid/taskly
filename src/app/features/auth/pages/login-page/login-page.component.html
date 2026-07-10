@@ -1,44 +1,73 @@
-<div class="lg:bg-white md:p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F]">
- <app-header-auth [title]="'Welcome Back'" [text]="'Please enter your details to access your workspace'"></app-header-auth>
+<div
+  class="lg:bg-white w-full lg:w-xl md:p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F]"
+>
+  <app-header-auth
+    [title]="'Welcome Back'"
+    [text]="'Please enter your details to access your workspace'"
+  ></app-header-auth>
   <div class="pb-4">
-    <form  class="flex flex-col gap-6 w-full" [formGroup]="loginForm" (ngSubmit)="login()">
-       <!-- email -->
-         <app-rusable-input [type]="'email'" [placholder]="'yourname@company.com'"
-         [control]="loginForm.get('email')" formControlName="email"
-          [label]="'email'" [id]="'email'">
-         </app-rusable-input>
-        <!-- password -->
-          <app-rusable-input [type]="'password'" [placholder]="'yourname@company.com'" 
-          [control]="loginForm.get('password')" formControlName="password"
-          [label]="'Password'" [id]="'passwordd'">
-      
-          </app-rusable-input>
-          <!-- Button -->
-             <div class="flex justify-between">
-      <div class="flex items-center">
-        <input  id="checked-checkbox" type="checkbox" formControlName="rememberMe"
-          class="w-4 h-4 border border-[#C3C6D6] outline-none rounded-xs bg-neutral-secondary-medium ">
-        <label for="checked-checkbox" class=" ms-2 text-sm font-medium text-[#434654]">Remember Me</label>
-      </div>
-      <a class="text-primary text-sm font-medium cursor-pointer" routerLink="/forgot-password" >Forget Password?</a>
-    </div>
-        <div>
-
-         <button class="btn-Primary  bg-linear-to-r from-primary to-primary-container w-full">Log In</button>
+    <form class="flex flex-col gap-6 w-full" [formGroup]="loginForm" (ngSubmit)="login()">
+      <!-- email -->
+      <app-rusable-input
+        [type]="'email'"
+        [placholder]="'yourname@company.com'"
+        [control]="loginForm.get('email')"
+        formControlName="email"
+        [label]="'email'"
+        [id]="'email'"
+      >
+      </app-rusable-input>
+      <!-- password -->
+      <app-rusable-input
+        [type]="'password'"
+        [placholder]="'Enter your password '"
+        [control]="loginForm.get('password')"
+        formControlName="password"
+        [label]="'Password'"
+        [id]="'passwordd'"
+      >
+      </app-rusable-input>
+      <!-- Button -->
+      <div class="flex justify-between">
+        <div class="flex items-center">
+          <input
+            id="checked-checkbox"
+            type="checkbox"
+            formControlName="rememberMe"
+            class="w-4 h-4 border border-[#C3C6D6] outline-none rounded-xs bg-neutral-secondary-medium"
+          />
+          <label for="checked-checkbox" class="ms-2 text-sm font-medium text-[#434654]"
+            >Remember Me</label
+          >
         </div>
+        <a class="text-primary text-sm font-medium cursor-pointer" routerLink="/forgot-password"
+          >Forget Password?</a
+        >
+      </div>
+      <div>
+        <button
+          class="btn-Primary bg-linear-to-r from-primary to-primary-container w-full flex justify-center items-center space-x-1.5"
+        >
+          @if (loading()) {
+            <span class="loader"></span>
+          }
+          <span> Log In </span>
+        </button>
+      </div>
     </form>
-     @if (successMessage) {
-        <p class="bg-success/20 text-[#005235] mt-1.5 text-center px-3 py-2.5">{{successMessage}}</p>
+    @if (successMessage) {
+      <p class="bg-success/20 text-[#005235] mt-1.5 text-center px-3 py-2.5">
+        {{ successMessage }}
+      </p>
     }
     @if (errorMessage) {
-
-      <p class="alert-error mt-1.5 text-center">{{errorMessage}}</p>
+      <p class="alert-error mt-1.5 text-center">{{ errorMessage }}</p>
     }
-<div class="mt-3">
-    <p class="pt-8 text-center text-[14px] leading-5 tracking-normal"><span class="satuld ">Don't have an account? ? </span>
-        <a class="text-primary font-semibold" routerLink="/sign-up">Sign Up</a></p>
-</div>
+    <div class="mt-3">
+      <p class="pt-8 text-center text-[14px] leading-5 tracking-normal">
+        <span class="satuld">Don't have an account? ? </span>
+        <a class="text-primary font-semibold" routerLink="/sign-up">Sign Up</a>
+      </p>
+    </div>
   </div>
 </div>
-
-
