@@ -9,7 +9,7 @@ import { HandleErrorComponent } from '../../components/handle-error/handle-error
 import { EmptyProjectCardComponent } from '../../components/empty-project-card/empty-project-card.component';
 import { ProjectCardSkelttonComponent } from '../../components/project-card-skeltton/project-card-skeltton.component';
 import { ViewportScroller } from '@angular/common';
-import { distinctUntilChanged, map, tap } from 'rxjs';
+import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
 
 @Component({
   selector: 'app-list-projects',
@@ -30,6 +30,7 @@ export class ListProjectsComponent implements OnInit {
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly viewPortScroller = inject(ViewportScroller);
   private readonly router = inject(Router);
+  private destroy$ = new Subject<void>();
 
   page = signal(1);
   limit = signal(5);
@@ -67,7 +68,6 @@ export class ListProjectsComponent implements OnInit {
     this.isMobile.set(window.innerWidth < 1024);
     const isNowDesktop = wasMobile && !this.isMobile();
 
-    // لما نتحول من موبايل لدسكتوب، لازم نرجع لأول صفحة ونستبدل الداتا مش نضيف عليها
     if (isNowDesktop) {
       this.page.set(1);
 

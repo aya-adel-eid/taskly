@@ -11,65 +11,80 @@ import { environment } from '../../../../environments/environment';
 import { IResetPassword } from '../interfaces/ResetPassword';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthServicesService {
-  private readonly httpClient=inject(HttpClient)
-  private readonly router=inject(Router)
-    private readonly REMEMBER_ME_DAYS = 30;
-// sign up
-signUp(userData:{}){
-  return this.httpClient.post<ISignUp>(APIS_KEYS.AUTH.signUp,userData)
-}
-// login
-signIn(userData:{}){
-return this.httpClient.post<ISignIn>(APIS_KEYS.AUTH.login,userData)
-}
-// get user data
-getUserInfo(){
-  return this.httpClient.get<UserInfo>(APIS_KEYS.AUTH.userData)
-}
-// logOut
-logOut(){
-  return this.httpClient.post(APIS_KEYS.AUTH.logOut,{}).subscribe({
-    next:()=>{
-       this.router.navigateByUrl('/login')
-       this.clearSession()
-      //  localStorage.removeItem(StORED_KEYS.userToken)
-      //  localStorage.removeItem(StORED_KEYS.refresh_token)
-    },
-    error:(error:HttpErrorResponse)=>{
-      console.log(error);
-      this.clearSession()
-      
-    }
-  })
-}
-// Remember
+  private readonly httpClient = inject(HttpClient);
+  private readonly router = inject(Router);
+  private readonly REMEMBER_ME_DAYS = 30;
+  // sign up
+  signUp(userData: {}) {
+    return this.httpClient.post<ISignUp>(APIS_KEYS.AUTH.signUp, userData);
+  }
+  // login
+  signIn(userData: {}) {
+    return this.httpClient.post<ISignIn>(APIS_KEYS.AUTH.login, userData);
+  }
+  // get user data
+  getUserInfo() {
+    return this.httpClient.get<UserInfo>(APIS_KEYS.AUTH.userData);
+  }
+  // logOut
+  logOut() {
+    return this.httpClient.post(APIS_KEYS.AUTH.logOut, {}).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/login');
+        this.clearSession();
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+        this.clearSession();
+      },
+    });
+  }
+  // Remember
 
   storeSession(tokens: { access_token: string; refresh_token: string }, rememberMe: boolean): void {
     const storage: Storage = rememberMe ? localStorage : sessionStorage;
- 
+
     storage.setItem(StORED_KEYS.userToken, tokens.access_token);
     storage.setItem(StORED_KEYS.refresh_token, tokens.refresh_token);
- 
+
     if (rememberMe) {
       const expiresAt = Date.now() + this.REMEMBER_ME_DAYS * 24 * 60 * 60 * 1000;
       localStorage.setItem(StORED_KEYS.rememberMeExpiry, String(expiresAt));
     }
   }
 
-   isRememberMeExpired(): boolean {
+  isRememberMeExpired(): boolean {
     const expiresAt = localStorage.getItem(StORED_KEYS.rememberMeExpiry);
     if (!expiresAt) {
-      return false; // "remember me" was never set — nothing to expire
+      return false;
     }
     return Date.now() > Number(expiresAt);
   }
- 
+
   getToken(): string | null {
-    return localStorage.getItem(StORED_KEYS.userToken) ?? sessionStorage.getItem(StORED_KEYS.userToken);
+    return (
+      localStorage.getItem(StORED_KEYS.userToken) ?? sessionStorage.getItem(StORED_KEYS.userToken)
+    );
   }
+
+  getRefreshToken(): string | null {
+    return (
+      localStorage.getItem(StORED_KEYS.refresh_token) ??
+      sessionStorage.getItem(StORED_KEYS.refresh_token)
+    );
+  }
+
+  updateStoredTokens(accessToken: string, refreshToken: string): void {
+    const storage: Storage = localStorage.getItem(StORED_KEYS.userToken)
+      ? localStorage
+      : sessionStorage;
+    storage.setItem(StORED_KEYS.userToken, accessToken);
+    storage.setItem(StORED_KEYS.refresh_token, refreshToken);
+  }
+
   private clearSession(): void {
     localStorage.removeItem(StORED_KEYS.userToken);
     localStorage.removeItem(StORED_KEYS.refresh_token);
@@ -78,24 +93,22 @@ logOut(){
     sessionStorage.removeItem(StORED_KEYS.refresh_token);
   }
 
-
   // forget password
-  forgetPassword(email:{}){
-return this.httpClient.post(APIS_KEYS.AUTH.forgetpassword,email)
+  forgetPassword(email: {}) {
+    return this.httpClient.post(APIS_KEYS.AUTH.forgetpassword, email);
   }
   // update pass
-  updatePassword(password:{},token:string){
-    return this.httpClient.put(APIS_KEYS.AUTH.resetPassword,password,{
+  updatePassword(password: {}, token: string) {
+    return this.httpClient.put(APIS_KEYS.AUTH.resetPassword, password, {
       headers: {
         Authorization: `Bearer ${token}`,
-          apikey: environment.apiKey,
-        'Content-Type': 'application/json'
-      }
-    })
+        apikey: environment.apiKey,
+        'Content-Type': 'application/json',
+      },
+    });
   }
   // refresh Toekn
-  refreshToken(refreshToken:{}){
-return this.httpClient.post<IResetPassword>(APIS_KEYS.AUTH.refreshToken,refreshToken)
+  refreshToken(refreshToken: {}) {
+    return this.httpClient.post<IResetPassword>(APIS_KEYS.AUTH.refreshToken, refreshToken);
   }
-
 }
