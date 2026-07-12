@@ -1,34 +1,41 @@
 /*  bg-gradient-to-r from-primary to-primary-container */
-@layer components {
-  .btn-Primary {
-    @apply py-3.5 px-6 rounded-sm cursor-pointer    text-body-md leading-5 text-white tracking-normal;
-  }
-  .btn-Secondary {
-    @apply py-2.5 px-6  text-body-md leading-5 text-primary tracking-normal rounded-xs;
-  }
-  .btn-Ghost {
-    @apply py-2.5 px-6  text-body-md leading-5 text-satuld tracking-normal rounded-xs;
-  }
-  .input-control {
-    @apply bg-surface-highest  text-[#6B7280] leading-[100%] tracking-normal 
-   px-4  py-3.5 rounded-sm outline-none border-0 text-[16px] font-[400];
-  }
-  .label-input {
-    @apply text-[#737685] text-label-sm  uppercase tracking-[0.55px] font-bold  left-[4px] leading-[16.5px] relative top-[-0.5px];
-  }
-  .label-error {
-    @apply text-error text-label-sm leading-4 uppercase tracking-[1px] font-bold;
-  }
-  .alert-error {
-    @apply text-[#93000A] bg-[#FFDAD6] px-4 py-3 rounded-sm;
-  }
-  .alert-success {
-    @apply text-[#1b421a] bg-[#75c86f] px-4 py-3 rounded-sm;
-  }
-  .badge {
-    @apply bg-success py-1 px-2 text-[10px] text-[#002113] font-bold uppercase leading-3.5;
-  }
-  .layoutSection {
-    @apply p-8;
-  }
+@utility btn-Primary {
+  @apply py-3.5 px-6 rounded-sm cursor-pointer text-body-md leading-5 text-white tracking-normal;
+}
+
+@utility btn-Secondary {
+  @apply py-2.5 px-6 text-body-md leading-5 text-primary tracking-normal rounded-xs;
+}
+
+@utility btn-Ghost {
+  @apply py-2.5 px-6 text-body-md leading-5 text-satuld tracking-normal rounded-xs;
+}
+
+@utility input-control {
+  @apply bg-surface-highest text-[#6B7280] leading-[100%] tracking-normal
+  px-4 py-3.5 rounded-sm outline-none border-0 text-[16px] font-[400];
+}
+
+@utility label-input {
+  @apply text-[#737685] text-label-sm uppercase tracking-[0.55px] font-bold left-[4px] leading-[16.5px] relative top-[-0.5px];
+}
+
+@utility label-error {
+  @apply text-error text-label-sm leading-4 uppercase tracking-[1px] font-bold;
+}
+
+@utility alert-error {
+  @apply text-[#93000A] bg-[#FFDAD6] px-4 py-3 rounded-sm;
+}
+
+@utility alert-success {
+  @apply text-[#1b421a] bg-[#75c86f] px-4 py-3 rounded-sm;
+}
+
+@utility badge {
+  @apply bg-success py-1 px-2 text-[10px] text-[#002113] font-bold uppercase leading-3.5;
+}
+
+@utility layoutSection {
+  @apply p-8;
 }
