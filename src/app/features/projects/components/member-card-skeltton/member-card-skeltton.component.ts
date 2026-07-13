@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './member-card-skeltton.component.html',
-  styleUrl: './member-card-skeltton.component.css'
+  styleUrl: './member-card-skeltton.component.css',
 })
-export class MemberCardSkelttonComponent {
-
-}
+export class MemberCardSkelttonComponent {}

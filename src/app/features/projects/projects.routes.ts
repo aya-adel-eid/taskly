@@ -4,9 +4,7 @@ export const PROJECTS_ROUtES: Routes = [
   {
     path: 'project',
     loadComponent: () =>
-      import('./pages/projects-page/projects-page.component').then(
-        (c) => c.ProjectsPageComponent
-      ),
+      import('./pages/projects-page/projects-page.component').then((c) => c.ProjectsPageComponent),
     children: [
       {
         path: '',
@@ -18,9 +16,7 @@ export const PROJECTS_ROUtES: Routes = [
       {
         path: 'add',
         loadComponent: () =>
-          import('./pages/add-project/add-project.component').then(
-            (c) => c.AddProjectComponent
-          ),
+          import('./pages/add-project/add-project.component').then((c) => c.AddProjectComponent),
       },
 
       {
@@ -29,30 +25,21 @@ export const PROJECTS_ROUtES: Routes = [
           {
             path: 'tasks',
             loadComponent: () =>
-              import('./pages/tasks/tasks.component').then(
-                (c) => c.TasksComponent
-              ),
+              import('./pages/tasks/tasks.component').then((c) => c.TasksComponent),
           },
           {
             path: 'members',
             loadComponent: () =>
-              import('./pages/members/members.component').then(
-                (c) => c.MembersComponent
-              ),
+              import('./pages/members/members.component').then((c) => c.MembersComponent),
           },
           {
             path: 'epics',
             loadComponent: () =>
-              import('./pages/epics/epics.component').then(
-                (c) => c.EpicsComponent
-              ),
+              import('./pages/epics/epics.component').then((c) => c.EpicsComponent),
           },
           {
             path: 'edit',
-            loadComponent: () =>
-              import('./pages/edit/edit.component').then(
-                (c) => c.EditComponent
-              ),
+            loadComponent: () => import('./pages/edit/edit.component').then((c) => c.EditComponent),
           },
         ],
       },

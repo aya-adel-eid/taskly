@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './epics.component.html',
-  styleUrl: './epics.component.css'
+  styleUrl: './epics.component.css',
 })
-export class EpicsComponent {
-
-}
+export class EpicsComponent {}

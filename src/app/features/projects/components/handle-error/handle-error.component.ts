@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './handle-error.component.html',
-  styleUrl: './handle-error.component.css'
+  styleUrl: './handle-error.component.css',
 })
-export class HandleErrorComponent {
-
-}
+export class HandleErrorComponent {}

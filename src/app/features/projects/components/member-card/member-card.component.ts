@@ -7,10 +7,10 @@ import { ProjectsService } from '../../services/projects.service';
   standalone: true,
   imports: [],
   templateUrl: './member-card.component.html',
-  styleUrl: './member-card.component.css'
+  styleUrl: './member-card.component.css',
 })
 export class MemberCardComponent {
-  projectServices=inject(ProjectsService)
+  projectServices = inject(ProjectsService);
   titleRow = ['MEMBER', 'Role', 'Actions'];
   members = input<Member[]>();
 }

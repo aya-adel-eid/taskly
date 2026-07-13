@@ -55,8 +55,8 @@ export class LoginPageComponent {
           });
           this.authService.storeSession(resp, rememberMe!);
 
-          localStorage.setItem(StORED_KEYS.userToken, resp.access_token);
-          localStorage.setItem(StORED_KEYS.refresh_token, resp.refresh_token);
+          sessionStorage.setItem(StORED_KEYS.userToken, resp.access_token);
+          sessionStorage.setItem(StORED_KEYS.refresh_token, resp.refresh_token);
         },
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);

@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './rusable-button.component.html',
-  styleUrl: './rusable-button.component.css'
+  styleUrl: './rusable-button.component.css',
 })
-export class RusableButtonComponent {
-
-}
+export class RusableButtonComponent {}

@@ -5,9 +5,9 @@ import { Component, Input } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './header-auth.component.html',
-  styleUrl: './header-auth.component.css'
+  styleUrl: './header-auth.component.css',
 })
 export class HeaderAuthComponent {
-@Input()title!:string;
-@Input()text!:string;
+  @Input() title!: string;
+  @Input() text!: string;
 }

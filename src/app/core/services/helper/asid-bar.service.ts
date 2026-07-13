@@ -1,13 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AsidBarService {
-  projectId=signal<string>('');
+  projectId = signal<string>('');
   isCollapsed = signal(false);
 
   toggleCollapse() {
-    this.isCollapsed.update(value => !value);
+    this.isCollapsed.update((value) => !value);
   }
 }
