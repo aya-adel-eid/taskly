@@ -28,16 +28,17 @@ export class MembersComponent implements OnInit, OnDestroy {
   hassError = signal<boolean>(false);
   private destroy$ = new Subject<void>();
   projectId = '';
+
+  ngOnInit(): void {
+    this.activateRoute.paramMap.subscribe((param) => (this.projectId = param.get('projectId')!));
+    this.getAllMembers();
+  }
   arrPaths = [
     {
       label: 'Members',
       path: `/project/${this.projectId}/members`,
     },
   ];
-  ngOnInit(): void {
-    this.activateRoute.paramMap.subscribe((param) => (this.projectId = param.get('projectId')!));
-    this.getAllMembers();
-  }
   getAllMembers() {
     this.hassError.set(false);
     console.log(this.projectServices.selectedProjectId());

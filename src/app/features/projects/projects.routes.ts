@@ -36,6 +36,22 @@ export const PROJECTS_ROUtES: Routes = [
             path: 'epics',
             loadComponent: () =>
               import('./pages/epics/epics.component').then((c) => c.EpicsComponent),
+            // children: [
+            //   {
+            //     path: 'new',
+            //     loadComponent: () =>
+            //       import('./pages/add-new-epics-page/add-new-epics-page.component').then(
+            //         (c) => c.AddNewEpicsPageComponent
+            //       ),
+            //   },
+            // ],
+          },
+          {
+            path: 'epics/new',
+            loadComponent: () =>
+              import('./pages/add-new-epics-page/add-new-epics-page.component').then(
+                (c) => c.AddNewEpicsPageComponent
+              ),
           },
           {
             path: 'edit',
