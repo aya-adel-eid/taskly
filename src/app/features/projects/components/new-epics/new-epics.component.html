@@ -1,14 +1,19 @@
 <div
   class="pt-2 lg:pb-4 w-full lg:border lg:border-[#C3C6D61A]/10 rounded-lg lg:shadow-lg lg:shadow-[#041B3C0F]/6 bg-transparent lg:bg-white"
 >
-  <form class="w-full p-8 flex flex-col gap-8">
+  <form
+    class="w-full lg:p-8 flex flex-col gap-6 lg:gap-8"
+    [formGroup]="addNewEpics"
+    (ngSubmit)="addEpics()"
+  >
     <!-- Title -->
-    <div class="mb-6 grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-6">
       <label for="projectTitle" class="label-input">
         TITLE <span class="text-red-600">*</span>
       </label>
       <div class="lg:col-span-3">
         <input
+          formControlName="title"
           type="text"
           id="projectTitle"
           class="input-control w-full"
@@ -18,13 +23,14 @@
     </div>
 
     <!-- Description -->
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-6 mb-10">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-6">
       <div class="lg:col-span-1">
         <label class="label-input">Description</label>
         <span class="text-[10px] leading-3.5 ps-1 text-[#434654] block">Optional</span>
       </div>
       <div class="lg:col-span-3 relative">
         <textarea
+          formControlName="description"
           rows="5"
           placeholder="Describe the scope and objectives of this epic..."
           class="input-control w-full"
@@ -34,20 +40,57 @@
     </div>
 
     <!-- Assignee & Deadline -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="flex flex-col gap-1.5">
         <label class="label-input">Assignee</label>
-        <select class="input-control appearance-none cursor-pointer">
-          <option value="" disabled selected>Select a member...</option>
-          @for (member of allMembers(); track member.user_id) {
-            <option [value]="member.user_id">{{ member.metadata.name }}</option>
-          }
-        </select>
+
+        <div class="relative">
+          <select
+            formControlName="assignee_id"
+            class="input-control appearance-none cursor-pointer pr-10 w-full"
+          >
+            <option [ngValue]="null" disabled selected>Select a member...</option>
+
+            @for (member of allMembers(); track member.user_id) {
+              <option [value]="member.user_id">
+                {{ member.metadata.name }}
+              </option>
+            }
+          </select>
+
+          <!-- Arrow -->
+          <div
+            class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M5 7.5L10 12.5L15 7.5"
+                stroke="#6B7280"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+
         <span></span>
       </div>
       <div class="flex flex-col gap-1.5">
         <label class="label-input">Deadline</label>
-        <input type="date" placeholder="mm/dd/yyyy" class="input-control w-full" />
+        <input
+          type="date"
+          placeholder="mm/dd/yyyy"
+          class="input-control w-full"
+          [min]="today"
+          formControlName="deadline"
+        />
       </div>
     </div>
 
@@ -58,13 +101,12 @@
       <button
         type="button"
         class="bg-linear-to-r from-primary to-primary-container btn-Primary order-1 lg:order-2 leading-5 py-3 px-10"
-        (click)="addEpics()"
       >
         Create Epic
       </button>
       <a
         [routerLink]="['/project', projectId(), 'epics']"
-        class="font-semibold text-[.875rem] text-[#4F5F7B] leading-5 tracking-normal order-2 lg:order-1 cursor-pointer py-4 px-8"
+        class="font-semibold text-[.875rem] text-[#4F5F7B] leading-5 tracking-normal order-2 lg:order-1 cursor-pointer py-4 px-8 text-center"
       >
         Cancel
       </a>

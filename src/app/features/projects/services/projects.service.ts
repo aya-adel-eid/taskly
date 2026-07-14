@@ -74,4 +74,8 @@ export class ProjectsService {
       ? (words[0][0] + words[1][0]).toUpperCase()
       : name.substring(0, 2).toUpperCase();
   }
+  //Add new Epics
+  addNewEpics(epicData: {}) {
+    return this.httpClient.post(APIS_KEYS.projects.NewEpics, epicData);
+  }
 }
