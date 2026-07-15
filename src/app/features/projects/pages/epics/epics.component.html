@@ -1,1 +1,75 @@
-<p>epics works!</p>
+<section class="p-8 flex gap-10 flex-col">
+  <div class="flex justify-between items-start w-full">
+    <div class="hidden lg:block">
+      <app-breadcrumb [arrPaths]="arrPaths"></app-breadcrumb>
+      <h2 class="text-[30px] font-bold leading-9 tracking-[-0.75px] text-[#041B3C] mt-1">
+        Project Epics
+      </h2>
+    </div>
+
+    <div class="flex gap-3 items-center w-full lg:w-auto">
+      <div class="relative flex-1 lg:flex-none">
+        <input
+          type="text"
+          placeholder="Search epics..."
+          class="input-control placeholder:text-[#737685] text-[14px] leading-[100%] tracking-normal py-3 ps-9 pe-3 rounded-xs block w-full lg:w-[220px] placeholder:pt-[9px] placeholder:pb-[10px]"
+        />
+        <span class="absolute top-1/2 -translate-y-1/2 left-3"
+          ><svg
+            width="11"
+            height="11"
+            viewBox="0 0 11 11"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.68333 10.5L6.00833 6.825C5.71667 7.05833 5.38125 7.24306 5.00208 7.37917C4.62292 7.51528 4.21944 7.58333 3.79167 7.58333C2.73194 7.58333 1.83507 7.21632 1.10104 6.48229C0.367014 5.74826 0 4.85139 0 3.79167C0 2.73194 0.367014 1.83507 1.10104 1.10104C1.83507 0.367014 2.73194 0 3.79167 0C4.85139 0 5.74826 0.367014 6.48229 1.10104C7.21632 1.83507 7.58333 2.73194 7.58333 3.79167C7.58333 4.21944 7.51528 4.62292 7.37917 5.00208C7.24306 5.38125 7.05833 5.71667 6.825 6.00833L10.5 9.68333L9.68333 10.5ZM3.79167 6.41667C4.52083 6.41667 5.14062 6.16146 5.65104 5.65104C6.16146 5.14062 6.41667 4.52083 6.41667 3.79167C6.41667 3.0625 6.16146 2.44271 5.65104 1.93229C5.14062 1.42188 4.52083 1.16667 3.79167 1.16667C3.0625 1.16667 2.44271 1.42188 1.93229 1.93229C1.42188 2.44271 1.16667 3.0625 1.16667 3.79167C1.16667 4.52083 1.42188 5.14062 1.93229 5.65104C2.44271 6.16146 3.0625 6.41667 3.79167 6.41667Z"
+              fill="#737685"
+            />
+          </svg>
+        </span>
+      </div>
+
+      <a
+        [routerLink]="['/project', projectId(), 'epics', 'new']"
+        class="btn-Primary bg-linear-to-r from-primary to-primary-container hidden lg:flex justify-center items-center gap-2 py-3 shrink-0"
+      >
+        <span class=""
+          ><svg
+            width="11"
+            height="11"
+            viewBox="0 0 11 11"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
+          </svg>
+        </span>
+        <span class="hidden lg:block">New Epic</span>
+      </a>
+    </div>
+  </div>
+  <div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <app-card-epic></app-card-epic>
+      <app-card-epic></app-card-epic>
+      <app-card-epic></app-card-epic>
+      <app-card-epic></app-card-epic>
+    </div>
+
+    <a
+      [routerLink]="['/project', projectId(), 'epics', 'new']"
+      class="lg:hidden mt-6 ml-auto w-14 h-14 rounded-lg bg-linear-to-r from-primary to-primary-container flex justify-center items-center shadow-lg"
+    >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 11 11"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
+      </svg>
+    </a>
+  </div>
+</section>
