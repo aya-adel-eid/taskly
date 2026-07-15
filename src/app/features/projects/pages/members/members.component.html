@@ -1,5 +1,5 @@
 @if (hassError()) {
-  <app-handle-error></app-handle-error>
+  <app-handle-error (retry)="getAllMembers()"></app-handle-error>
 } @else {
   @if (allMembers()) {
     <section id="projectMember" class="">

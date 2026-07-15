@@ -3,7 +3,7 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { RusableInputComponent } from '../../../auth/components/rusable-input/rusable-input.component';
 import { CardEpicComponent } from '../../components/card-epic/card-epic.component';
-import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, map, Subject, tap } from 'rxjs';
 import { ProjectsService } from '../../services/projects.service';
 import { ViewportScroller } from '@angular/common';
 import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-skelltone.component';
@@ -29,10 +29,12 @@ import { HandleErrorComponent } from '../../components/handle-error/handle-error
 export class EpicsComponent {
   private readonly activateRoute = inject(ActivatedRoute);
   projectId = signal<string>('');
-  ngOnInit(): void {
-    this.activateRoute.paramMap.subscribe((param) => this.projectId.set(param.get('projectId')!));
-    this.getAllEpics();
-  }
+  // ngOnInit(): void {
+  //   this.activateRoute.paramMap.subscribe((param) => {
+  //     this.projectId.set(param.get('projectId')!);
+  //     this.getAllEpics();
+  //   });
+  // }
   arrPaths = computed(() => [
     {
       label: 'Epics',
@@ -59,13 +61,15 @@ export class EpicsComponent {
   selectedProjectId = signal<string | null>(null);
 
   constructor() {
-    this.activateRoute.queryParamMap
+    combineLatest([this.activateRoute.paramMap, this.activateRoute.queryParamMap])
       .pipe(
-        tap((params) => {
-          this.selectedProjectId.set(params.get('projectId'));
+        tap(([params, queryParams]) => {
+          this.projectId.set(params.get('projectId')!);
+          this.selectedProjectId.set(queryParams.get('projectId'));
         }),
-        map((params) => +(params.get('offset') ?? 0)),
-        distinctUntilChanged()
+        map(([, queryParams]) => +(queryParams.get('offset') ?? 0)),
+        distinctUntilChanged(),
+        filter(() => !!this.projectId())
       )
       .subscribe((offset) => {
         this.page.set(offset / this.limit() + 1);

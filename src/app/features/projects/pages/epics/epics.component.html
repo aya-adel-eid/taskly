@@ -1,5 +1,5 @@
 @if (hasError()) {
-  <app-handle-error></app-handle-error>
+  <app-handle-error (retry)="getAllEpics()"></app-handle-error>
 } @else {
   @if (allEpics() != null && allEpics()?.length === 0) {
     <app-empty-epics></app-empty-epics>
@@ -76,7 +76,7 @@
         </div>
       }
       <div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           @if (!allEpics()) {
             @for (skelltone of [1, 2, 3, 4, 5, 6]; track $index) {
               <app-epic-skelltone></app-epic-skelltone>
@@ -104,14 +104,15 @@
         </a>
       </div>
       <div
-        class="lg:flex justify-between items-center ps-8 text-[#434654 text-xs leading-3.5 hidden"
+        class="lg:flex justify-between items-center ps-8 text-[#434654] text-xs leading-3.5 hidden"
       >
         <div>
-          <p>
-            <span>Showing</span>
-            <span>{{ limit() }}</span>
-            from
-            <span>{{ totalCount() }}</span>
+          <p class="text-[#434654] text-[14px] leading-[100%]">
+            Showing
+            <span class="text-[#041B3C] font-semibold">{{ allEpics()?.length }}</span>
+            of
+            <span class="text-[#041B3C] font-semibold">{{ totalCount() }}</span>
+            epics
           </p>
         </div>
 

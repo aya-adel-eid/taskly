@@ -1,6 +1,6 @@
 <!-- list of projects -->
 @if (hasError()) {
-  <app-handle-error></app-handle-error>
+  <app-handle-error (retry)="getAllProjects()"></app-handle-error>
 } @else {
   @if (allProjects() !== null && allProjects()?.length === 0) {
     <app-empty-project-card></app-empty-project-card>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'app-handle-error',
@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
   templateUrl: './handle-error.component.html',
   styleUrl: './handle-error.component.css',
 })
-export class HandleErrorComponent {}
+export class HandleErrorComponent {
+  retry = output<void>();
+
+  onRetry() {
+    this.retry.emit();
+  }
+}
