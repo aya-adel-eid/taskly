@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { APIS_KEYS } from '../../../core/constants/APIS_KEYS';
 import { IProject } from '../interfaces/Iprojects';
 import { Member } from '../interfaces/IMembers';
+import { IEpicsProject } from '../interfaces/IEpicsProject';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,10 @@ export class ProjectsService {
   isLoading = signal<boolean>(true);
   selectedProjectId = signal<string>('');
   isSelected = signal<boolean>(false);
+  epicsIsLoadding = signal<boolean>(false);
+  epicsError = signal<string>('');
+  allEpics = signal<IEpicsProject[] | null>(null);
+  totalCountEpics = signal<number>(0);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -77,5 +82,44 @@ export class ProjectsService {
   //Add new Epics
   addNewEpics(epicData: {}) {
     return this.httpClient.post(APIS_KEYS.projects.NewEpics, epicData);
+  }
+  // get allEpics
+  getAllEpics(limit = 5, page = 1, append = false, projectId: string) {
+    const offset = (page - 1) * limit;
+
+    this.epicsIsLoadding.set(true);
+
+    return this.httpClient
+      .get<IEpicsProject[]>(
+        `${APIS_KEYS.projects.getEpics}?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
+        {
+          headers: {
+            Prefer: 'count=exact',
+          },
+          observe: 'response',
+        }
+      )
+      .subscribe({
+        next: (resp) => {
+          this.epicsError.set('');
+
+          if (append) {
+            this.allEpics.update((current) => [...(current ?? []), ...(resp.body ?? [])]);
+          } else {
+            this.allEpics.set(resp.body ?? []);
+          }
+
+          this.epicsIsLoadding.set(false);
+
+          const contentRange = resp.headers.get('Content-Range');
+          if (contentRange) {
+            this.totalCountEpics.set(+contentRange.split('/')[1]);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.epicsError.set(error.error.msg);
+          this.epicsIsLoadding.set(false);
+        },
+      });
   }
 }

@@ -17,5 +17,6 @@ export const APIS_KEYS = {
     editProject: `${environment.baseUrRL}/rest/v1/projects`,
     allMembers: `${environment.baseUrRL}/rest/v1/get_project_members`,
     NewEpics: `${environment.baseUrRL}/rest/v1/epics`,
+    getEpics: `${environment.baseUrRL}/rest/v1/project_epics`,
   },
 };

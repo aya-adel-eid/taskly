@@ -29,20 +29,13 @@
               />
             </svg>
 
-            @if (!last) {
-              <a
-                [routerLink]="item.path"
-                class="inline-flex items-center font-bold cursor-pointer leading-3.5 tracking-[1.2px] uppercase text-[12px] text-[#43465499]/60 hover:text-main-700"
-              >
-                {{ item.label }}
-              </a>
-            } @else {
-              <span
-                class="inline-flex items-center font-bold leading-3.5 tracking-[1.2px] uppercase text-[12px] text-primary"
-              >
-                {{ item.label }}
-              </span>
-            }
+            <a
+              [routerLink]="item.path"
+              [class]="last ? 'text-primary' : 'text-[#43465499]/60 hover:text-main-700'"
+              class="inline-flex items-center font-bold cursor-pointer leading-3.5 tracking-[1.2px] uppercase text-[12px]"
+            >
+              {{ item.label }}
+            </a>
           </div>
         </li>
       }
