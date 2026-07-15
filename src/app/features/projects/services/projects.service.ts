@@ -18,7 +18,7 @@ export class ProjectsService {
   selectedProjectId = signal<string>('');
   isSelected = signal<boolean>(false);
   epicsIsLoadding = signal<boolean>(false);
-  epicsError = signal<string>('');
+  epicsError = signal<boolean>(false);
   allEpics = signal<IEpicsProject[] | null>(null);
   totalCountEpics = signal<number>(0);
   createNewProject(data: {}) {
@@ -101,7 +101,7 @@ export class ProjectsService {
       )
       .subscribe({
         next: (resp) => {
-          this.epicsError.set('');
+          this.epicsError.set(false);
 
           if (append) {
             this.allEpics.update((current) => [...(current ?? []), ...(resp.body ?? [])]);
@@ -117,7 +117,7 @@ export class ProjectsService {
           }
         },
         error: (error: HttpErrorResponse) => {
-          this.epicsError.set(error.error.msg);
+          this.epicsError.set(true);
           this.epicsIsLoadding.set(false);
         },
       });

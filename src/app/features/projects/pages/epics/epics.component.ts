@@ -7,6 +7,9 @@ import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
 import { ProjectsService } from '../../services/projects.service';
 import { ViewportScroller } from '@angular/common';
 import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-skelltone.component';
+import { EmptyEpicsComponent } from '../../components/empty-epics/empty-epics.component';
+import { IEpicsProject } from '../../interfaces/IEpicsProject';
+import { HandleErrorComponent } from '../../components/handle-error/handle-error.component';
 
 @Component({
   selector: 'app-epics',
@@ -17,6 +20,8 @@ import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-ske
     RouterLink,
     CardEpicComponent,
     EpicSkelltoneComponent,
+    EmptyEpicsComponent,
+    HandleErrorComponent,
   ],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',

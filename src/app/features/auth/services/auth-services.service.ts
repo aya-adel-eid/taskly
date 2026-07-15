@@ -91,6 +91,7 @@ export class AuthServicesService {
     localStorage.removeItem(StORED_KEYS.rememberMeExpiry);
     sessionStorage.removeItem(StORED_KEYS.userToken);
     sessionStorage.removeItem(StORED_KEYS.refresh_token);
+    sessionStorage.removeItem(StORED_KEYS.projectId);
   }
 
   // forget password
