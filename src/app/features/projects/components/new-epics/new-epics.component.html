@@ -79,7 +79,9 @@
           placeholder="Describe the scope and objectives of this epic..."
           class="input-control w-full"
         ></textarea>
-        <span class="absolute -bottom-4 right-1.5 text-xs text-[#8B93B0]">0 / 500 characters</span>
+        <span class="absolute -bottom-4 right-1.5 text-xs text-[#8B93B0]"
+          >{{ addNewEpics.get('description')?.value?.length || 0 }}/ 500 characters</span
+        >
       </div>
     </div>
 

@@ -34,7 +34,7 @@ export class NewEpicsComponent {
   }
   addNewEpics = this.fb.group({
     title: [null, [Validators.required, Validators.minLength(3)]],
-    description: [null],
+    description: ['', Validators.maxLength(500)],
     assignee_id: [null],
     project_id: [sessionStorage.getItem(StORED_KEYS.projectId)],
     deadline: [
@@ -83,6 +83,7 @@ export class NewEpicsComponent {
         error: (error: HttpErrorResponse) => {},
       });
   }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
