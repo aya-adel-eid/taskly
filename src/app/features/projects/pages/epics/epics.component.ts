@@ -6,11 +6,18 @@ import { CardEpicComponent } from '../../components/card-epic/card-epic.componen
 import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
 import { ProjectsService } from '../../services/projects.service';
 import { ViewportScroller } from '@angular/common';
+import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-skelltone.component';
 
 @Component({
   selector: 'app-epics',
   standalone: true,
-  imports: [BreadcrumbComponent, RusableInputComponent, RouterLink, CardEpicComponent],
+  imports: [
+    BreadcrumbComponent,
+    RusableInputComponent,
+    RouterLink,
+    CardEpicComponent,
+    EpicSkelltoneComponent,
+  ],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
 })
@@ -36,7 +43,7 @@ export class EpicsComponent {
   private destroy$ = new Subject<void>();
 
   page = signal(1);
-  limit = signal(3);
+  limit = signal(6);
 
   allEpics = this.projectsService.allEpics;
   totalCount = this.projectsService.totalCountEpics;
