@@ -24,7 +24,8 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (req.url.includes('/auth/v1/token') || error.status !== 401) {
+      // لو الطلب نفسه لطلب الـ refresh أو الطلب مش auth error، اسيبه يمشي عادي
+      if (req.url.includes('/auth/v1/token') || (error.status !== 401 && error.status !== 403)) {
         return throwError(() => error);
       }
 
@@ -41,9 +42,7 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
         return authService.refreshToken(refreshToken).pipe(
           switchMap((res) => {
             isRefreshing = false;
-
             authService.updateStoredTokens(res.access_token, res.refresh_token);
-
             refreshTokenSubject.next(res.access_token);
 
             const retryRequest = req.clone({
@@ -58,9 +57,7 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((refreshError) => {
             isRefreshing = false;
             refreshTokenSubject.next(null);
-
-            authService.logOut();
-
+            authService.logOut(); // هنا لازم تتأكد إنها بتمسح التوكنز فعليًا وبتوديه لصفحة اللوجين
             return throwError(() => refreshError);
           })
         );

@@ -1,0 +1,173 @@
+<div
+  class="bg-transparent lg:bg-white rounded-lg w-full lg:p-6 lg:shadow-[0px_24px_48px_-12px_rgba(4,27,60,0.06)]"
+>
+  <form class="w-full flex flex-col gap-8" [formGroup]="addNewTask">
+    <div>
+      <label for="projectTitle" class="label-input"
+        >Project TITLE <span class="text-red-600">*</span></label
+      >
+      <input
+        type="text"
+        id="projectTitle"
+        class="bg-[#D7E2FF] rounded-sm w-full text-[18px] tracking-normal font-medium leading-[100%] pt-3.75 pb-4 px-4"
+        placeholder="e.g., Finalize structural schematics"
+        formControlName="title"
+      />
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <!-- status -->
+      <div>
+        <label class="label-input">Status*</label>
+        <div class="relative">
+          <select
+            class="input-control appearance-none cursor-pointer w-full"
+            formControlName="status"
+          >
+            <option value="TO_DO" disabled selected>TO DO</option>
+            @for (statue of statues; track $index) {
+              <option [value]="statue.value">{{ statue.value }}</option>
+            }
+          </select>
+          <!-- Arrow -->
+          <div
+            class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M5 7.5L10 12.5L15 7.5"
+                stroke="#6B7280"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <!-- Assignee -->
+      <div>
+        <label class="label-input">Assignee</label>
+        <div class="relative">
+          <select
+            class="input-control w-full appearance-none cursor-pointer"
+            formControlName="assignee_id"
+          >
+            <option [ngValue]="null" disabled selected>Select Team Member</option>
+            @for (member of allMembers(); track member.project_id) {
+              <option [value]="member.user_id">{{ member.metadata.name }}</option>
+            }
+          </select>
+          <!-- Arrow -->
+          <div
+            class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <path
+                d="M5 7.5L10 12.5L15 7.5"
+                stroke="#6B7280"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- epic Id -->
+      <label class="label-input text-[#434654]">Epic</label>
+      <div class="relative">
+        <select
+          class="input-control appearance-none cursor-pointer w-full"
+          formControlName="epic_id"
+        >
+          <option [ngValue]="null" disabled selected>Select Epic</option>
+          @for (epic of allEpics(); track $index) {
+            <option [value]="epic.id">{{ epic.epic_id }} {{ truncate(epic.title) }}</option>
+          }
+        </select>
+        <!-- Arrow -->
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 20 20"
+            fill="none"
+          >
+            <path
+              d="M5 7.5L10 12.5L15 7.5"
+              stroke="#6B7280"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div>
+      <!-- date -->
+      <label class="label-input">Due Date</label>
+      <input
+        type="date"
+        placeholder="mm/dd/yyyy"
+        class="input-control w-full"
+        formControlName="due_date"
+      />
+    </div>
+    <!-- description -->
+    <div>
+      <label for="projectdescription" class="label-input flex justify-between">
+        <span>Description</span>
+      </label>
+      <textarea
+        id="projectdescription"
+        rows="4"
+        class="input-control pt-3 text-[15px] leading-6 tracking-normal px-4 w-full"
+        placeholder="Provide detailed context for this task..."
+        formControlName="description"
+      ></textarea>
+    </div>
+    <div
+      class="pt-8 border-t border-t-[#C3C6D61A] flex lg:flex-row flex-col lg:items-center lg:justify-end gap-4"
+    >
+      <button
+        [routerLink]="['/project', projectId(), 'epics']"
+        class="font-semibold text-[.875rem] text-[#4F5F7B] leading-5 tracking-normal order-2 lg:order-1 cursor-pointer py-3 px-6"
+      >
+        Back
+      </button>
+      <button
+        type="button"
+        class="bg-linear-to-r from-primary to-primary-container btn-Primary px-7 order-1 lg:order-2 flex justify-center items-center gap-2"
+      >
+        <span class="block lg:hidden"
+          ><svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M6 8H0V6H6V0H8V6H14V8H8V14H6V8Z" fill="white" />
+          </svg>
+        </span>
+        <span>Create Task</span>
+      </button>
+    </div>
+  </form>
+</div>

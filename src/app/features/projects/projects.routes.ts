@@ -54,6 +54,13 @@ export const PROJECTS_ROUtES: Routes = [
               ),
           },
           {
+            path: 'tasks/new',
+            loadComponent: () =>
+              import('./pages/task-form-page/task-form-page.component').then(
+                (c) => c.TaskFormPageComponent
+              ),
+          },
+          {
             path: 'edit',
             loadComponent: () => import('./pages/edit/edit.component').then((c) => c.EditComponent),
           },

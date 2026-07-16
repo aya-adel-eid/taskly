@@ -28,9 +28,10 @@ export class NewEpicsComponent {
   today = new Date().toISOString().split('T')[0];
   private readonly fb = inject(FormBuilder);
   ngOnInit(): void {
-    this.activateRoute.paramMap.subscribe((param) => this.projectId.set(param.get('projectId')!));
-
-    this.getAllMembers();
+    this.activateRoute.paramMap.subscribe((param) => {
+      this.projectId.set(param.get('projectId')!);
+      this.getAllMembers();
+    });
   }
   addNewEpics = this.fb.group({
     title: [null, [Validators.required, Validators.minLength(3)]],

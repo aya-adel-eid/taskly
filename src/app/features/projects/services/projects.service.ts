@@ -21,6 +21,7 @@ export class ProjectsService {
   epicsError = signal<boolean>(false);
   allEpics = signal<IEpicsProject[] | null>(null);
   totalCountEpics = signal<number>(0);
+  epics = signal<IEpicsProject[] | null>(null);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -119,6 +120,18 @@ export class ProjectsService {
         error: (error: HttpErrorResponse) => {
           this.epicsError.set(true);
           this.epicsIsLoadding.set(false);
+        },
+      });
+  }
+  getEpicsProject(projectId: string) {
+    return this.httpClient
+      .get<IEpicsProject[]>(`${APIS_KEYS.projects.getEpics}?project_id=eq.${projectId}`)
+      .subscribe({
+        next: (resp) => {
+          this.epics.set(resp);
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
         },
       });
   }
