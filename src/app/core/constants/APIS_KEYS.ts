@@ -18,5 +18,6 @@ export const APIS_KEYS = {
     allMembers: `${environment.baseUrRL}/rest/v1/get_project_members`,
     NewEpics: `${environment.baseUrRL}/rest/v1/epics`,
     getEpics: `${environment.baseUrRL}/rest/v1/project_epics`,
+    NewTask: `${environment.baseUrRL}/rest/v1/tasks`,
   },
 };

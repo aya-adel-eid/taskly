@@ -135,4 +135,7 @@ export class ProjectsService {
         },
       });
   }
+  createNewtTask(taskInfo: {}) {
+    return this.httpClient.post(APIS_KEYS.projects.NewTask, taskInfo);
+  }
 }

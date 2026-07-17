@@ -1,16 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
 import { Member } from '../../interfaces/IMembers';
-import { Subject, takeUntil } from 'rxjs';
+import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IEpicsProject } from '../../interfaces/IEpicsProject';
+import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
+import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
 
 @Component({
   selector: 'app-add-task-form',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ToastMassageComponent],
   templateUrl: './add-task-form.component.html',
   styleUrl: './add-task-form.component.css',
 })
@@ -18,7 +20,8 @@ export class AddTaskFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly activateRoute = inject(ActivatedRoute);
   private readonly projectServices = inject(ProjectsService);
-
+  private readonly route = inject(Router);
+  successMessage = signal<string>('');
   allMembers = signal<Member[] | null>(null);
   allEpics = this.projectServices.epics;
 
@@ -32,7 +35,7 @@ export class AddTaskFormComponent {
     });
   }
   addNewTask = this.fb.group({
-    project_id: [this.projectId(), Validators.required],
+    project_id: [sessionStorage.getItem(StORED_KEYS.projectId), Validators.required],
     epic_id: [null],
     title: [null, [Validators.required]],
     description: [null],
@@ -94,5 +97,27 @@ export class AddTaskFormComponent {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+  createNewTask() {
+    console.log(this.addNewTask.value);
+    this.successMessage.set('');
+    if (this.addNewTask.valid) {
+      this.projectServices.createNewtTask(this.addNewTask.value).subscribe({
+        next: (resp) => {
+          console.log(resp);
+          this.successMessage.set('Your epic has been created successfully.');
+          interval(1000)
+            .pipe(take(3))
+            .subscribe(() => {
+              this.successMessage.set('');
+              this.route.navigateByUrl(`/project/${this.projectId()}/tasks`);
+            });
+        },
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+          this.successMessage.set('');
+        },
+      });
+    }
   }
 }

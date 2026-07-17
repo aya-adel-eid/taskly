@@ -57,7 +57,7 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((refreshError) => {
             isRefreshing = false;
             refreshTokenSubject.next(null);
-            authService.logOut(); // هنا لازم تتأكد إنها بتمسح التوكنز فعليًا وبتوديه لصفحة اللوجين
+            authService.logOut();
             return throwError(() => refreshError);
           })
         );

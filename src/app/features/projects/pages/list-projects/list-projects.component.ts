@@ -129,4 +129,7 @@ export class ListProjectsComponent implements OnInit {
   get pages(): number[] {
     return Array.from({ length: Math.ceil(this.totalCount() / this.limit()) }, (_, i) => i + 1);
   }
+  addNewProject() {
+    this.projectsService.projectEdit.set(null);
+  }
 }

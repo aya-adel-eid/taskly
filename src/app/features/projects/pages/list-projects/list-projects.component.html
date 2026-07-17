@@ -21,6 +21,7 @@
           </div>
           @if (allProjects()) {
             <a
+              (click)="addNewProject()"
               routerLink="/project/add"
               class="btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center flex"
             >
