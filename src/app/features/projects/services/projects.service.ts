@@ -4,6 +4,7 @@ import { APIS_KEYS } from '../../../core/constants/APIS_KEYS';
 import { IProject } from '../interfaces/Iprojects';
 import { Member } from '../interfaces/IMembers';
 import { IEpicsProject } from '../interfaces/IEpicsProject';
+import { IEpicDetails } from '../interfaces/IEpicDetails';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +20,11 @@ export class ProjectsService {
   isSelected = signal<boolean>(false);
   epicsIsLoadding = signal<boolean>(false);
   epicsError = signal<boolean>(false);
-  allEpics = signal<IEpicsProject[] | null>(null);
+  allEpics = signal<IEpicsProject[] | []>([]);
   totalCountEpics = signal<number>(0);
   epics = signal<IEpicsProject[] | null>(null);
+  epic = signal<IEpicDetails | null>(null);
+  showPoupDetail = signal<boolean>(false);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -137,5 +140,19 @@ export class ProjectsService {
   }
   createNewtTask(taskInfo: {}) {
     return this.httpClient.post(APIS_KEYS.projects.NewTask, taskInfo);
+  }
+  // get epics Details
+  getEpicsDetails(projectID: string, epicID: string) {
+    return this.httpClient.get<IEpicDetails[]>(
+      `${APIS_KEYS.projects.getEpics}?project_id=eq.${projectID}&&id=eq.${epicID}`
+    );
+  }
+  updateEpic(editInfo: Partial<IEpicDetails>, epicId: string) {
+    return this.httpClient.patch(`${APIS_KEYS.projects.updateEpic}?id=eq.${epicId}`, editInfo);
+  }
+  patchLocalEpic(epicId: string, partial: Partial<IEpicsProject>) {
+    this.allEpics.update((epics) =>
+      epics.map((epic) => (epic.id === epicId ? { ...epic, ...partial } : epic))
+    );
   }
 }

@@ -1,1 +1,284 @@
-<p>epic-details-popup works!</p>
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50" (click)="closeModal()">
+  <div
+    class="bg-white rounded-lg w-full max-w-2xl max-h-230.25 overflow-y-auto shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Header -->
+
+    <!-- Body -->
+    <form [formGroup]="epicForm" class="flex flex-col gap-6">
+      <!-- Title &&header-->
+      <div
+        class="bg-linear-to-r from-white to-[#F1F3FF] lg:linear-to-r lg:from-white px-6 pb-4 pt-6 lg:to-white border border-[#F1F3FF] lg:border-b lg:border-[#C3C6D626]/15 lg:p-8 flex flex-col justify-between lg:gap-4"
+      >
+        <div class="flex justify-between items-center gap-6">
+          <div class="flex items-center gap-2">
+            <span class="hidden lg:block">
+              <svg
+                width="20"
+                height="14"
+                viewBox="0 0 20 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 10V4C0 3.45 0.195833 2.97917 0.5875 2.5875C0.979167 2.19583 1.45 2 2 2C2.55 2 3.02083 2.19583 3.4125 2.5875C3.80417 2.97917 4 3.45 4 4V10C4 10.55 3.80417 11.0208 3.4125 11.4125C3.02083 11.8042 2.55 12 2 12C1.45 12 0.979167 11.8042 0.5875 11.4125C0.195833 11.0208 0 10.55 0 10ZM7 14C6.45 14 5.97917 13.8042 5.5875 13.4125C5.19583 13.0208 5 12.55 5 12V2C5 1.45 5.19583 0.979167 5.5875 0.5875C5.97917 0.195833 6.45 0 7 0H13C13.55 0 14.0208 0.195833 14.4125 0.5875C14.8042 0.979167 15 1.45 15 2V12C15 12.55 14.8042 13.0208 14.4125 13.4125C14.0208 13.8042 13.55 14 13 14H7ZM16 10V4C16 3.45 16.1958 2.97917 16.5875 2.5875C16.9792 2.19583 17.45 2 18 2C18.55 2 19.0208 2.19583 19.4125 2.5875C19.8042 2.97917 20 3.45 20 4V10C20 10.55 19.8042 11.0208 19.4125 11.4125C19.0208 11.8042 18.55 12 18 12C17.45 12 16.9792 11.8042 16.5875 11.4125C16.1958 11.0208 16 10.55 16 10Z"
+                  fill="#003D9B"
+                />
+              </svg>
+            </span>
+
+            <span
+              class="text-[#003D9B] text-[10px] lg:text-[#041B3C99]/60 lg:text-xs font-bold tracking-[0.6px] leading-4 uppercase"
+            >
+              {{ epic().epic_id }}
+            </span>
+          </div>
+          <button (click)="closeModal()" class="cursor-pointer">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 30 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.4 22L8 20.6L13.6 15L8 9.4L9.4 8L15 13.6L20.6 8L22 9.4L16.4 15L22 20.6L20.6 22L15 16.4L9.4 22Z"
+                fill="#041B3C"
+                fill-opacity="0.6"
+              />
+            </svg>
+          </button>
+        </div>
+        <div>
+          <input
+            type="text"
+            (blur)="onTitleBlur()"
+            formControlName="title"
+            placeholder="Epic title"
+            class="text-[16px] lg:text-[20px] font-bold text-[#041B3C] border border-[#C3C6D680]/50 lg:border-[#D7E2FF] rounded-xl p-2 lg:p-3 w-full tracking-normal leading-8 focus:outline-none focus:border-[#0052CC]"
+            [class.border-red-400]="
+              epicForm.get('title')?.invalid && epicForm.get('title')?.touched
+            "
+          />
+          @if (epicForm.get('title')?.invalid && epicForm.get('title')?.touched) {
+            <span class="text-red-500 text-[12px] mt-1 block">Title is required</span>
+          }
+        </div>
+      </div>
+      <div class="flex flex-col gap-8 p-8">
+        <!-- Description -->
+        <div>
+          <label
+            class="text-[11px] font-bold leading-[16.5px] tracking-[0.55px] uppercase lg:hidden text-[#4F5F7B] pb-1 ps-1 block"
+            >Description</label
+          >
+          <textarea
+            formControlName="description"
+            (blur)="onDescriptionBlur()"
+            rows="3"
+            placeholder="No description provided"
+            class="text-[14px] lg:text-[16px] leading-5 text-[#4F5F7B] lg:text-[#041B3C] border border-[#C3C6D680]/50 lg:border-[#D7E2FF] rounded-xl p-3 w-full resize-none focus:outline-none focus:border-[#0052CC] lg:leading-6.5 tracking-normal"
+          ></textarea>
+        </div>
+
+        <!-- Meta grid: Created by / Assignee / Deadline / Created At -->
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Created By -->
+          <div class="flex flex-col gap-2">
+            <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">
+              Created By
+            </span>
+            <div class="flex items-center gap-2">
+              <div
+                class="w-6 h-6 rounded-full bg-[#0B815A] text-white flex items-center justify-center text-[10px] font-semibold shrink-0"
+              >
+                {{ getInitials(epic().created_by.name) }}
+              </div>
+              <span class="text-[13px] font-medium text-[#041B3C]">
+                {{ epic().created_by.name }}
+              </span>
+            </div>
+          </div>
+          <!-- Assignee -->
+          <div class="flex flex-col gap-2 relative">
+            <label class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">
+              Assignee
+            </label>
+
+            <!-- الزرار اللي بيفتح/يقفل الدروب داون -->
+            <div
+              class="flex items-center gap-2 h-10 px-3 border border-[#D7E2FF] rounded-lg cursor-pointer"
+              (click)="isEditingAssignee.set(!isEditingAssignee())"
+            >
+              @if (epic().assignee?.sub) {
+                <div
+                  class="w-6 h-6 rounded-full bg-[#0052CC] text-white flex items-center justify-center text-[10px] shrink-0"
+                >
+                  {{ getInitials(epic().assignee.name) }}
+                </div>
+                <span class="text-[13px] text-[#041B3C] truncate">{{ epic().assignee.name }}</span>
+              } @else {
+                <div class="flex gap-2 items-center">
+                  <span
+                    class="block size-5 flex items-center justify-center bg-[#E0E8FF] rounded-xl"
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10.7333 11.5646L9.20208 10.0333H1.53125V8.4C1.53125 8.06944 1.61632 7.76562 1.78646 7.48854C1.9566 7.21146 2.18264 7 2.46458 6.85417C2.90208 6.63056 3.34687 6.45069 3.79896 6.31458C4.25104 6.17847 4.71042 6.07639 5.17708 6.00833L0 0.83125L0.83125 0L11.5646 10.7333L10.7333 11.5646ZM2.69792 8.86667H8.03542L6.28542 7.11667C6.26597 7.11667 6.25139 7.11667 6.24167 7.11667C6.23194 7.11667 6.21736 7.11667 6.19792 7.11667C5.65347 7.11667 5.11389 7.18229 4.57917 7.31354C4.04444 7.44479 3.51458 7.64167 2.98958 7.90417C2.90208 7.95278 2.8316 8.02083 2.77813 8.10833C2.72465 8.19583 2.69792 8.29306 2.69792 8.4V8.86667ZM9.93125 6.85417C10.2132 6.99028 10.4368 7.19688 10.6021 7.47396C10.7674 7.75104 10.8549 8.05 10.8646 8.37083L8.91042 6.41667C9.08542 6.48472 9.25799 6.55278 9.42813 6.62083C9.59826 6.68889 9.76597 6.76667 9.93125 6.85417ZM7.48125 4.9875L6.62083 4.12708C6.84444 4.03958 7.02431 3.89618 7.16042 3.69688C7.29653 3.49757 7.36458 3.27639 7.36458 3.03333C7.36458 2.7125 7.25035 2.43785 7.02187 2.20937C6.7934 1.9809 6.51875 1.86667 6.19792 1.86667C5.95486 1.86667 5.73368 1.93472 5.53438 2.07083C5.33507 2.20694 5.19167 2.38681 5.10417 2.61042L4.24375 1.75C4.46736 1.41944 4.74931 1.16181 5.08958 0.977083C5.42986 0.792361 5.79931 0.7 6.19792 0.7C6.83958 0.7 7.38889 0.928472 7.84583 1.38542C8.30278 1.84236 8.53125 2.39167 8.53125 3.03333C8.53125 3.43194 8.43889 3.80139 8.25417 4.14167C8.06944 4.48194 7.81181 4.76389 7.48125 4.9875ZM8.03542 8.86667H2.69792C2.69792 8.86667 2.72465 8.86667 2.77813 8.86667C2.8316 8.86667 2.90208 8.86667 2.98958 8.86667C3.25208 8.86667 3.52431 8.86667 3.80625 8.86667C4.08819 8.86667 4.42118 8.86667 4.80521 8.86667C5.18924 8.86667 5.64132 8.86667 6.16146 8.86667C6.6816 8.86667 7.30625 8.86667 8.03542 8.86667Z"
+                        fill="#4F5F7B"
+                      />
+                    </svg>
+                  </span>
+
+                  <span class="text-[13px] text-[#737685]">Unassigned</span>
+                </div>
+              }
+
+              <svg
+                class="ms-auto shrink-0"
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3 4.5L6 7.5L9 4.5"
+                  stroke="#737685"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+
+            <!-- القائمة المنسدلة المخصصة -->
+            @if (isEditingAssignee()) {
+              <div
+                class="absolute top-full mt-1 left-0 w-full bg-white border border-[#D7E2FF] rounded-lg shadow-lg z-10 max-h-48 overflow-y-auto"
+              >
+                <!-- خيار Unassigned -->
+                <div
+                  class="flex items-center gap-2 px-3 py-2 hover:bg-[#F4F6FE] cursor-pointer"
+                  (click)="selectAssignee(null)"
+                >
+                  <span class="text-[13px] text-[#737685]">Unassigned</span>
+                </div>
+
+                @for (member of allMembers(); track member.user_id) {
+                  <div
+                    class="flex items-center gap-2 px-3 py-2 hover:bg-[#F4F6FE] cursor-pointer"
+                    (click)="selectAssignee(member)"
+                  >
+                    <div
+                      class="w-6 h-6 rounded-full bg-[#0052CC] text-white flex items-center justify-center text-[10px] shrink-0"
+                    >
+                      {{ getInitials(member.metadata.name) }}
+                    </div>
+                    <span class="text-[13px] text-[#041B3C] truncate">{{
+                      member.metadata.name
+                    }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Deadline -->
+          <div class="flex flex-col gap-2">
+            <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">
+              Deadline
+            </span>
+            <input
+              (change)="onDeadlineChange()"
+              type="date"
+              formControlName="deadline"
+              class="border border-[#D7E2FF] p-2 rounded-lg text-[14px] leading-5 tracking-normal font-medium w-full"
+            />
+          </div>
+
+          <!-- Created At -->
+          <div class="flex flex-col gap-2">
+            <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">
+              Created At
+            </span>
+            <div class="flex items-center gap-2 text-[13px] text-[#041B3C]">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 5.5H12M4 2V3.5M10 2V3.5M3.5 3.5H10.5C11.0523 3.5 11.5 3.94772 11.5 4.5V11C11.5 11.5523 11.0523 12 10.5 12H3.5C2.94772 12 2.5 11.5523 2.5 11V4.5C2.5 3.94772 2.94772 3.5 3.5 3.5Z"
+                  stroke="#737685"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              {{ epic().created_at | date: 'MMM d, y' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tasks section -->
+    <div class="px-6 pb-6 flex flex-col gap-3">
+      <div class="flex justify-between items-center">
+        <h4 class="text-[16px] font-semibold text-[#041B3C]">Tasks</h4>
+        <button
+          (click)="addTask()"
+          class="flex items-center gap-1.5 text-[13px] font-semibold text-[#0052CC] hover:text-[#003D9B] cursor-pointer"
+        >
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M5 6.5H0V5.5H5V0H6V5.5H11V6.5H6V12H5V6.5Z" fill="currentColor" />
+          </svg>
+          Add Task
+        </button>
+      </div>
+
+      <!-- @if (epicTasks().length === 0) {
+        <div class="bg-[#F4F6FE] rounded-lg flex flex-col items-center justify-center gap-3 py-10">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="6" fill="#D7E2FF" />
+            <path d="M8 9H16M8 12H16M8 15H12" stroke="#4F5F7B" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+          <p class="text-[13px] text-[#737685]">No tasks have been added to this epic yet</p>
+          <button
+            (click)="addTask()"
+            class="btn-Primary bg-linear-to-r from-primary to-primary-container flex items-center gap-2 py-2.5 px-5"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 6.5H0V5.5H5V0H6V5.5H11V6.5H6V12H5V6.5Z" fill="white" />
+            </svg>
+            <span>Add Task</span>
+          </button>
+        </div>
+      } @else {
+        <div class="flex flex-col gap-2">
+          @for (task of epicTasks(); track task.id) {
+            <div class="flex justify-between items-center border border-[#E4E7EC] rounded-lg px-4 py-3">
+              <span class="text-[13px] text-[#041B3C]">{{ task.title }}</span>
+              <span class="text-[11px] text-[#737685]">{{ task.status }}</span>
+            </div>
+          }
+        </div>
+      } -->
+    </div>
+  </div>
+</div>

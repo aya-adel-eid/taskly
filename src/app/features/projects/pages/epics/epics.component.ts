@@ -10,6 +10,8 @@ import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-ske
 import { EmptyEpicsComponent } from '../../components/empty-epics/empty-epics.component';
 import { IEpicsProject } from '../../interfaces/IEpicsProject';
 import { HandleErrorComponent } from '../../components/handle-error/handle-error.component';
+import { HttpErrorResponse } from '@angular/common/http';
+import { EpicDetailsPopupComponent } from '../epic-details-popup/epic-details-popup.component';
 
 @Component({
   selector: 'app-epics',
@@ -22,12 +24,19 @@ import { HandleErrorComponent } from '../../components/handle-error/handle-error
     EpicSkelltoneComponent,
     EmptyEpicsComponent,
     HandleErrorComponent,
+    EpicDetailsPopupComponent,
   ],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
 })
 export class EpicsComponent {
   private readonly activateRoute = inject(ActivatedRoute);
+  private readonly projectsService = inject(ProjectsService);
+  showPoupDetail = this.projectsService.showPoupDetail;
+  private readonly viewPortScroller = inject(ViewportScroller);
+  private readonly router = inject(Router);
+  private destroy$ = new Subject<void>();
+  epic = this.projectsService.epic;
   projectId = signal<string>('');
   // ngOnInit(): void {
   //   this.activateRoute.paramMap.subscribe((param) => {
@@ -43,11 +52,6 @@ export class EpicsComponent {
   ]);
 
   //
-  private readonly projectsService = inject(ProjectsService);
-
-  private readonly viewPortScroller = inject(ViewportScroller);
-  private readonly router = inject(Router);
-  private destroy$ = new Subject<void>();
 
   page = signal(1);
   limit = signal(6);
@@ -97,10 +101,8 @@ export class EpicsComponent {
 
   @HostListener('window:scroll')
   onScroll() {
-    // يشتغل على الموبايل فقط
     if (!this.isMobile()) return;
 
-    // لو لسه بيحمل بيانات
     if (this.isLoading()) return;
 
     const reachedBottom =
@@ -135,5 +137,20 @@ export class EpicsComponent {
 
   get pages(): number[] {
     return Array.from({ length: Math.ceil(this.totalCount() / this.limit()) }, (_, i) => i + 1);
+  }
+  // epicsDetails
+  epicsDetails(projectId: string, epicId: string) {
+    this.projectsService.getEpicsDetails(projectId, epicId).subscribe({
+      next: (resp) => {
+        console.log(resp);
+        this.epic.set(resp[0]);
+        console.log(this.epic());
+
+        this.showPoupDetail.set(true);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
   }
 }

@@ -19,5 +19,6 @@ export const APIS_KEYS = {
     NewEpics: `${environment.baseUrRL}/rest/v1/epics`,
     getEpics: `${environment.baseUrRL}/rest/v1/project_epics`,
     NewTask: `${environment.baseUrRL}/rest/v1/tasks`,
+    updateEpic: `${environment.baseUrRL}/rest/v1/epics`,
   },
 };

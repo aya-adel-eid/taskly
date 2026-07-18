@@ -83,7 +83,9 @@
             }
           } @else {
             @for (epic of allEpics(); track epic.epic_id) {
-              <app-card-epic [epic]="epic"></app-card-epic>
+              <a class="" (click)="epicsDetails(projectId(), epic.id)">
+                <app-card-epic [epic]="epic"></app-card-epic>
+              </a>
             }
           }
         </div>
@@ -176,4 +178,7 @@
       </div>
     </section>
   }
+}
+@if (showPoupDetail() && epic() !== null) {
+  <app-epic-details-popup [epic]="epic()!"></app-epic-details-popup>
 }
