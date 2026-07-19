@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { RusableInputComponent } from '../../../auth/components/rusable-input/rusable-input.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
@@ -16,7 +16,7 @@ import { ToastMassageComponent } from '../toast-massage/toast-massage.component'
   templateUrl: './new-epics.component.html',
   styleUrl: './new-epics.component.css',
 })
-export class NewEpicsComponent {
+export class NewEpicsComponent implements OnInit, OnDestroy {
   private readonly projectServices = inject(ProjectsService);
   private readonly activateRoute = inject(ActivatedRoute);
   private readonly route = inject(Router);

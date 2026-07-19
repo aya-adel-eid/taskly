@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, signal, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
 import { IEpicsProject } from '../../interfaces/IEpicsProject';
@@ -27,7 +27,7 @@ import { ToastMassageComponent } from '../../components/toast-massage/toast-mass
   templateUrl: './epic-details-popup.component.html',
   styleUrl: './epic-details-popup.component.css',
 })
-export class EpicDetailsPopupComponent {
+export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   projectService = inject(ProjectsService);
   errorMessage = signal<string>('');

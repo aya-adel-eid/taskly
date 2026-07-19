@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { ActivatedRoute } from '@angular/router';
 import { NewEpicsComponent } from '../../components/new-epics/new-epics.component';
@@ -10,7 +10,7 @@ import { NewEpicsComponent } from '../../components/new-epics/new-epics.componen
   templateUrl: './add-new-epics-page.component.html',
   styleUrl: './add-new-epics-page.component.css',
 })
-export class AddNewEpicsPageComponent {
+export class AddNewEpicsPageComponent implements OnInit {
   private readonly activateRoute = inject(ActivatedRoute);
   projectId = signal<string>('');
   ngOnInit(): void {

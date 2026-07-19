@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './task-skelltone.component.html',
-  styleUrl: './task-skelltone.component.css'
+  styleUrl: './task-skelltone.component.css',
 })
-export class TaskSkelltoneComponent {
-
-}
+export class TaskSkelltoneComponent {}

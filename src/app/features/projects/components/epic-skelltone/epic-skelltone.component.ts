@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './epic-skelltone.component.html',
-  styleUrl: './epic-skelltone.component.css'
+  styleUrl: './epic-skelltone.component.css',
 })
-export class EpicSkelltoneComponent {
-
-}
+export class EpicSkelltoneComponent {}

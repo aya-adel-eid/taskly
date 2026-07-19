@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
@@ -8,7 +8,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   templateUrl: './empty-epics.component.html',
   styleUrl: './empty-epics.component.css',
 })
-export class EmptyEpicsComponent {
+export class EmptyEpicsComponent implements OnInit {
   private readonly activateRoute = inject(ActivatedRoute);
   projectId = signal<string>('');
   ngOnInit(): void {

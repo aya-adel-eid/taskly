@@ -1,8 +1,15 @@
 <app-toast-massage [flag]="false" [message]="errorMessage()"></app-toast-massage>
-<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50" (click)="closeModal()">
+
+<div class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <button
+    type="button"
+    class="absolute inset-0 w-full h-full cursor-default"
+    (click)="closeModal()"
+    aria-label="Close modal"
+  ></button>
+
   <div
-    class="bg-white rounded-lg w-full max-w-2xl max-h-230.25 overflow-y-auto shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]"
-    (click)="$event.stopPropagation()"
+    class="relative bg-white rounded-lg w-full max-w-2xl max-h-230.25 overflow-y-auto shadow-[0px_25px_50px_-12px_rgba(0,0,0,0.25)]"
   >
     <!-- Header -->
 
@@ -71,10 +78,12 @@
         <!-- Description -->
         <div>
           <label
+            for="epicDescription"
             class="text-[11px] font-bold leading-[16.5px] tracking-[0.55px] uppercase lg:hidden text-[#4F5F7B] pb-1 ps-1 block"
             >Description</label
           >
           <textarea
+            id="epicDescription"
             formControlName="description"
             (blur)="onDescriptionBlur()"
             rows="3"
@@ -82,7 +91,6 @@
             class="text-[14px] lg:text-[16px] leading-5 text-[#4F5F7B] lg:text-[#041B3C] border border-[#C3C6D680]/50 lg:border-[#D7E2FF] rounded-xl p-3 w-full resize-none focus:outline-none focus:border-[#0052CC] lg:leading-6.5 tracking-normal"
           ></textarea>
         </div>
-
         <!-- Meta grid: Created by / Assignee / Deadline / Created At -->
         <div class="grid grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Created By -->
@@ -283,14 +291,32 @@
               }
             } @else {
               @for (task of epicTasks(); track task.id) {
-                <!-- <div
-                class="flex justify-between items-center border border-[#E4E7EC] rounded-lg px-4 py-3"
-              >
-                <span class="text-[13px] text-[#041B3C]">{{ task.title }}</span>
-                <span class="text-[11px] text-[#737685]">{{ task.status }}</span>
-              </div> -->
                 <app-task-card [task]="task"></app-task-card>
               }
+              <a
+                [routerLink]="['/project', epic().project_id, 'tasks', 'new']"
+                class="lg:hidden border-2 border-dashed border-[#C3C6D64D]/70 py-4 flex gap-2 justify-center"
+              >
+                <span
+                  ><svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 15 15"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.75 11.25H8.25V8.25H11.25V6.75H8.25V3.75H6.75V6.75H3.75V8.25H6.75V11.25ZM7.5 15C6.4625 15 5.4875 14.8031 4.575 14.4094C3.6625 14.0156 2.86875 13.4812 2.19375 12.8062C1.51875 12.1312 0.984375 11.3375 0.590625 10.425C0.196875 9.5125 0 8.5375 0 7.5C0 6.4625 0.196875 5.4875 0.590625 4.575C0.984375 3.6625 1.51875 2.86875 2.19375 2.19375C2.86875 1.51875 3.6625 0.984375 4.575 0.590625C5.4875 0.196875 6.4625 0 7.5 0C8.5375 0 9.5125 0.196875 10.425 0.590625C11.3375 0.984375 12.1312 1.51875 12.8062 2.19375C13.4812 2.86875 14.0156 3.6625 14.4094 4.575C14.8031 5.4875 15 6.4625 15 7.5C15 8.5375 14.8031 9.5125 14.4094 10.425C14.0156 11.3375 13.4812 12.1312 12.8062 12.8062C12.1312 13.4812 11.3375 14.0156 10.425 14.4094C9.5125 14.8031 8.5375 15 7.5 15ZM7.5 13.5C9.175 13.5 10.5938 12.9188 11.7563 11.7563C12.9188 10.5938 13.5 9.175 13.5 7.5C13.5 5.825 12.9188 4.40625 11.7563 3.24375C10.5938 2.08125 9.175 1.5 7.5 1.5C5.825 1.5 4.40625 2.08125 3.24375 3.24375C2.08125 4.40625 1.5 5.825 1.5 7.5C1.5 9.175 2.08125 10.5938 3.24375 11.7563C4.40625 12.9188 5.825 13.5 7.5 13.5Z"
+                      fill="#434654"
+                      fill-opacity="0.6"
+                    />
+                  </svg>
+                </span>
+                <span
+                  class="uppercase text-[12px] leading-4 font-bold tracking-[1.2px] text-[#43465499]/60"
+                  >Add New Task</span
+                >
+              </a>
             }
           </div>
         }

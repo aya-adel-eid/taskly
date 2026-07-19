@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
@@ -16,7 +16,7 @@ import { ToastMassageComponent } from '../toast-massage/toast-massage.component'
   templateUrl: './add-task-form.component.html',
   styleUrl: './add-task-form.component.css',
 })
-export class AddTaskFormComponent {
+export class AddTaskFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly activateRoute = inject(ActivatedRoute);
   private readonly projectServices = inject(ProjectsService);

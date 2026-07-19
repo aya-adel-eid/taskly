@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AddTaskFormComponent } from '../../components/add-task-form/add-task-form.component';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './task-form-page.component.html',
   styleUrl: './task-form-page.component.css',
 })
-export class TaskFormPageComponent {
+export class TaskFormPageComponent implements OnInit {
   private readonly activateRoute = inject(ActivatedRoute);
   projectId = signal<string>('');
   ngOnInit(): void {
