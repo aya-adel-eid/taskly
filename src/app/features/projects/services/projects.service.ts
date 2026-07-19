@@ -5,6 +5,7 @@ import { IProject } from '../interfaces/Iprojects';
 import { Member } from '../interfaces/IMembers';
 import { IEpicsProject } from '../interfaces/IEpicsProject';
 import { IEpicDetails } from '../interfaces/IEpicDetails';
+import { IEpicTasks } from '../interfaces/IEpicTasks';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class ProjectsService {
   epics = signal<IEpicsProject[] | null>(null);
   epic = signal<IEpicDetails | null>(null);
   showPoupDetail = signal<boolean>(false);
+  epicTasks = signal<IEpicTasks[] | null>(null);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -153,6 +155,12 @@ export class ProjectsService {
   patchLocalEpic(epicId: string, partial: Partial<IEpicsProject>) {
     this.allEpics.update((epics) =>
       epics.map((epic) => (epic.id === epicId ? { ...epic, ...partial } : epic))
+    );
+  }
+  // get epicTasks
+  getEpicTasks(epicId: string) {
+    return this.httpClient.get<IEpicTasks[]>(
+      `${APIS_KEYS.projects.getEpicTasks}?epic_id=eq.${epicId}`
     );
   }
 }

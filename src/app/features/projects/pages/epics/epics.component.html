@@ -83,7 +83,11 @@
             }
           } @else {
             @for (epic of allEpics(); track epic.epic_id) {
-              <a class="" (click)="epicsDetails(projectId(), epic.id)">
+              <a
+                class=""
+                (click)="epicsDetails(projectId(), epic.id)"
+                (click)="getEpicTasks(epic.id)"
+              >
                 <app-card-epic [epic]="epic"></app-card-epic>
               </a>
             }
@@ -180,5 +184,5 @@
   }
 }
 @if (showPoupDetail() && epic() !== null) {
-  <app-epic-details-popup [epic]="epic()!"></app-epic-details-popup>
+  <app-epic-details-popup [epic]="epic()!" [epicTasks]="epicTasks()!"></app-epic-details-popup>
 }

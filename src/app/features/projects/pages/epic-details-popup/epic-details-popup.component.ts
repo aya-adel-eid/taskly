@@ -7,11 +7,13 @@ import { DatePipe } from '@angular/common';
 import { IEpicDetails } from '../../interfaces/IEpicDetails';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
+import { RouterLink } from '@angular/router';
+import { IEpicTasks } from '../../interfaces/IEpicTasks';
 
 @Component({
   selector: 'app-epic-details-popup',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [DatePipe, ReactiveFormsModule, RouterLink],
   templateUrl: './epic-details-popup.component.html',
   styleUrl: './epic-details-popup.component.css',
 })
@@ -25,7 +27,7 @@ export class EpicDetailsPopupComponent {
   private destroy$ = new Subject<void>();
   projectId = signal<string>('');
 
-  // epicTasks = input<ITask[]>([]);
+  epicTasks = input<IEpicTasks[]>([]);
 
   isEditingAssignee = signal(false);
 

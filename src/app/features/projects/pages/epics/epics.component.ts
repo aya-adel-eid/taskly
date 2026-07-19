@@ -38,6 +38,7 @@ export class EpicsComponent {
   private destroy$ = new Subject<void>();
   epic = this.projectsService.epic;
   projectId = signal<string>('');
+  epicTasks = this.projectsService.epicTasks;
   // ngOnInit(): void {
   //   this.activateRoute.paramMap.subscribe((param) => {
   //     this.projectId.set(param.get('projectId')!);
@@ -151,6 +152,15 @@ export class EpicsComponent {
       error: (error: HttpErrorResponse) => {
         console.log(error);
       },
+    });
+  }
+  // get epic Tasks
+  getEpicTasks(epicId: string) {
+    this.projectsService.getEpicTasks(epicId).subscribe({
+      next: (resp) => {
+        this.epicTasks.set(resp);
+      },
+      error: (error: HttpErrorResponse) => {},
     });
   }
 }
