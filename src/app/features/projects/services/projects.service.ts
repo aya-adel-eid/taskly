@@ -27,6 +27,8 @@ export class ProjectsService {
   epic = signal<IEpicDetails | null>(null);
   showPoupDetail = signal<boolean>(false);
   epicTasks = signal<IEpicTasks[] | null>(null);
+  isLoadingEpicTask = signal<boolean>(false);
+  hasErrorEpicTask = signal<boolean>(false);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }

@@ -156,11 +156,21 @@ export class EpicsComponent {
   }
   // get epic Tasks
   getEpicTasks(epicId: string) {
-    this.projectsService.getEpicTasks(epicId).subscribe({
-      next: (resp) => {
-        this.epicTasks.set(resp);
-      },
-      error: (error: HttpErrorResponse) => {},
-    });
+    this.projectsService.isLoadingEpicTask.set(true);
+    this.projectsService.hasErrorEpicTask.set(false);
+    this.projectsService
+      .getEpicTasks(epicId)
+      .pipe()
+      .subscribe({
+        next: (resp) => {
+          this.epicTasks.set(resp);
+          this.projectsService.isLoadingEpicTask.set(false);
+          this.projectsService.hasErrorEpicTask.set(false);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.projectsService.isLoadingEpicTask.set(false);
+          this.projectsService.hasErrorEpicTask.set(true);
+        },
+      });
   }
 }

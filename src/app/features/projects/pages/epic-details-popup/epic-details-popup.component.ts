@@ -9,18 +9,28 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { IEpicTasks } from '../../interfaces/IEpicTasks';
+import { TaskCardComponent } from '../../components/task-card/task-card.component';
+import { TaskSkelltoneComponent } from '../../components/task-skelltone/task-skelltone.component';
+import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
 
 @Component({
   selector: 'app-epic-details-popup',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule, RouterLink],
+  imports: [
+    DatePipe,
+    ReactiveFormsModule,
+    RouterLink,
+    TaskCardComponent,
+    TaskSkelltoneComponent,
+    ToastMassageComponent,
+  ],
   templateUrl: './epic-details-popup.component.html',
   styleUrl: './epic-details-popup.component.css',
 })
 export class EpicDetailsPopupComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly projectService = inject(ProjectsService);
-
+  projectService = inject(ProjectsService);
+  errorMessage = signal<string>('');
   epic = input.required<IEpicDetails>();
   allMembers = signal<Member[]>([]);
 
@@ -105,7 +115,7 @@ export class EpicDetailsPopupComponent {
       },
       error: () => {
         this.epicForm.get(field)?.setValue(oldValue ?? (field === 'assignee_id' ? null : ''));
-        // this.toastService.error('Failed to update epic. Please try again.');
+        this.errorMessage.set('Failed to update epic. Please try again.');
       },
     });
   }
@@ -114,9 +124,6 @@ export class EpicDetailsPopupComponent {
     this.projectService.showPoupDetail.set(false);
   }
 
-  addTask() {
-    // منطقك بتاع إضافة تاسك
-  }
   selectAssignee(member: Member | null) {
     const newAssigneeId = member?.user_id ?? null;
     const oldAssigneeId = this.epic().assignee?.sub ?? null;
