@@ -1,7 +1,7 @@
-import { Component, inject, input, signal, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, input, signal, OnInit, OnDestroy, computed } from '@angular/core';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
-import { IEpicsProject } from '../../interfaces/IEpicsProject';
+
 import { Member } from '../../interfaces/IMembers';
 import { DatePipe } from '@angular/common';
 import { IEpicDetails } from '../../interfaces/IEpicDetails';
@@ -33,7 +33,8 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   errorMessage = signal<string>('');
   epic = input.required<IEpicDetails>();
   allMembers = signal<Member[]>([]);
-
+  currentAssignee = signal<Member | null>(null);
+  today: string = new Date().toISOString().split('T')[0];
   private destroy$ = new Subject<void>();
   projectId = signal<string>('');
 
@@ -44,8 +45,15 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   epicForm = this.fb.group({
     title: ['', Validators.required],
     description: [''],
-    deadline: [''],
     assignee_id: [null as string | null],
+    deadline: [
+      null as string | null,
+      (control: AbstractControl) => {
+        if (!control.value) return null;
+
+        return control.value >= this.today ? null : { invalidDate: true };
+      },
+    ],
   });
 
   ngOnInit(): void {
@@ -85,18 +93,57 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   }
 
   // ---------- Assignee ----------
-  onAssigneeChange() {
+  // onAssigneeChange() {
+  //   const control = this.epicForm.get('assignee_id')!;
+  //   const newAssigneeId = control.value;
+  //   const oldAssigneeId = this.epic().assignee.sub;
+
+  //   this.isEditingAssignee.set(false);
+
+  //   if (newAssigneeId !== oldAssigneeId) {
+  //     this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
+  //   }
+  // }
+  selectAssignee(member: Member | null) {
     const control = this.epicForm.get('assignee_id')!;
-    const newAssigneeId = control.value;
-    const oldAssigneeId = this.epic().assignee.sub;
+
+    const oldAssigneeId = control.value;
+    const newAssigneeId = member?.user_id ?? null;
+
+    if (oldAssigneeId === newAssigneeId) {
+      this.isEditingAssignee.set(false);
+      return;
+    }
+
+    control.setValue(newAssigneeId);
+
+    // 👇 هنا فقط
+    this.currentAssignee.set(member);
 
     this.isEditingAssignee.set(false);
 
-    if (newAssigneeId !== oldAssigneeId) {
-      this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
-    }
-  }
+    this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
 
+    this.projectService.patchLocalEpic(this.epic().id, {
+      assignee: member
+        ? {
+            sub: member.user_id,
+            name: member.metadata.name,
+            email: member.metadata.email,
+            department: member.metadata.department,
+          }
+        : undefined,
+    });
+  }
+  selectedAssignee = computed(() => {
+    const assigneeId = this.epicForm.get('assignee_id')?.value;
+
+    if (!assigneeId) {
+      return null;
+    }
+
+    return this.allMembers().find((m) => m.user_id === assigneeId) ?? null;
+  });
   // ---------- Deadline ----------
   onDeadlineChange() {
     const control = this.epicForm.get('deadline')!;
@@ -124,27 +171,27 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
     this.projectService.showPoupDetail.set(false);
   }
 
-  selectAssignee(member: Member | null) {
-    const newAssigneeId = member?.user_id ?? null;
-    const oldAssigneeId = this.epic().assignee?.sub ?? null;
+  // selectAssignee(member: Member | null) {
+  //   const newAssigneeId = member?.user_id ?? null;
+  //   const oldAssigneeId = this.epic().assignee?.sub ?? null;
+  //   this.epicForm.get('assignee_id')?.setValue(newAssigneeId);
+  //   this.isEditingAssignee.set(false);
 
-    this.isEditingAssignee.set(false);
+  //   if (newAssigneeId !== oldAssigneeId) {
+  //     this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
 
-    if (newAssigneeId !== oldAssigneeId) {
-      this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
-
-      this.projectService.patchLocalEpic(this.epic().id, {
-        assignee: member
-          ? {
-              sub: member.user_id,
-              name: member.metadata.name,
-              email: member.metadata.email,
-              department: member.metadata.department,
-            }
-          : undefined,
-      });
-    }
-  }
+  //     this.projectService.patchLocalEpic(this.epic().id, {
+  //       assignee: member
+  //         ? {
+  //             sub: member.user_id,
+  //             name: member.metadata.name,
+  //             email: member.metadata.email,
+  //             department: member.metadata.department,
+  //           }
+  //         : undefined,
+  //     });
+  //   }
+  // }
 
   getInitials(name?: string): string {
     if (!name) return '';
@@ -164,8 +211,13 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
         next: (resp) => {
           console.log(resp);
           this.allMembers.set(resp);
+          const assignee = resp.find((m) => m.user_id === this.epic().assignee?.sub);
+
+          this.currentAssignee.set(assignee ?? null);
         },
-        error: (error: HttpErrorResponse) => {},
+        error: (error: HttpErrorResponse) => {
+          console.log(error);
+        },
       });
   }
   ngOnDestroy(): void {

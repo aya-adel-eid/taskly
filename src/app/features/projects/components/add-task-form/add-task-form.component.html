@@ -40,11 +40,12 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <!-- status -->
       <div>
-        <label class="label-input">Status*</label>
+        <label class="label-input" for="status">Status*</label>
         <div class="relative">
           <select
             class="input-control appearance-none cursor-pointer w-full"
             formControlName="status"
+            id="status"
           >
             <option value="TO_DO" disabled selected>TO DO</option>
             @for (statue of statues; track $index) {
@@ -75,11 +76,12 @@
       </div>
       <!-- Assignee -->
       <div>
-        <label class="label-input">Assignee</label>
+        <label class="label-input" for="assignee">Assignee</label>
         <div class="relative">
           <select
             class="input-control w-full appearance-none cursor-pointer"
             formControlName="assignee_id"
+            id="assignee"
           >
             <option [ngValue]="null" disabled selected>Select Team Member</option>
             @for (member of allMembers(); track member.project_id) {
@@ -111,11 +113,12 @@
     </div>
     <div>
       <!-- epic Id -->
-      <label class="label-input">Epic</label>
+      <label class="label-input" for="epic">Epic</label>
       <div class="relative">
         <select
           class="input-control appearance-none cursor-pointer w-full"
           formControlName="epic_id"
+          id="epic"
         >
           <option [ngValue]="null" disabled selected>Select Epic</option>
           @for (epic of allEpics(); track $index) {
@@ -144,12 +147,13 @@
     </div>
     <div>
       <!-- date -->
-      <label class="label-input">Due Date</label>
+      <label class="label-input" for="date">Due Date</label>
       <input
         type="date"
         placeholder="mm/dd/yyyy"
         class="input-control w-full"
         formControlName="due_date"
+        id="date"
       />
     </div>
     <!-- description -->

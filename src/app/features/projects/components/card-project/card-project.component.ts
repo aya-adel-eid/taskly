@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { IProject } from '../../interfaces/Iprojects';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 
@@ -25,9 +25,11 @@ export class CardProjectComponent {
     if (isCurrentlySelected) {
       sessionStorage.removeItem(StORED_KEYS.projectId);
       this.projectService.selectedProjectId.set('');
+      sessionStorage.removeItem(StORED_KEYS.projectName);
     } else {
       sessionStorage.setItem(StORED_KEYS.projectId, project.id);
       this.projectService.selectedProjectId.set(project.id);
+      sessionStorage.setItem(StORED_KEYS.projectName, project.name);
     }
     this.projectService.projectEdit.set(project);
   }

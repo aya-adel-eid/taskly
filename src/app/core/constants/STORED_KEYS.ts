@@ -3,4 +3,5 @@ export const StORED_KEYS = {
   refresh_token: 'refresh_token',
   rememberMeExpiry: 'rememberMeExpiry',
   projectId: 'ProjectID',
+  projectName: 'ProjectName',
 };

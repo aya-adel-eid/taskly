@@ -69,11 +69,12 @@
     <!-- Description -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-6">
       <div class="lg:col-span-1">
-        <label class="label-input">Description</label>
+        <label class="label-input" for="descrip">Description</label>
         <span class="text-[10px] leading-3.5 ps-1 text-[#434654] block">Optional</span>
       </div>
       <div class="lg:col-span-3 relative">
         <textarea
+          id="descrip"
           formControlName="description"
           rows="5"
           placeholder="Describe the scope and objectives of this epic..."
@@ -88,10 +89,11 @@
     <!-- Assignee & Deadline -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="flex flex-col gap-1.5">
-        <label class="label-input">Assignee</label>
+        <label class="label-input" for="assignee">Assignee</label>
 
         <div class="relative">
           <select
+            id="assignee"
             formControlName="assignee_id"
             class="input-control appearance-none cursor-pointer pr-10 w-full"
           >
@@ -129,8 +131,9 @@
         <span></span>
       </div>
       <div class="flex flex-col gap-1.5">
-        <label class="label-input">Deadline</label>
+        <label class="label-input" for="deadline">Deadline</label>
         <input
+          id="deadline"
           type="date"
           placeholder="mm/dd/yyyy"
           class="input-control w-full"

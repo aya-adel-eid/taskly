@@ -65,11 +65,12 @@
           class="lg:flex justify-between items-center ps-8 text-[#434654 text-xs leading-3.5 hidden"
         >
           <div>
-            <p>
-              <span>Showing</span>
-              <span>{{ limit() }}</span>
-              from
-              <span>{{ totalCount() }}</span>
+            <p class="text-[#434654] text-[14px] leading-[100%]">
+              Showing
+              <span class="text-[#041B3C] font-semibold">{{ allProjects()?.length }}</span>
+              of
+              <span class="text-[#041B3C] font-semibold">{{ totalCount() }}</span>
+              epics
             </p>
           </div>
 
@@ -78,11 +79,11 @@
             <button
               (click)="changePage(page() - 1)"
               [disabled]="page() === 1"
-              class="w-10 h-10 cursor-pointer rounded-lg flex justify-center items-center border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+              class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
             >
               <svg
-                width="15"
-                height="15"
+                width="5"
+                height="7"
                 viewBox="0 0 5 7"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -98,12 +99,10 @@
             @for (pageNumber of pages; track pageNumber) {
               <button
                 (click)="changePage(pageNumber)"
-                class="w-10 h-10 rounded-lg border transition cursor-pointer"
-                [class.bg-blue-600]="page() === pageNumber"
+                class="w-8 h-8 pt-[6.5px] pb-[7.5ppx] rounded-xs border transition cursor-pointer border-[#C3C6D64D]/30"
+                [class.bg-primary]="page() === pageNumber"
                 [class.text-white]="page() === pageNumber"
-                [class.border-blue-600]="page() === pageNumber"
                 [class.bg-white]="page() !== pageNumber"
-                [class.border-gray-200]="page() !== pageNumber"
                 [class.hover:bg-gray-50]="page() !== pageNumber"
               >
                 {{ pageNumber }}
@@ -114,11 +113,11 @@
             <button
               (click)="changePage(page() + 1)"
               [disabled]="page() === pages.length"
-              class="w-10 h-10 flex justify-center items-center cursor-pointer rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+              class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
             >
               <svg
-                width="15"
-                height="15"
+                width="5"
+                height="7"
                 viewBox="0 0 5 7"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

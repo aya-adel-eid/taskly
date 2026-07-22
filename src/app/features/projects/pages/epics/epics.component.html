@@ -1,7 +1,7 @@
 @if (hasError()) {
   <app-handle-error (retry)="getAllEpics()"></app-handle-error>
 } @else {
-  @if (allEpics() != null && allEpics()?.length === 0) {
+  @if (allEpics() !== null && allEpics()?.length === 0) {
     <app-empty-epics></app-empty-epics>
   } @else {
     <section class="px-6 pt-4 pb-32 lg:p-8 flex gap-10 flex-col">
@@ -83,11 +83,7 @@
             }
           } @else {
             @for (epic of allEpics(); track epic.epic_id) {
-              <a
-                class=""
-                (click)="epicsDetails(projectId(), epic.id)"
-                (click)="getEpicTasks(epic.id)"
-              >
+              <a (click)="epicsDetails(projectId(), epic.id)" (click)="getEpicTasks(epic.id)">
                 <app-card-epic [epic]="epic"></app-card-epic>
               </a>
             }
@@ -127,11 +123,11 @@
           <button
             (click)="changePage(page() - 1)"
             [disabled]="page() === 1"
-            class="w-10 h-10 cursor-pointer rounded-lg flex justify-center items-center border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+            class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
           >
             <svg
-              width="15"
-              height="15"
+              width="5"
+              height="7"
               viewBox="0 0 5 7"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -147,12 +143,10 @@
           @for (pageNumber of pages; track pageNumber) {
             <button
               (click)="changePage(pageNumber)"
-              class="w-10 h-10 rounded-lg border transition cursor-pointer"
-              [class.bg-blue-600]="page() === pageNumber"
+              class="w-8 h-8 pt-[6.5px] pb-[7.5ppx] rounded-xs border transition cursor-pointer border-[#C3C6D64D]/30"
+              [class.bg-primary]="page() === pageNumber"
               [class.text-white]="page() === pageNumber"
-              [class.border-blue-600]="page() === pageNumber"
               [class.bg-white]="page() !== pageNumber"
-              [class.border-gray-200]="page() !== pageNumber"
               [class.hover:bg-gray-50]="page() !== pageNumber"
             >
               {{ pageNumber }}
@@ -163,11 +157,11 @@
           <button
             (click)="changePage(page() + 1)"
             [disabled]="page() === pages.length"
-            class="w-10 h-10 flex justify-center items-center cursor-pointer rounded-lg border border-gray-200 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+            class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
           >
             <svg
-              width="15"
-              height="15"
+              width="5"
+              height="7"
               viewBox="0 0 5 7"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

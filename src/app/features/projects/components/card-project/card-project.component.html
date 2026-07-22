@@ -1,6 +1,11 @@
 <div
-  class="rounded-lg bg-white p-6 min-h-55 flex flex-col justify-between cursor-pointer"
+  class="rounded-lg bg-white p-6 min-h-55 flex flex-col justify-between cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-600"
+  role="button"
+  tabindex="0"
+  [attr.aria-pressed]="isSelected()"
   (click)="selectProject(project()!)"
+  (keydown.enter)="selectProject(project()!)"
+  (keydown.space)="$event.preventDefault(); selectProject(project()!)"
   [class]="isSelected() ? 'border border-blue-600' : 'border-0'"
 >
   <div>

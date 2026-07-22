@@ -21,7 +21,7 @@ export class ProjectsService {
   isSelected = signal<boolean>(false);
   epicsIsLoadding = signal<boolean>(false);
   epicsError = signal<boolean>(false);
-  allEpics = signal<IEpicsProject[] | []>([]);
+  allEpics = signal<IEpicsProject[] | null>(null);
   totalCountEpics = signal<number>(0);
   epics = signal<IEpicsProject[] | null>(null);
   epic = signal<IEpicDetails | null>(null);
@@ -156,7 +156,7 @@ export class ProjectsService {
   }
   patchLocalEpic(epicId: string, partial: Partial<IEpicsProject>) {
     this.allEpics.update((epics) =>
-      epics.map((epic) => (epic.id === epicId ? { ...epic, ...partial } : epic))
+      epics ? epics.map((epic) => (epic.id === epicId ? { ...epic, ...partial } : epic)) : epics
     );
   }
   // get epicTasks
