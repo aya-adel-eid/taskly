@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { interval, take } from 'rxjs';
 import { ProjectsService } from '../../services/projects.service';
 import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-project-form',
@@ -16,6 +16,7 @@ import { RouterLink } from '@angular/router';
 export class ProjectFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly projectServices = inject(ProjectsService);
+  private readonly route = inject(Router);
   isEdit = signal<boolean>(false);
   errorMsg = signal<string>('');
   toastMessage = signal('');
@@ -54,6 +55,7 @@ export class ProjectFormComponent {
             .pipe(take(5))
             .subscribe(() => {
               this.toastMessage.set('');
+              this.route.navigateByUrl(`/project`);
             });
         },
         error: (error: HttpErrorResponse) => {
