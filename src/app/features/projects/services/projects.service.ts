@@ -92,21 +92,27 @@ export class ProjectsService {
     return this.httpClient.post(APIS_KEYS.projects.NewEpics, epicData);
   }
   // get allEpics
-  getAllEpics(limit = 5, page = 1, append = false, projectId: string) {
+  // get allEpics
+  getAllEpics(limit = 5, page = 1, append = false, projectId: string, searchTerm = '') {
     const offset = (page - 1) * limit;
 
     this.epicsIsLoadding.set(true);
 
+    let url = `${APIS_KEYS.projects.getEpics}?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
+
+    const trimmedTerm = searchTerm.trim();
+    if (trimmedTerm) {
+      // title=ilike.%25{term}%25  ->  case-insensitive "contains" match
+      url += `&title=ilike.%25${encodeURIComponent(trimmedTerm)}%25`;
+    }
+
     return this.httpClient
-      .get<IEpicsProject[]>(
-        `${APIS_KEYS.projects.getEpics}?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
-        {
-          headers: {
-            Prefer: 'count=exact',
-          },
-          observe: 'response',
-        }
-      )
+      .get<IEpicsProject[]>(url, {
+        headers: {
+          Prefer: 'count=exact',
+        },
+        observe: 'response',
+      })
       .subscribe({
         next: (resp) => {
           this.epicsError.set(false);

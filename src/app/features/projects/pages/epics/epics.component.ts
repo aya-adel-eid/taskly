@@ -1,9 +1,9 @@
 import { Component, computed, HostListener, inject, signal } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { RusableInputComponent } from '../../../auth/components/rusable-input/rusable-input.component';
 import { CardEpicComponent } from '../../components/card-epic/card-epic.component';
-import { combineLatest, distinctUntilChanged, filter, map, Subject, tap } from 'rxjs';
+import { combineLatest, distinctUntilChanged, filter, map, Subject, tap, debounceTime } from 'rxjs';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
 import { ViewportScroller } from '@angular/common';
 import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-skelltone.component';
@@ -18,7 +18,7 @@ import { EpicDetailsPopupComponent } from '../epic-details-popup/epic-details-po
   standalone: true,
   imports: [
     BreadcrumbComponent,
-    RusableInputComponent,
+    ReactiveFormsModule,
     RouterLink,
     CardEpicComponent,
     EpicSkelltoneComponent,
@@ -39,12 +39,7 @@ export class EpicsComponent {
   epic = this.projectsService.epic;
   projectId = signal<string>('');
   epicTasks = this.projectsService.epicTasks;
-  // ngOnInit(): void {
-  //   this.activateRoute.paramMap.subscribe((param) => {
-  //     this.projectId.set(param.get('projectId')!);
-  //     this.getAllEpics();
-  //   });
-  // }
+
   arrPaths = computed(() => [
     {
       label: 'Epics',
@@ -52,10 +47,16 @@ export class EpicsComponent {
     },
   ]);
 
-  //
-
   page = signal(1);
   limit = signal(6);
+
+  // --- Search ---
+  searchControl = new FormControl<string>('', { nonNullable: true });
+  searchTerm = signal<string>('');
+
+  get isSearching(): boolean {
+    return this.searchTerm().trim().length > 0;
+  }
 
   allEpics = this.projectsService.allEpics;
   totalCount = this.projectsService.totalCountEpics;
@@ -71,14 +72,37 @@ export class EpicsComponent {
         tap(([params, queryParams]) => {
           this.projectId.set(params.get('projectId')!);
           this.selectedProjectId.set(queryParams.get('projectId'));
+
+          // keep the input synced with the URL (e.g. back/forward nav)
+          // without re-triggering the debounced navigate below
+          const searchFromUrl = queryParams.get('search') ?? '';
+          if (this.searchControl.value !== searchFromUrl) {
+            this.searchControl.setValue(searchFromUrl, { emitEvent: false });
+          }
         }),
-        map(([, queryParams]) => +(queryParams.get('offset') ?? 0)),
-        distinctUntilChanged(),
+        map(([, queryParams]) => ({
+          offset: +(queryParams.get('offset') ?? 0),
+          search: queryParams.get('search') ?? '',
+        })),
+        distinctUntilChanged((a, b) => a.offset === b.offset && a.search === b.search),
         filter(() => !!this.projectId())
       )
-      .subscribe((offset) => {
+      .subscribe(({ offset, search }) => {
         this.page.set(offset / this.limit() + 1);
+        this.searchTerm.set(search);
         this.getAllEpics();
+      });
+
+    this.searchControl.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
+      .subscribe((term) => {
+        this.router.navigate([], {
+          queryParams: {
+            search: term.trim() ? term.trim() : null,
+            offset: 0,
+          },
+          queryParamsHandling: 'merge',
+        });
       });
   }
 
@@ -112,12 +136,28 @@ export class EpicsComponent {
     if (reachedBottom && this.page() < this.pages.length) {
       this.page.update((p) => p + 1);
 
-      this.projectsService.getAllEpics(this.limit(), this.page(), true, this.projectId());
+      this.projectsService.getAllEpics(
+        this.limit(),
+        this.page(),
+        true,
+        this.projectId(),
+        this.searchTerm()
+      );
     }
   }
 
   getAllEpics() {
-    this.projectsService.getAllEpics(this.limit(), this.page(), false, this.projectId());
+    this.projectsService.getAllEpics(
+      this.limit(),
+      this.page(),
+      false,
+      this.projectId(),
+      this.searchTerm()
+    );
+  }
+
+  clearSearch(): void {
+    this.searchControl.setValue('');
   }
 
   changePage(page: number) {
