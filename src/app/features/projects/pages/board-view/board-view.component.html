@@ -1,1 +1,39 @@
-<p>board-view works!</p>
+<!-- <table class="overflow-x-auto">
+  <tr class="flex justify-between">
+    @for (statu of statues; track $index) {
+      <th class="px-1 flex justify-between items-center">
+        <div class="flex gap-2 items-center">
+          <div class="size-2 rounded-xl" [class]="statu.dotClass"></div>
+          <h3 class="text-[11px] leading-4 tracking-[1.1px] font-bold uppercase text-[#64748B]">
+            {{ statu.title }}
+          </h3>
+          <div
+            class="w-[18.46px] h-4.75 py-0.5 px-1.5 rounded-xs text-[10px] font-bold leading-3.75 tracking-normal"
+            [class]="statu.badgeClass"
+          >
+            1
+          </div>
+          <a>
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 11 11"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="#94A3B8" />
+            </svg>
+          </a>
+        </div>
+      </th>
+    }
+  </tr>
+</table> -->
+
+<div
+  class="flex gap-4 overflow-x-auto pb-4 flex-nowrap [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-[#F1F3FF] [&::-webkit-scrollbar-thumb]:bg-[#C3C6D6] [&::-webkit-scrollbar-thumb]:rounded-ful"
+>
+  @for (col of statues; track col.value) {
+    <app-board-column [projectId]="projectId()" [statu]="col"></app-board-column>
+  }
+</div>

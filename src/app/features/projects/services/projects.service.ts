@@ -6,6 +6,8 @@ import { Member } from '../interfaces/IMembers';
 import { IEpicsProject } from '../interfaces/IEpicsProject';
 import { IEpicDetails } from '../interfaces/IEpicDetails';
 import { IEpicTasks } from '../interfaces/IEpicTasks';
+import { ITask } from '../interfaces/ITask';
+import { single } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +31,10 @@ export class ProjectsService {
   epicTasks = signal<IEpicTasks[] | null>(null);
   isLoadingEpicTask = signal<boolean>(false);
   hasErrorEpicTask = signal<boolean>(false);
+  totalCountTasks = signal<number>(0);
+  tasksIsLoading = signal<boolean>(false);
+  tasksError = signal<boolean>(false);
+  allTasks = signal<ITask[] | null>(null);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -170,5 +176,108 @@ export class ProjectsService {
     return this.httpClient.get<IEpicTasks[]>(
       `${APIS_KEYS.projects.getEpicTasks}?epic_id=eq.${epicId}`
     );
+  }
+  // get tasks by statues
+  // getTasksByStatus(projectId: string, statu: string) {
+  //   return this.httpClient.get<ITask[]>(
+  //     `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&status=eq.${statu}`
+  //   );
+  // }
+
+  // --- signals dedicated to per-status (board column) fetching ---
+  // keyed by status value, e.g. tasksByStatus()['TO_DO']
+  tasksByStatus = signal<Record<string, ITask[]>>({});
+  tasksByStatusTotalCount = signal<Record<string, number>>({});
+  tasksByStatusLoading = signal<Record<string, boolean>>({});
+  tasksByStatusError = signal<Record<string, boolean>>({});
+
+  getTasksByStatus(projectId: string, statu: string, limit = 5, page = 1, append = false) {
+    const offset = (page - 1) * limit;
+
+    const url = `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&status=eq.${statu}&limit=${limit}&offset=${offset}`;
+
+    this.tasksByStatusLoading.update((state) => ({ ...state, [statu]: true }));
+    this.tasksByStatusError.update((state) => ({ ...state, [statu]: false }));
+
+    return this.httpClient
+      .get<ITask[]>(url, {
+        headers: {
+          Prefer: 'count=exact',
+        },
+        observe: 'response',
+      })
+      .subscribe({
+        next: (resp) => {
+          this.tasksByStatus.update((state) => {
+            const previous = state[statu] ?? [];
+            return {
+              ...state,
+              [statu]: append ? [...previous, ...(resp.body ?? [])] : (resp.body ?? []),
+            };
+          });
+
+          this.tasksByStatusLoading.update((state) => ({ ...state, [statu]: false }));
+          this.tasksByStatusError.update((state) => ({ ...state, [statu]: false }));
+
+          const contentRange = resp.headers.get('Content-Range');
+          if (contentRange) {
+            const total = +contentRange.split('/')[1];
+            this.tasksByStatusTotalCount.update((state) => ({ ...state, [statu]: total }));
+          }
+        },
+        error: () => {
+          this.tasksByStatusError.update((state) => ({ ...state, [statu]: true }));
+          this.tasksByStatusLoading.update((state) => ({ ...state, [statu]: false }));
+        },
+      });
+  }
+
+  // getAllTasks(projectId: string) {
+  //   return this.httpClient.get<ITask[]>(
+  //     `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}`
+  //   );
+  // }
+
+  getAllTasks(projectId: string, limit = 5, page = 1, append = false, searchTerm = '') {
+    const offset = (page - 1) * limit;
+
+    this.tasksIsLoading.set(true);
+
+    let url = `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
+
+    const trimmedTerm = searchTerm.trim();
+    if (trimmedTerm) {
+      url += `&title=ilike.%25${encodeURIComponent(trimmedTerm)}%25`;
+    }
+
+    return this.httpClient
+      .get<ITask[]>(url, {
+        headers: {
+          Prefer: 'count=exact',
+        },
+        observe: 'response',
+      })
+      .subscribe({
+        next: (resp) => {
+          this.tasksError.set(false);
+
+          if (append) {
+            this.allTasks.update((tasks) => [...(tasks ?? []), ...(resp.body ?? [])]);
+          } else {
+            this.allTasks.set(resp.body ?? []);
+          }
+
+          this.tasksIsLoading.set(false);
+
+          const contentRange = resp.headers.get('Content-Range');
+          if (contentRange) {
+            this.totalCountTasks.set(+contentRange.split('/')[1]);
+          }
+        },
+        error: () => {
+          this.tasksError.set(true);
+          this.tasksIsLoading.set(false);
+        },
+      });
   }
 }

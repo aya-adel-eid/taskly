@@ -39,3 +39,41 @@
 @utility layoutSection {
   @apply p-8;
 }
+
+@layer utilities {
+  .status-badge {
+    @apply px-2 py-1 rounded text-xs font-semibold uppercase;
+  }
+
+  .status-todo {
+    @apply bg-[#CDDDFF] text-[#374763];
+  }
+
+  .status-in-progress {
+    @apply bg-[#CDDDFF] text-[#374763];
+  }
+
+  .status-completed {
+    @apply bg-[#82F9BE] text-[#002113];
+  }
+
+  .status-blocked {
+    @apply bg-[#FFDAD6] text-[#93000A];
+  }
+
+  .status-urgent {
+    @apply bg-[#FFDAD6] text-[#93000A];
+  }
+
+  .status-ready-for-qa {
+    @apply bg-[#FEF3C7] text-[#B45309];
+  }
+
+  .status-ready-for-production {
+    @apply bg-[#CDDDFF] text-[#374763];
+  }
+
+  .status-reopened {
+    @apply bg-[#CDDDFF] text-[#374763];
+  }
+}

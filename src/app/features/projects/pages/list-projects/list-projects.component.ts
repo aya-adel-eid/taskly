@@ -82,10 +82,8 @@ export class ListProjectsComponent implements OnInit {
 
   @HostListener('window:scroll')
   onScroll() {
-    // يشتغل على الموبايل فقط
     if (!this.isMobile()) return;
 
-    // لو لسه بيحمل بيانات
     if (this.isLoading()) return;
 
     const reachedBottom =

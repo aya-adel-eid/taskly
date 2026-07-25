@@ -5,7 +5,7 @@ import { ProjectsService } from '../../services/projects.service';
 import { Member } from '../../interfaces/IMembers';
 import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { IEpicsProject } from '../../interfaces/IEpicsProject';
+
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
 
@@ -33,6 +33,10 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
       this.getAllMembers();
       this.projectServices.getEpicsProject(this.projectId());
     });
+    const status = this.activateRoute.snapshot.queryParamMap.get('status');
+    if (status) {
+      this.addNewTask.patchValue({ status });
+    }
   }
   addNewTask = this.fb.group({
     project_id: [sessionStorage.getItem(StORED_KEYS.projectId), Validators.required],

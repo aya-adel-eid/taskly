@@ -1,0 +1,72 @@
+<div class="flex flex-col gap-4 w-[288px] shrink-0 bg-[#F7F8FA] rounded-lg p-3">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <span class="size-2 rounded-xl" [class]="statu()?.dotClass"></span>
+      <h3 class="text-[11px] leading-4 tracking-[1.1px] font-bold uppercase text-[#64748B]">
+        {{ statu()?.title }}
+      </h3>
+      @if (tasks()) {
+        <span class="py-0.5 px-1.5 rounded-xs text-[10px] font-bold" [class]="statu()?.badgeClass">
+          {{ tasks()!.length }}
+        </span>
+      }
+    </div>
+
+    <button
+      type="button"
+      (click)="addTask()"
+      class="w-5 h-5 flex items-center justify-center rounded-md hover:bg-[#EDEFF4] text-[#434654] transition cursor-pointer"
+      aria-label="Add task"
+    >
+      <svg
+        width="10"
+        height="10"
+        viewBox="0 0 11 11"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="currentColor" />
+      </svg>
+    </button>
+  </div>
+
+  <button
+    type="button"
+    (click)="addTask()"
+    class="flex items-center justify-center gap-2 w-full py-4 rounded-lg border-2 border-dashed border-[#C3C6D64D] text-[#434654] text-[12px] font-medium cursor-pointer"
+  >
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M6.75 11.25H8.25V8.25H11.25V6.75H8.25V3.75H6.75V6.75H3.75V8.25H6.75V11.25ZM7.5 15C6.4625 15 5.4875 14.8031 4.575 14.4094C3.6625 14.0156 2.86875 13.4812 2.19375 12.8062C1.51875 12.1312 0.984375 11.3375 0.590625 10.425C0.196875 9.5125 0 8.5375 0 7.5C0 6.4625 0.196875 5.4875 0.590625 4.575C0.984375 3.6625 1.51875 2.86875 2.19375 2.19375C2.86875 1.51875 3.6625 0.984375 4.575 0.590625C5.4875 0.196875 6.4625 0 7.5 0C8.5375 0 9.5125 0.196875 10.425 0.590625C11.3375 0.984375 12.1312 1.51875 12.8062 2.19375C13.4812 2.86875 14.0156 3.6625 14.4094 4.575C14.8031 5.4875 15 6.4625 15 7.5C15 8.5375 14.8031 9.5125 14.4094 10.425C14.0156 11.3375 13.4812 12.1312 12.8062 12.8062C12.1312 13.4812 11.3375 14.0156 10.425 14.4094C9.5125 14.8031 8.5375 15 7.5 15ZM7.5 13.5C9.175 13.5 10.5938 12.9188 11.7563 11.7563C12.9188 10.5938 13.5 9.175 13.5 7.5C13.5 5.825 12.9188 4.40625 11.7563 3.24375C10.5938 2.08125 9.175 1.5 7.5 1.5C5.825 1.5 4.40625 2.08125 3.24375 3.24375C2.08125 4.40625 1.5 5.825 1.5 7.5C1.5 9.175 2.08125 10.5938 3.24375 11.7563C4.40625 12.9188 5.825 13.5 7.5 13.5Z"
+        fill="#434654"
+        fill-opacity="0.6"
+      />
+    </svg>
+    <span class="text-xs leading-4 tracking-[1.2px] uppercase text-[#43465499]/60 font-bold block">
+      ADD NEW TASK
+    </span>
+  </button>
+
+  <div
+    class="flex flex-col gap-2 min-h-[40px] max-h-[calc(100vh-320px)] overflow-y-auto pr-1 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-[#F1F3FF] [&::-webkit-scrollbar-thumb]:bg-[#C3C6D6] [&::-webkit-scrollbar-thumb]:rounded-ful"
+    (scroll)="onScroll($event)"
+  >
+    @if (tasks() === null) {
+      @for (i of [1, 2, 3]; track i) {
+        <div class="h-[70px] rounded-lg skeleton-shimmer"></div>
+      }
+    } @else if (hasError()) {
+      <p class="text-[11px] text-[#E0433C] text-center py-4">Failed to load tasks</p>
+    } @else if (tasks()!.length === 0) {
+      <p class="text-[11px] text-[#737685] text-center py-4">No tasks</p>
+    } @else {
+      @for (task of tasks()!; track task.id) {
+        <app-card-task-view [task]="task"></app-card-task-view>
+      }
+
+      @if (isLoading()) {
+        <div class="h-[70px] rounded-lg skeleton-shimmer"></div>
+      }
+    }
+  </div>
+</div>
