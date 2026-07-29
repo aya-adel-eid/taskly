@@ -27,7 +27,7 @@ export class ListViewComponent {
   limit = signal(5);
   isMobile = signal(window.innerWidth < 1024);
   taskDetails=signal<ITask|null>(null)
-showDetails=this.projectservice.showPoupDetail
+showDetails=this.projectservice.showTaskDetails
   constructor() {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(

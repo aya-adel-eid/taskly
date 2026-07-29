@@ -1,18 +1,19 @@
 <div class="fixed inset-0 bg-[#041B3C66]/50 flex items-end md:items-center md:justify-center z-50 lg:p-4" (click)="close()">
   <div
-    class="bg-white rounded-t-2xl md:rounded-2xl w-full max-w-4xl min-h-[80vh] max-h-[95vh] overflow-y-auto flex flex-col"
+    class="bg-[#FFFFFF] md:bg-white rounded-t-3xl md:rounded-2xl w-full max-w-4xl min-h-[80vh] max-h-[95vh] overflow-y-auto flex flex-col"
     (click)="$event.stopPropagation()"
     [formGroup]="taskDetails"
   >
     <!-- ===== MOBILE HEADER (X close icon) ===== -->
     <div class="flex md:hidden items-center justify-between px-4 pt-4 pb-2">
-      <span class="text-[11px] font-semibold text-[#737685] tracking-wide">
+      <span class="text-[11px] font-bold leading-[16.5px] text-[#4F5F7B] tracking-[1.1px]">
         {{ task()?.task_id }}
       </span>
-      <button (click)="close()" class="text-[#737685]">
-        <svg width="18" height="18" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
+      <button (click)="close()" class="text-[#737685] cursor-pointer">
+       <svg width="33" height="30" viewBox="0 0 33 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.4 22L8 20.6L13.6 15L8 9.4L9.4 8L15 13.6L20.6 8L22 9.4L16.4 15L22 20.6L20.6 22L15 16.4L9.4 22Z" fill="#434654"/>
+</svg>
+
       </button>
     </div>
 
@@ -100,23 +101,44 @@
 
           <!-- Mobile: Status + Epic badges -->
           <div class="flex md:hidden items-center gap-2 px-4 mb-4">
-            <span class="inline-flex items-center gap-1 h-6 px-2.5 rounded-full bg-[#E8F8F0] text-[11px] font-semibold text-[#0F9D58]">
-              <span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M5.01667 8.51667L9.12917 4.40417L8.3125 3.5875L5.01667 6.88333L3.35417 5.22083L2.5375 6.0375L5.01667 8.51667ZM5.83333 11.6667C5.02639 11.6667 4.26806 11.5135 3.55833 11.2073C2.84861 10.901 2.23125 10.4854 1.70625 9.96042C1.18125 9.43542 0.765625 8.81806 0.459375 8.10833C0.153125 7.39861 0 6.64028 0 5.83333C0 5.02639 0.153125 4.26806 0.459375 3.55833C0.765625 2.84861 1.18125 2.23125 1.70625 1.70625C2.23125 1.18125 2.84861 0.765625 3.55833 0.459375C4.26806 0.153125 5.02639 0 5.83333 0C6.64028 0 7.39861 0.153125 8.10833 0.459375C8.81806 0.765625 9.43542 1.18125 9.96042 1.70625C10.4854 2.23125 10.901 2.84861 11.2073 3.55833C11.5135 4.26806 11.6667 5.02639 11.6667 5.83333C11.6667 6.64028 11.5135 7.39861 11.2073 8.10833C10.901 8.81806 10.4854 9.43542 9.96042 9.96042C9.43542 10.4854 8.81806 10.901 8.10833 11.2073C7.39861 11.5135 6.64028 11.6667 5.83333 11.6667Z" fill="#002113"/>
-</svg>
+            <span 
+             
+               class="status-badge flex gap-1 items-center  px-3 py-1 rounded-xl text-[12px] leading-4 tracking-normal font-bold  cursor-pointer focus:outline-none"
+    [class.status-todo]="task()?.status === 'TO_DO'"
+    [class.status-in-progress]="task()?.status === 'IN_PROGRESS'"
+    [class.status-completed]="task()?.status === 'DONE'"
+    [class.status-blocked]="task()?.status === 'BLOCKED'"
+    [class.status-in-review]="task()?.status === 'IN_REVIEW'"
+    [class.status-ready-for-qa]="task()?.status === 'READY_FOR_QA'"
+    [class.status-ready-for-production]="task()?.status === 'READY_FOR_PRODUCTION'"
+    [class.status-reopened]="task()?.status=== 'REOPENED'"
+             >
+             @if (task()?.status === 'TO_DO') {
+
+                 <span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+   <path d="M5.01667 8.51667L9.12917 4.40417L8.3125 3.5875L5.01667 6.88333L3.35417 5.22083L2.5375 6.0375L5.01667 8.51667ZM5.83333 11.6667C5.02639 11.6667 4.26806 11.5135 3.55833 11.2073C2.84861 10.901 2.23125 10.4854 1.70625 9.96042C1.18125 9.43542 0.765625 8.81806 0.459375 8.10833C0.153125 7.39861 0 6.64028 0 5.83333C0 5.02639 0.153125 4.26806 0.459375 3.55833C0.765625 2.84861 1.18125 2.23125 1.70625 1.70625C2.23125 1.18125 2.84861 0.765625 3.55833 0.459375C4.26806 0.153125 5.02639 0 5.83333 0C6.64028 0 7.39861 0.153125 8.10833 0.459375C8.81806 0.765625 9.43542 1.18125 9.96042 1.70625C10.4854 2.23125 10.901 2.84861 11.2073 3.55833C11.5135 4.26806 11.6667 5.02639 11.6667 5.83333C11.6667 6.64028 11.5135 7.39861 11.2073 8.10833C10.901 8.81806 10.4854 9.43542 9.96042 9.96042C9.43542 10.4854 8.81806 10.901 8.10833 11.2073C7.39861 11.5135 6.64028 11.6667 5.83333 11.6667Z" fill="#002113"/>
+   </svg>
+   </span>
+             }
+<span>
+
+    {{ task()?.status}}
 </span>
-                {{ task()?.status}}
             </span>
-            <span class="flex items-center gap-1 h-6 px-2 rounded-full bg-[#E0E8FF] text-[11px] font-semibold text-[#0052CC]">
-              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 1L11 3.5V8.5L6 11L1 8.5V3.5L6 1Z" stroke="#0052CC" stroke-width="1.2"/>
-              </svg>
-              {{ task()?.epic_id }}
+            <span class="flex items-center gap-[5.99px] py-1 px-3  rounded-xl bg-[#CDDDFF] text-[11px] font-bold text-[#374763] leading-[16.5px] tracking-normal">
+          <svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.25 11.1125L0 7.02917L0.9625 6.3L5.25 9.625L9.5375 6.3L10.5 7.02917L5.25 11.1125ZM5.25 8.16667L0 4.08333L5.25 0L10.5 4.08333L5.25 8.16667ZM5.25 6.67917L8.60417 4.08333L5.25 1.4875L1.89583 4.08333L5.25 6.67917Z" fill="#374763"/>
+</svg>
+<span >
+
+    {{ task()?.epic?.epic_id }}
+</span>
+
             </span>
           </div>
 
           <!-- Description (Textarea) -->
-          <div class="mb-6 flex-1 flex flex-col px-8 pt-2">
+          <div class="mb-6 flex-1  flex-col px-8 pt-2 hidden lg:flex">
             <span class="text-[10px] font-bold leading-3.75 text-[#434654] tracking-[0.5px] uppercase">
               Description
             </span>
@@ -131,33 +153,70 @@
           </div>
 
           <!-- Mobile: Assignee + Created grid -->
-          <div class="grid grid-cols-2 gap-4 md:hidden px-4 mb-4">
-            <div>
-              <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">Assignee</span>
-              <select class="mt-1.5 w-full h-9 px-2 border border-[#D7E2FF] rounded-lg text-[12px] text-[#041B3C] focus:outline-none focus:border-[#0052CC]">
-                <option [selected]="!task()?.assignee?.name">Unassigned</option>
-                <option [selected]="!!task()?.assignee?.name">{{ task()?.assignee?.name }}</option>
-              </select>
-            </div>
-            <div>
-              <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">Due Date</span>
-              <input type="date" class="mt-1.5 w-full h-9 px-2 border border-[#D7E2FF] rounded-lg text-[12px] text-[#041B3C] focus:outline-none focus:border-[#0052CC]" [value]="task()?.due_date" />
-            </div>
-            <div>
-              <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">Created By</span>
-              <div class="flex items-center gap-1.5 mt-1.5">
-                <div class="w-5 h-5 rounded-full bg-[#4F5F7B] text-white flex items-center justify-center text-[9px] font-semibold shrink-0">
-                  {{ projectServices.getInitials(task()?.created_by?.name!) }}
-                </div>
-                <span class="text-[12px] font-medium text-[#041B3C] truncate">{{ task()?.created_by?.name }}</span>
-              </div>
-            </div>
-            <div>
-              <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">Created At</span>
-              <div class="flex items-center gap-1 mt-1.5 text-[12px] text-[#041B3C]">
-                {{ task()?.created_at | date: 'MMM d, y'}}
-              </div>
-            </div>
+           <div>
+               <div class="grid grid-cols-2 gap-4 md:hidden px-4 mb-4">
+                 <div class="bg-[#F1F3FF] p-4  rounded-lg flex flex-col gap-1">
+                   <span class="text-[11px] font-bold leading-[16.5px] text-[#737685] tracking-normal uppercase">Assignee</span>
+                  <div class="flex gap-2">
+                     <span class="size-6 pt-[4px] pb-[5px] rounded-xl  bg-[#DAE2FF]
+                      text-[#003D9B] text-[10px] font-bold leadin-[15px] tracking-normal flex justify-center items-center">
+                     {{projectServices.getInitials(task()?.assignee?.name!)}}
+                     </span>
+                     <span class="text-sm font-medium leading-5 tracking-normal text-[#041B3C]">
+                         {{task()?.assignee ?.name}}
+                     </span>
+                  </div>
+                 </div>
+                 <div class="bg-[#F1F3FF] p-4  rounded-lg flex flex-col gap-1 ">
+                   <span class="text-[11px] font-bold leading-[16.5px] text-[#737685] tracking-normal uppercase">Due Date</span>
+                   <div class="flex gap-1 items-center">
+                     <span><svg width="11" height="12" viewBox="0 0 11 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+     <path d="M6.70833 9.33333C6.3 9.33333 5.95486 9.19236 5.67292 8.91042C5.39097 8.62847 5.25 8.28333 5.25 7.875C5.25 7.46667 5.39097 7.12153 5.67292 6.83958C5.95486 6.55764 6.3 6.41667 6.70833 6.41667C7.11667 6.41667 7.46181 6.55764 7.74375 6.83958C8.02569 7.12153 8.16667 7.46667 8.16667 7.875C8.16667 8.28333 8.02569 8.62847 7.74375 8.91042C7.46181 9.19236 7.11667 9.33333 6.70833 9.33333ZM1.16667 11.6667C0.845833 11.6667 0.571181 11.5524 0.342708 11.324C0.114236 11.0955 0 10.8208 0 10.5V2.33333C0 2.0125 0.114236 1.73785 0.342708 1.50937C0.571181 1.2809 0.845833 1.16667 1.16667 1.16667H1.75V0H2.91667V1.16667H7.58333V0H8.75V1.16667H9.33333C9.65417 1.16667 9.92882 1.2809 10.1573 1.50937C10.3858 1.73785 10.5 2.0125 10.5 2.33333V10.5C10.5 10.8208 10.3858 11.0955 10.1573 11.324C9.92882 11.5524 9.65417 11.6667 9.33333 11.6667H1.16667ZM1.16667 10.5H9.33333V4.66667H1.16667V10.5ZM1.16667 3.5H9.33333V2.33333H1.16667V3.5ZM1.16667 3.5V2.33333V3.5Z" fill="#003D9B"/>
+     </svg>
+     </span>
+     <span class="text-sm font-medium tracking-normal leading-5 text-[#041B3C]">
+         {{task()?.due_date ? (task()?.due_date | date: 'd MMM yyyy') : '_'}}
+     </span>
+                   </div>
+                 </div>
+                 <div class="bg-[#F1F3FF] p-4  rounded-lg flex flex-col gap-1">
+                   <span class="text-[11px] font-bold leading-[16.5px] text-[#737685] tracking-normal uppercase">Created By</span>
+                   <div class="flex items-center gap-1.5 mt-1.5">
+                     <div class="w-5 h-5 rounded-full bg-[#4F5F7B] text-white flex items-center justify-center text-[9px] font-semibold shrink-0">
+                       {{ projectServices.getInitials(task()?.created_by?.name!) }}
+                     </div>
+                     <span class="text-[12px] font-medium text-[#041B3C] truncate">{{ task()?.created_by?.name }}</span>
+                   </div>
+                 </div>
+                 <div class="bg-[#F1F3FF] p-4  rounded-lg flex flex-col gap-1">
+                   <span class="text-[11px] font-bold leading-[16.5px] text-[#737685] tracking-normal uppercase">Created At</span>
+                   <div class="flex items-center gap-1 mt-1.5 text-[12px] text-[#041B3C]">
+                    <span><svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5.25 10.5C3.90833 10.5 2.73924 10.0552 1.74271 9.16562C0.746181 8.27604 0.175 7.16528 0.0291667 5.83333H1.225C1.36111 6.84444 1.81076 7.68056 2.57396 8.34167C3.33715 9.00278 4.22917 9.33333 5.25 9.33333C6.3875 9.33333 7.35243 8.93715 8.14479 8.14479C8.93715 7.35243 9.33333 6.3875 9.33333 5.25C9.33333 4.1125 8.93715 3.14757 8.14479 2.35521C7.35243 1.56285 6.3875 1.16667 5.25 1.16667C4.57917 1.16667 3.95208 1.32222 3.36875 1.63333C2.78542 1.94444 2.29444 2.37222 1.89583 2.91667H3.5V4.08333H0V0.583333H1.16667V1.95417C1.6625 1.33194 2.26771 0.850694 2.98229 0.510417C3.69688 0.170139 4.45278 0 5.25 0C5.97917 0 6.66215 0.138542 7.29896 0.415625C7.93576 0.692708 8.48993 1.06701 8.96146 1.53854C9.43299 2.01007 9.80729 2.56424 10.0844 3.20104C10.3615 3.83785 10.5 4.52083 10.5 5.25C10.5 5.97917 10.3615 6.66215 10.0844 7.29896C9.80729 7.93576 9.43299 8.48993 8.96146 8.96146C8.48993 9.43299 7.93576 9.80729 7.29896 10.0844C6.66215 10.3615 5.97917 10.5 5.25 10.5ZM6.88333 7.7L4.66667 5.48333V2.33333H5.83333V5.01667L7.7 6.88333L6.88333 7.7Z" fill="#4F5F7B"/>
+</svg>
+</span>
+<span>
+
+    {{ task()?.created_at | date: 'MMM d, y'}}
+</span>
+                   </div>
+                 </div>
+               </div>
+
+           </div>
+            <!-- Description (Textarea) -->
+          <div class=" flex-1  flex-col px-4  lg:hidden">
+            <span class="text-[10px] font-bold leading-3.75 text-[#434654] tracking-[0.5px] uppercase">
+              Description
+            </span>
+            <textarea
+              class="mt-2 w-full flex-1 border border-[#D7E2FF] rounded-lg p-3 min-h-35 md:min-h-60
+                     text-[14px] leading-[22.75px] tracking-normal text-[#041B3C] resize-none
+                     focus:outline-none"
+              placeholder="Add a detailed description..."
+              formControlName="description"
+            ></textarea>
+            
           </div>
         </div>
 
@@ -172,7 +231,7 @@
           
           <button
             (click)="close()"
-            class="h-9 px-4 py-2 rounded-sm bg-[#D7E2FF]  text-[#041B3C] text-[14px] tracking-normal leading-5 
+            class="h-9 px-4 py-2 rounded-sm bg-[#D7E2FF]  text-[#041B3C] text-[14px] tracking-normal leading-5  cursor-pointer
             font-semibold transition-colors"
           >
             Close

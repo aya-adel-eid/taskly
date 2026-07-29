@@ -147,7 +147,9 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.projectServices.showTaskDetails.set(false);
+   this.projectServices.showTaskDetails.set(!this.projectServices.showTaskDetails())
+   console.log('flase');
+   
   }
 
   ngOnDestroy(): void {
