@@ -192,7 +192,7 @@ export class ProjectsService {
   tasksByStatusTotalCount = signal<Record<string, number>>({});
   tasksByStatusLoading = signal<Record<string, boolean>>({});
   tasksByStatusError = signal<Record<string, boolean>>({});
-
+selectedTask = signal<ITask | null>(null);
   getTasksByStatus(projectId: string, statu: string, limit = 5, page = 1, append = false) {
     const offset = (page - 1) * limit;
 

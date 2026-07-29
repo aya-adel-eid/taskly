@@ -80,6 +80,9 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
       this.getEpicsProject();
       this.getAllMembers();
     }
+    // 
+    console.log('form detaisl',this.taskDetails.value);
+    
 
   }
  formatDateForInput(dateString: string | Date | undefined) {

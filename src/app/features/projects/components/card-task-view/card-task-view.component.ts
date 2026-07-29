@@ -49,13 +49,15 @@ export class CardTaskViewComponent {
       due.getDate() === now.getDate()
     );
   }
-   taskDetails=signal<ITask|null>(null)
+   taskDetails=this.projectService.selectedTask
 showDetails=this.projectService.showTaskDetails
 
     getTaskDetails(projectId:string,taskId:string){
+      this.taskDetails.set(null)
     this.projectService.getTaskDetails(projectId,taskId).subscribe({
 next:(resp)=>{
   this.taskDetails.set(resp[0])
+  
   this.showDetails.set(true)
   console.log(this.taskDetails(),444);
   
