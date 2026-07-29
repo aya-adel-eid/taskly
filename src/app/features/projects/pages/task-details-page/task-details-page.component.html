@@ -270,14 +270,14 @@
     <!-- Assignee (Select) -->
       <!-- Assignee -->
 
-          <div class="flex flex-col gap-2 relative assignee-dropdown">
-            <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">
+          <div class="flex flex-col gap-2 relative assignee-dropdown ">
+            <span class="text-[12px] font-semibold text-[#434654] tracking-[0.5px] uppercase leading-[15px]">
               Assignee
             </span>
 
             <!-- Selected Assignee -->
             <div
-              class="flex items-center gap-2 h-10 px-3 border border-[#D7E2FF] rounded-lg cursor-pointer"
+              class="flex items-center gap-2 h-10 px-3 border border-[#D7E2FF] rounded-lg cursor-pointer bg-[#FFFFFF]"
               (click)="isEditingAssignee.set(!isEditingAssignee())"
             >
               @if (currentAssignee(); as assignee) {

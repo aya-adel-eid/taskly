@@ -1,5 +1,5 @@
 <div
-  class="relative rounded-lg p-4 transition cursor-pointer border border-[#C3C6D61A]/10 shadow-[0px_2px_8px_0px_rgba(0,0,0,0.02)]"
+  class="relative rounded-lg p-4 cursor-pointer transition  border border-[#C3C6D61A]/10 shadow-[0px_2px_8px_0px_rgba(0,0,0,0.02)]"
   [class]="
     task()?.status === 'IN_PROGRESS' && task()?.status !== 'BLOCKED'
       ? 'border-l-4 border-l-[#0052CC]'
@@ -10,6 +10,7 @@
       ? 'bg-[#FFDAD633] border border-[#BA1A1A1A]'
       : 'bg-white '
   "
+(click)="getTaskDetails(task()?.project_id!,task()?.id!)"
 >
   <h2 class="text-sm font-medium text-[#041B3C] leading-[19.25px] line-clamp-2 tracking-normal">
     {{ task()?.title }}
@@ -108,3 +109,7 @@
     }
   </div>
 </div>
+@if (showDetails()) {
+  <app-task-details-page [task]="taskDetails()!"></app-task-details-page>
+}
+

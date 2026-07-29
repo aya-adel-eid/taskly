@@ -1,6 +1,6 @@
 import { Component, effect, inject, input, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { ITask } from '../../interfaces/ITask';
-import { IEpicTasks } from '../../interfaces/IEpicTasks';
+import { Epic, IEpicTasks } from '../../interfaces/IEpicTasks';
 import { ProjectsService } from '../../services/projects.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Member } from '../../interfaces/IMembers';
@@ -26,7 +26,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
 
   // Epic dropdown state
   isEditingEpic = signal(false);
-  currentEpic = signal<IEpicsProject | null>(null);
+  currentEpic = signal<Epic | null>(null);
   allEpics = this.projectServices.epics;
 
   // Assignee dropdown state
@@ -57,14 +57,17 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   });
 
   constructor() {
-    // بس الـ status محتاج effect لأنه مش مرتبط بـ API call زي الـ assignee
+
     effect(() => {
       this.selectedStatus.set(this.task()?.status ?? '');
-    });
+      this.currentEpic.set(this.task()?.epic??null)
+    }, { allowSignalWrites: true });
   }
 
   ngOnInit() {
     if (this.task()) {
+      console.log('current',this.task());
+      
       const taskData = this.task();
       this.taskDetails.patchValue({
         title: this.task()?.title ?? '',
@@ -74,10 +77,10 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
         status: this.task()?.status ?? 'TO_DO',
        due_date: this.formatDateForInput(taskData?.due_date!)
       });
+      this.getEpicsProject();
+      this.getAllMembers();
     }
 
-    this.getEpicsProject();
-    this.getAllMembers();
   }
  formatDateForInput(dateString: string | Date | undefined) {
   if (!dateString) return '';
@@ -123,11 +126,11 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     // });
   }
 
-  selectEpic(epic: IEpicsProject | null) {
-    this.currentEpic.set(epic);
-    this.isEditingEpic.set(false);
-    this.taskDetails.patchValue({ epic_id: epic?.id ?? '' });
-  }
+  selectEpic(epic: Epic | IEpicsProject | null) {
+  this.currentEpic.set(epic as Epic);
+  this.isEditingEpic.set(false);
+  this.taskDetails.patchValue({ epic_id: epic?.id ?? '' });
+}
 
   onStatusChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;

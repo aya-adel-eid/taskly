@@ -3,11 +3,13 @@ import { CardTaskViewComponent } from '../card-task-view/card-task-view.componen
 import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
 import { ProjectsService } from '../../services/projects.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { TaskDetailsPageComponent } from "../../pages/task-details-page/task-details-page.component";
 
 @Component({
   selector: 'app-board-column',
   standalone: true,
-  imports: [CardTaskViewComponent],
+  imports: [CardTaskViewComponent, TaskDetailsPageComponent],
   templateUrl: './board-column.component.html',
   styleUrl: './board-column.component.css',
 })
@@ -68,4 +70,22 @@ export class BoardColumnComponent implements OnInit {
       queryParams: { status: this.statu().value },
     });
   }
+  taskDetails=signal<ITask|null>(null)
+showDetails=this.projectsService.showTaskDetails
+
+    getTaskDetails(projectId:string,taskId:string){
+    this.projectsService.getTaskDetails(projectId,taskId).subscribe({
+next:(resp)=>{
+  this.taskDetails.set(resp[0])
+  this.showDetails.set(true)
+  console.log(this.taskDetails(),444);
+  
+},
+error:(error:HttpErrorResponse)=>{
+  console.log(error);
+  
+}
+    })
+  }
+
 }

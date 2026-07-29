@@ -61,7 +61,10 @@
       <p class="text-[11px] text-[#737685] text-center py-4">No tasks</p>
     } @else {
       @for (task of tasks()!; track task.id) {
-        <app-card-task-view [task]="task"></app-card-task-view>
+        <div  class="cursor-pointer">
+
+          <app-card-task-view [task]="task"></app-card-task-view>
+        </div>
       }
 
       @if (isLoading()) {
@@ -70,3 +73,6 @@
     }
   </div>
 </div>
+<!-- @if (showDetails()) {
+  <app-task-details-page [task]="taskDetails()!"></app-task-details-page>
+} -->

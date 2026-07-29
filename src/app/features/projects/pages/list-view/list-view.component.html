@@ -208,7 +208,7 @@
 </div>
 <div class="lg:hidden flex flex-col gap-3 py-4 mb-6">
   @for (task of allTasks(); track task.task_id) {
-    <div class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3" (click)="!showDetails()">
+    <div class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3 cursor-pointer" (click)="getTaskDetails(task.project_id,task.id)">
       <div>
         <div class="flex items-center justify-between">
           <span
