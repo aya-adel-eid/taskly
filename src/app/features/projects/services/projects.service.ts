@@ -9,6 +9,7 @@ import { IEpicTasks } from '../interfaces/IEpicTasks';
 import { ITask } from '../interfaces/ITask';
 import { single } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -35,6 +36,7 @@ export class ProjectsService {
   tasksIsLoading = signal<boolean>(false);
   tasksError = signal<boolean>(false);
   allTasks = signal<ITask[] | null>(null);
+  showTaskDetails=signal<boolean>(false);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -280,4 +282,8 @@ export class ProjectsService {
         },
       });
   }
+  // get task details
+   getTaskDetails(projectId:string,taskId:string){
+return  this.httpClient.get<ITask[]>(`${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&id=eq.${taskId}`)
+   }
 }

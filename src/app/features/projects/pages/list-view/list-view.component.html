@@ -26,7 +26,7 @@
     <!-- Table Body -->
     <tbody class="divide-y divide-[#F1F3FF]">
       @for (task of allTasks(); track task.task_id) {
-        <tr class="bg-white">
+        <tr class="bg-white cursor-pointer" (click)="getTaskDetails(task.project_id,task.id)">
           <!-- Task ID -->
 
           <td class="text-xs text-[#003D9B] px-6 py-5 align-middle leading-4 tracking-normal">
@@ -208,7 +208,7 @@
 </div>
 <div class="lg:hidden flex flex-col gap-3 py-4 mb-6">
   @for (task of allTasks(); track task.task_id) {
-    <div class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3">
+    <div class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3" (click)="!showDetails()">
       <div>
         <div class="flex items-center justify-between">
           <span
@@ -278,3 +278,6 @@
     </div>
   }
 </div>
+@if (showDetails()) {
+  <app-task-details-page [task]="taskDetails()!"></app-task-details-page>
+}

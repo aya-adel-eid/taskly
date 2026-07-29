@@ -3,11 +3,14 @@ import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { combineLatest, distinctUntilChanged, filter, map, tap } from 'rxjs';
+import { TaskDetailsPageComponent } from "../task-details-page/task-details-page.component";
+import { ITask } from '../../interfaces/ITask';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-list-view',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, TaskDetailsPageComponent],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css',
 })
@@ -23,7 +26,8 @@ export class ListViewComponent {
   page = signal(1);
   limit = signal(5);
   isMobile = signal(window.innerWidth < 1024);
-
+  taskDetails=signal<ITask|null>(null)
+showDetails=this.projectservice.showPoupDetail
   constructor() {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
@@ -102,5 +106,17 @@ export class ListViewComponent {
         true // append
       );
     }
+  }
+  getTaskDetails(projectId:string,taskId:string){
+    this.projectservice.getTaskDetails(projectId,taskId).subscribe({
+next:(resp)=>{
+  this.taskDetails.set(resp[0])
+  this.showDetails.set(true)
+},
+error:(error:HttpErrorResponse)=>{
+  console.log(error);
+  
+}
+    })
   }
 }
