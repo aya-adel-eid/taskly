@@ -286,4 +286,7 @@ selectedTask = signal<ITask | null>(null);
    getTaskDetails(projectId:string,taskId:string){
 return  this.httpClient.get<ITask[]>(`${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&id=eq.${taskId}`)
    }
+    updateTask(taskInfo: Partial<ITask>, taskId: string) {
+    return this.httpClient.patch(`${APIS_KEYS.projects.updateEpic}?id=eq.${taskId}`, taskInfo);
+  }
 }
