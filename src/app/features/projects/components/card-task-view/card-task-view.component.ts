@@ -17,7 +17,7 @@ export class CardTaskViewComponent {
   projectService = inject(ProjectsService);
 
   get assigneeColor(): string {
-    const id = this.task()?.assignee.id;
+    const id = this.task()?.assignee?.id;
     if (!id) return AVATAR_COLORS[0];
     return AVATAR_COLORS[this.hashString(id) % AVATAR_COLORS.length];
   }

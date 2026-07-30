@@ -6,11 +6,11 @@ export interface ITask {
   description: string;
   status: string;
   created_at: string;
-  due_date: string;
+  due_date: string|null;
   task_id: string;
-  epic: Epic;
+  epic?: Epic|null;
   created_by: CreatedBy;
-  assignee: Assignee;
+  assignee: Assignee|null;
 }
 
 export interface Epic {

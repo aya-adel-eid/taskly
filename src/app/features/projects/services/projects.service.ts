@@ -311,7 +311,7 @@ return  this.httpClient.get<ITask[]>(`${APIS_KEYS.projects.getEpicTasks}?project
 //     }
 // }
 patchLocalTask(taskId: string, partial: Partial<ITask>) {
-  // ===== تحديث allTasks (للـ List View) =====
+
   if (this.allTasks()?.length) {
     this.allTasks.update((tasks) =>
       tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
@@ -323,7 +323,7 @@ patchLocalTask(taskId: string, partial: Partial<ITask>) {
     this.tasksByStatus.update((tasksMap) => {
       const updated: typeof tasksMap = { ...tasksMap };
 
-      // 1) دوّر على التاسك القديم في أي عمود، واحفظه
+     
       let foundTask: ITask | null = null;
       let oldStatus: string | null = null;
 
@@ -336,17 +336,17 @@ patchLocalTask(taskId: string, partial: Partial<ITask>) {
         }
       }
 
-      if (!foundTask || !oldStatus) return updated; // مش لاقي التاسك، ما تعملش حاجة
+      if (!foundTask || !oldStatus) return updated; 
 
       const updatedTask = { ...foundTask, ...partial };
-      const newStatus = partial.status ?? oldStatus; // لو مفيش status في partial، سيبه في نفس العمود
+      const newStatus = partial.status ?? oldStatus; 
 
-      // 2) لو الـ status اتغيّر فعليًا → شيله من العمود القديم، وحطه في الجديد
+  
       if (newStatus !== oldStatus) {
         updated[oldStatus] = updated[oldStatus]?.filter((t) => t.id !== taskId) ?? [];
         updated[newStatus] = [updatedTask, ...(updated[newStatus] ?? [])];
       } else {
-        // 3) لو الـ status متغيرش، بس حدّث باقي الحقول في مكانه
+       
         updated[oldStatus] = updated[oldStatus]?.map((t) =>
           t.id === taskId ? updatedTask : t
         ) ?? [];

@@ -1,4 +1,4 @@
-import { Component, effect, inject, input, signal, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, effect, inject, input, signal, OnInit, OnDestroy, HostListener, computed } from '@angular/core';
 import { ITask } from '../../interfaces/ITask';
 import { Epic, IEpicTasks } from '../../interfaces/IEpicTasks';
 import { ProjectsService } from '../../services/projects.service';
@@ -8,6 +8,7 @@ import { IEpicsProject } from '../../interfaces/IEpicsProject';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-task-details-page',
@@ -19,14 +20,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   readonly projectServices = inject(ProjectsService);
-
+todayDateString = new Date().toISOString().split('T')[0];
   task = input<ITask>();
 
   private destroy$ = new Subject<void>();
 
   // Epic dropdown state
   isEditingEpic = signal(false);
-  currentEpic = signal<Epic | null>(null);
+  // currentEpic = signal<Epic | null>(null);
   allEpics = this.projectServices.epics;
 
   // Assignee dropdown state
@@ -50,7 +51,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   taskDetails = this.fb.group({
     title: [''],
     assignee_id: [''],
-    due_date: [''],
+    due_date: [null as string | null],
     epic_id: [''],
     status: [''],
     description: [''],
@@ -60,7 +61,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
 
     effect(() => {
       this.selectedStatus.set(this.task()?.status ?? '');
-      this.currentEpic.set(this.task()?.epic??null)
+      // this.currentEpic.set(this.task()?.epic??null)
     }, { allowSignalWrites: true });
   }
 
@@ -118,21 +119,61 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
       });
   }
 
-  selectAssignee(member: Member | null) {
-    this.currentAssignee.set(member);
-    this.isEditingAssignee.set(false);
-    this.taskDetails.patchValue({ assignee_id: member?.user_id ?? '' });
+selectAssignee(member: Member | null) {
+   console.log('selectAssignee called with:', member);
+    const control = this.taskDetails.get('assignee_id')!;
 
-    // لو محتاج تبعت التغيير للـ API فورًا لاحقًا:
-    // this.taskService.updateTask(this.task()!.task_id, {
-    //   assignee_id: member?.user_id ?? null
-    // });
+    const oldAssigneeId = control.value;
+    const newAssigneeId = member?.user_id ?? null;
+
+    if (oldAssigneeId === newAssigneeId) {
+      this.isEditingAssignee.set(false);
+      return;
+    }
+
+    control.setValue(newAssigneeId);
+    this.isEditingAssignee.set(false);
+
+    this.updateTask({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
+
+    this.projectServices.patchLocalTask(this.task()?.id!, {
+      assignee: member
+        ? {
+            id: member.user_id,
+            name: member.metadata.name,
+            email: member.metadata.email,
+            department: member.metadata.department,
+          }
+        : null,   // ⬅️ null بدل undefined
+    });
   }
 
-  selectEpic(epic: Epic | IEpicsProject | null) {
-  this.currentEpic.set(epic as Epic);
+//   selectEpic(epic: Epic | IEpicsProject | null) {
+//   this.currentEpic.set(epic as Epic);
+//   this.isEditingEpic.set(false);
+//   this.taskDetails.patchValue({ epic_id: epic?.id ?? '' });
+// }
+selectEpic(epic: Epic | IEpicsProject | null) {
+  const control = this.taskDetails.get('epic_id')!;
+
+  const oldEpicId = control.value;
+  const newEpicId = epic?.id ?? null;
+
+  if (oldEpicId === newEpicId) {
+    this.isEditingEpic.set(false);
+    return;
+  }
+
+  control.setValue(newEpicId); // ⬅️ ده اللي هيخلي currentEpic (computed) تتحدث تلقائيًا
   this.isEditingEpic.set(false);
-  this.taskDetails.patchValue({ epic_id: epic?.id ?? '' });
+
+  this.updateTask({ epic_id: newEpicId }, 'epic_id', oldEpicId);
+
+  this.projectServices.patchLocalTask(this.task()?.id!, {
+    epic: epic
+      ? { id: epic.id, epic_id: (epic as any).epic_id, title: epic.title }
+      : null,
+  });
 }
 
   onStatusChange(event: Event) {
@@ -193,18 +234,53 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
       this.updateTask({ description: newValue || null }, 'description', this.task()?.description);
     }
   }
-    // ---------- Status ----------
-  // onStatusChanges() {
-  //   const control = this.taskDetails.get('status')!;
-  //   const newValue = control.value!;
-  //   const oldValue = this.task()?.status;
+      // ---------- Assignee ----------
 
-  //   if (newValue !== oldValue) {
-  //     this.updateTask({ status: newValue }, 'status', oldValue);
-  //   }
-  // }
+private assigneeIdValue = toSignal(
+  this.taskDetails.get('assignee_id')!.valueChanges,
+  { initialValue: this.taskDetails.get('assignee_id')!.value }
+);
 
+selectedAssignee = computed(() => {
+  const assigneeId = this.assigneeIdValue();
+  if (!assigneeId) return null;
+  return this.allMembers().find((m) => m.user_id === assigneeId) ?? null;
+});
+// epic
+private epicIdValue = toSignal(
+  this.taskDetails.get('epic_id')!.valueChanges,
+  { initialValue: this.taskDetails.get('epic_id')!.value }
+);
 
+currentEpic = computed(() => {
+  const epicId = this.epicIdValue();
+  if (!epicId) return null;
+  return this.allEpics()?.find((e) => e.id === epicId) ?? null;
+});
+// due date
+onDueDateChange() {
+  const control = this.taskDetails.get('due_date')!;
+  const newValue = control.value || null; 
+  const oldValue = this.formatDateForInput(this.task()?.due_date!) || null;
+
+  if (newValue === oldValue) return;
+
+ 
+  if (newValue && newValue < this.todayDateString) {
+    control.setValue(oldValue);
+   
+    return;
+  }
+
+ 
+  const payloadValue = newValue ? new Date(newValue).toISOString() : null;
+
+  this.updateTask({ due_date: payloadValue }, 'due_date', oldValue);
+
+  this.projectServices.patchLocalTask(this.task()?.id!, {
+    due_date: payloadValue,
+  });
+}
 
 
   // ---------- Generic update + rollback ----------
