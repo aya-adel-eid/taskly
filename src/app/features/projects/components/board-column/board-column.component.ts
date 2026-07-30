@@ -113,4 +113,34 @@ export class BoardColumnComponent implements OnInit {
   onDragLeaveColumn(): void {
     this.dragOverStatus.set(null);
   }
+
+  onDropColumn(event: DragEvent, targetStatus: string): void {
+    event.preventDefault();
+
+    const task = this.draggedTask();
+    const fromStatus = this.draggedFromStatus();
+
+    this.dragOverStatus.set(null);
+
+    if (!task || !fromStatus || fromStatus === targetStatus) {
+      this.onDragEnd();
+      return;
+    }
+
+    const oldStatus = fromStatus;
+
+    this.projectsService.tasksByStatus.update((byStatus) => {
+      const fromList = (byStatus[oldStatus] ?? []).filter((t) => t.id !== task.id);
+      const toList = [
+        ...(byStatus[targetStatus] ?? []),
+        { ...task, status: targetStatus as ITask['status'] },
+      ];
+
+      return {
+        ...byStatus,
+        [oldStatus]: fromList,
+        [targetStatus]: toList,
+      };
+    });
+  }
 }

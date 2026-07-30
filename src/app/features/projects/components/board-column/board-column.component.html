@@ -6,6 +6,7 @@
   [class.ring-[#0052CC]]="dragOverStatus() === statu()?.value"
   (dragover)="onDragOverColumn($event, statu()!.value)"
   (dragleave)="onDragLeaveColumn()"
+  (drop)="onDropColumn($event, statu()!.value)"
 >
   <div class="flex items-center justify-between mb-3">
     <div class="flex items-center gap-2">
