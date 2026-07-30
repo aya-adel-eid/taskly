@@ -4,7 +4,7 @@ import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
 import { ProjectsService } from '../../services/projects.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TaskDetailsPageComponent } from "../../pages/task-details-page/task-details-page.component";
+import { TaskDetailsPageComponent } from '../../pages/task-details-page/task-details-page.component';
 
 @Component({
   selector: 'app-board-column',
@@ -18,8 +18,15 @@ export class BoardColumnComponent implements OnInit {
   /** The full status config entry (value, title, dotClass, badgeClass) from task-status.config.ts */
   statu = input.required<ITaskStatusConfig>();
 
+  errorMessage = signal<string>('');
+
   private projectsService = inject(ProjectsService);
   private router = inject(Router);
+
+  // ---------- Drag state (shared across all columns via the service) ----------
+  draggedTask = this.projectsService.draggedTask;
+  draggedFromStatus = this.projectsService.draggedFromStatus;
+  dragOverStatus = this.projectsService.dragOverStatus;
 
   readonly limit = 5;
   page = signal(1);
@@ -70,22 +77,40 @@ export class BoardColumnComponent implements OnInit {
       queryParams: { status: this.statu().value },
     });
   }
-  taskDetails=signal<ITask|null>(null)
-showDetails=this.projectsService.showTaskDetails
 
-    getTaskDetails(projectId:string,taskId:string){
-    this.projectsService.getTaskDetails(projectId,taskId).subscribe({
-next:(resp)=>{
-  this.taskDetails.set(resp[0])
-  this.showDetails.set(true)
-  console.log(this.taskDetails(),444);
-  
-},
-error:(error:HttpErrorResponse)=>{
-  console.log(error);
-  
-}
-    })
+  taskDetails = signal<ITask | null>(null);
+  showDetails = this.projectsService.showTaskDetails;
+
+  getTaskDetails(projectId: string, taskId: string) {
+    this.projectsService.getTaskDetails(projectId, taskId).subscribe({
+      next: (resp) => {
+        this.taskDetails.set(resp[0]);
+        this.showDetails.set(true);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
   }
 
+  // ---------- Drag events ----------
+  onDragStart(task: ITask, fromStatus: string): void {
+    this.draggedTask.set(task);
+    this.draggedFromStatus.set(fromStatus);
+  }
+
+  onDragEnd(): void {
+    this.draggedTask.set(null);
+    this.draggedFromStatus.set(null);
+    this.dragOverStatus.set(null);
+  }
+
+  onDragOverColumn(event: DragEvent, status: string): void {
+    event.preventDefault(); // لازم عشان الـ (drop) يشتغل أصلاً
+    this.dragOverStatus.set(status);
+  }
+
+  onDragLeaveColumn(): void {
+    this.dragOverStatus.set(null);
+  }
 }

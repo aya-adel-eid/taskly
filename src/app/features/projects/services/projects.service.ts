@@ -9,7 +9,6 @@ import { IEpicTasks } from '../interfaces/IEpicTasks';
 import { ITask } from '../interfaces/ITask';
 import { single } from 'rxjs';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -36,7 +35,10 @@ export class ProjectsService {
   tasksIsLoading = signal<boolean>(false);
   tasksError = signal<boolean>(false);
   allTasks = signal<ITask[] | null>(null);
-  showTaskDetails=signal<boolean>(false);
+  showTaskDetails = signal<boolean>(false);
+  draggedTask = signal<ITask | null>(null);
+  draggedFromStatus = signal<string | null>(null);
+  dragOverStatus = signal<string | null>(null);
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
@@ -192,7 +194,7 @@ export class ProjectsService {
   tasksByStatusTotalCount = signal<Record<string, number>>({});
   tasksByStatusLoading = signal<Record<string, boolean>>({});
   tasksByStatusError = signal<Record<string, boolean>>({});
-selectedTask = signal<ITask | null>(null);
+  selectedTask = signal<ITask | null>(null);
   getTasksByStatus(projectId: string, statu: string, limit = 5, page = 1, append = false) {
     const offset = (page - 1) * limit;
 
@@ -283,77 +285,74 @@ selectedTask = signal<ITask | null>(null);
       });
   }
   // get task details
-   getTaskDetails(projectId:string,taskId:string){
-return  this.httpClient.get<ITask[]>(`${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&id=eq.${taskId}`)
-   }
-    updateTask(taskInfo: Partial<ITask>, taskId: string) {
+  getTaskDetails(projectId: string, taskId: string) {
+    return this.httpClient.get<ITask[]>(
+      `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&id=eq.${taskId}`
+    );
+  }
+  updateTask(taskInfo: Partial<ITask>, taskId: string) {
     return this.httpClient.patch(`${APIS_KEYS.projects.updateTasks}?id=eq.${taskId}`, taskInfo);
   }
   currentView = signal<'board' | 'list'>('board');
-//   patchLocalTask(taskId: string, partial: Partial<ITask>) {
-//     if(this.tasksByStatus()){
-//       this.tasksByStatus.update((tasksMap) => {
-//         const updated: typeof tasksMap = { ...tasksMap };
-//         for (const status in updated) {
-//           updated[status] = updated[status]?.map((task) =>
-//             task.id === taskId ? { ...task, ...partial } : task
-//           ) ?? null;
-//         }
-//         return updated;
-//       });
+  //   patchLocalTask(taskId: string, partial: Partial<ITask>) {
+  //     if(this.tasksByStatus()){
+  //       this.tasksByStatus.update((tasksMap) => {
+  //         const updated: typeof tasksMap = { ...tasksMap };
+  //         for (const status in updated) {
+  //           updated[status] = updated[status]?.map((task) =>
+  //             task.id === taskId ? { ...task, ...partial } : task
+  //           ) ?? null;
+  //         }
+  //         return updated;
+  //       });
 
-//     }
-//     if(this.allTasks()){
+  //     }
+  //     if(this.allTasks()){
 
-//       this.allTasks.update((tasks) =>
-//         tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
-//        );
-//     }
-// }
-patchLocalTask(taskId: string, partial: Partial<ITask>) {
+  //       this.allTasks.update((tasks) =>
+  //         tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
+  //        );
+  //     }
+  // }
+  patchLocalTask(taskId: string, partial: Partial<ITask>) {
+    if (this.allTasks()?.length) {
+      this.allTasks.update((tasks) =>
+        tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
+      );
+    }
 
-  if (this.allTasks()?.length) {
-    this.allTasks.update((tasks) =>
-      tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
-    );
-  }
+    // ===== تحديث tasksByStatus (للـ Board View) =====
+    if (Object.keys(this.tasksByStatus()).length > 0) {
+      this.tasksByStatus.update((tasksMap) => {
+        const updated: typeof tasksMap = { ...tasksMap };
 
-  // ===== تحديث tasksByStatus (للـ Board View) =====
-  if (Object.keys(this.tasksByStatus()).length > 0) {
-    this.tasksByStatus.update((tasksMap) => {
-      const updated: typeof tasksMap = { ...tasksMap };
+        let foundTask: ITask | null = null;
+        let oldStatus: string | null = null;
 
-     
-      let foundTask: ITask | null = null;
-      let oldStatus: string | null = null;
-
-      for (const status in updated) {
-        const task = updated[status]?.find((t) => t.id === taskId);
-        if (task) {
-          foundTask = task;
-          oldStatus = status;
-          break;
+        for (const status in updated) {
+          const task = updated[status]?.find((t) => t.id === taskId);
+          if (task) {
+            foundTask = task;
+            oldStatus = status;
+            break;
+          }
         }
-      }
 
-      if (!foundTask || !oldStatus) return updated; 
+        if (!foundTask || !oldStatus) return updated;
 
-      const updatedTask = { ...foundTask, ...partial };
-      const newStatus = partial.status ?? oldStatus; 
+        const updatedTask = { ...foundTask, ...partial };
+        const newStatus = partial.status ?? oldStatus;
 
-  
-      if (newStatus !== oldStatus) {
-        updated[oldStatus] = updated[oldStatus]?.filter((t) => t.id !== taskId) ?? [];
-        updated[newStatus] = [updatedTask, ...(updated[newStatus] ?? [])];
-      } else {
-       
-        updated[oldStatus] = updated[oldStatus]?.map((t) =>
-          t.id === taskId ? updatedTask : t
-        ) ?? [];
-      }
+        if (newStatus !== oldStatus) {
+          updated[oldStatus] = updated[oldStatus]?.filter((t) => t.id !== taskId) ?? [];
+          updated[newStatus] = [updatedTask, ...(updated[newStatus] ?? [])];
+        } else {
+          updated[oldStatus] =
+            updated[oldStatus]?.map((t) => (t.id === taskId ? updatedTask : t)) ?? [];
+        }
 
-      return updated;
-    });
+        return updated;
+      });
+    }
   }
-}
 }
