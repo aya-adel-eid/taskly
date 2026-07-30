@@ -158,6 +158,56 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
    
   }
 
+
+//  update title
+ onTitleBlur() {
+  console.log('blur fired', this.taskDetails.get('title')?.value);
+   console.log('🔵 onTitleBlur CALLED'); // ⬅️ ضيف السطر ده
+  console.log('blur fired', this.taskDetails.get('title')?.value);
+  const control = this.taskDetails.get('title')!;
+  if (control.invalid) {
+    control.setValue(this.task()?.title!);
+    return;
+  }
+  const newValue = control.value!.trim();
+  console.log('newValue:', newValue, 'oldValue:', this.task()?.title);
+  
+  if (newValue !== this.task()?.title) {
+    this.updateTask({ title: newValue }, 'title', this.task()?.title);
+  }
+}
+// update decript
+ // ---------- Description ----------
+  onDescriptionBlur() {
+    const control = this.taskDetails.get('description')!;
+    const newValue = control.value?.trim() ?? '';
+
+    if (newValue !== (this.task()?.description ?? '')) {
+      this.updateTask({ description: newValue || null }, 'description', this.task()?.description);
+    }
+  }
+
+
+
+
+  // ---------- Generic update + rollback ----------
+  updateTask(partial: Record<string, any>, field: string, oldValue: any) {
+    this.projectServices.updateTask(partial, this.task()?.id!).subscribe({
+      next: () => {
+        this.projectServices.patchLocalTask(this.task()?.id!, partial);
+        console.log(partial);
+        console.log(
+          'done'
+        );
+        
+        
+      },
+      error: () => {
+        this.taskDetails.get(field)?.setValue(oldValue ?? (field === 'assignee_id' || field === 'epic_id' ? null : ''));
+        // this.errorMessage.set('Failed to update task. Please try again.');
+      },
+    });
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

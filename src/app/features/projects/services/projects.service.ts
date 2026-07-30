@@ -287,6 +287,27 @@ selectedTask = signal<ITask | null>(null);
 return  this.httpClient.get<ITask[]>(`${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&id=eq.${taskId}`)
    }
     updateTask(taskInfo: Partial<ITask>, taskId: string) {
-    return this.httpClient.patch(`${APIS_KEYS.projects.updateEpic}?id=eq.${taskId}`, taskInfo);
+    return this.httpClient.patch(`${APIS_KEYS.projects.updateTasks}?id=eq.${taskId}`, taskInfo);
   }
+  currentView = signal<'board' | 'list'>('board');
+  patchLocalTask(taskId: string, partial: Partial<ITask>) {
+    if(this.tasksByStatus()){
+      this.tasksByStatus.update((tasksMap) => {
+        const updated: typeof tasksMap = { ...tasksMap };
+        for (const status in updated) {
+          updated[status] = updated[status]?.map((task) =>
+            task.id === taskId ? { ...task, ...partial } : task
+          ) ?? null;
+        }
+        return updated;
+      });
+
+    }
+    if(this.allTasks()){
+
+      this.allTasks.update((tasks) =>
+        tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
+       );
+    }
+}
 }

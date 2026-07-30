@@ -84,6 +84,7 @@
               </div>
             </div>
             <input type="text" formControlName="title"
+            (blur)="onTitleBlur()"
              class="hidden w-full border-none  lg:block text-[24px] font-semibold leading-snug
               md:text-[30px] md:tracking-normal md:leading-9 md:font-bold text-[#041B3C] mb-3 focus:outline-none outline-none focus:border-none  ">
              
@@ -93,7 +94,9 @@
            <input type="text" formControlName="title" class="text-[24px] lg:hidden
             border-none focus:outline-none outline-none focus:border-none  
             font-semibold leading-snug md:text-[30px] md:tracking-normal 
-          md:leading-9 md:font-bold text-[#041B3C] px-4 mb-3">
+          md:leading-9 md:font-bold text-[#041B3C] px-4 mb-3"
+            (blur)="onTitleBlur()"
+          >
           <!-- <h2 class="text-[24px] lg:hidden font-semibold leading-snug md:text-[30px] md:tracking-normal 
           md:leading-9 md:font-bold text-[#041B3C] px-4 mb-3">
             {{ task()?.title }}
@@ -148,6 +151,8 @@
                      focus:outline-none"
               placeholder="Add a detailed description..."
               formControlName="description"
+                (blur)="onDescriptionBlur()"
+  
             ></textarea>
             
           </div>
