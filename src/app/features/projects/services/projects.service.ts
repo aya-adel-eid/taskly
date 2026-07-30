@@ -294,26 +294,7 @@ export class ProjectsService {
     return this.httpClient.patch(`${APIS_KEYS.projects.updateTasks}?id=eq.${taskId}`, taskInfo);
   }
   currentView = signal<'board' | 'list'>('board');
-  //   patchLocalTask(taskId: string, partial: Partial<ITask>) {
-  //     if(this.tasksByStatus()){
-  //       this.tasksByStatus.update((tasksMap) => {
-  //         const updated: typeof tasksMap = { ...tasksMap };
-  //         for (const status in updated) {
-  //           updated[status] = updated[status]?.map((task) =>
-  //             task.id === taskId ? { ...task, ...partial } : task
-  //           ) ?? null;
-  //         }
-  //         return updated;
-  //       });
 
-  //     }
-  //     if(this.allTasks()){
-
-  //       this.allTasks.update((tasks) =>
-  //         tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
-  //        );
-  //     }
-  // }
   patchLocalTask(taskId: string, partial: Partial<ITask>) {
     if (this.allTasks()?.length) {
       this.allTasks.update((tasks) =>
@@ -321,7 +302,7 @@ export class ProjectsService {
       );
     }
 
-    // ===== تحديث tasksByStatus (للـ Board View) =====
+    // ===== tasksByStatus =====
     if (Object.keys(this.tasksByStatus()).length > 0) {
       this.tasksByStatus.update((tasksMap) => {
         const updated: typeof tasksMap = { ...tasksMap };

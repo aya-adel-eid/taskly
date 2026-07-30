@@ -15,7 +15,7 @@ import { ToastMassageComponent } from '../toast-massage/toast-massage.component'
 })
 export class BoardColumnComponent implements OnInit {
   projectId = input.required<string>();
-  /** The full status config entry (value, title, dotClass, badgeClass) from task-status.config.ts */
+
   statu = input.required<ITaskStatusConfig>();
 
   errorMessage = signal<string>('');
@@ -23,7 +23,7 @@ export class BoardColumnComponent implements OnInit {
   private projectsService = inject(ProjectsService);
   private router = inject(Router);
 
-  // ---------- Drag state (shared across all columns via the service) ----------
+  // ---------- Drag state  ----------
   draggedTask = this.projectsService.draggedTask;
   draggedFromStatus = this.projectsService.draggedFromStatus;
   dragOverStatus = this.projectsService.dragOverStatus;
@@ -31,7 +31,6 @@ export class BoardColumnComponent implements OnInit {
   readonly limit = 5;
   page = signal(1);
 
-  // read this column's own slice out of the shared keyed Record
   tasks = computed(() => this.projectsService.tasksByStatus()[this.statu().value] ?? null);
   totalCount = computed(
     () => this.projectsService.tasksByStatusTotalCount()[this.statu().value] ?? 0
@@ -59,7 +58,6 @@ export class BoardColumnComponent implements OnInit {
     );
   }
 
-  /** Fires on the column's own inner scroll container, not the window */
   onScroll(event: Event): void {
     if (this.isLoading() || !this.hasMore) return;
 
