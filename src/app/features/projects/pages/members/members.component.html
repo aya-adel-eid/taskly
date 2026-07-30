@@ -15,8 +15,8 @@
           </h3>
         </div>
         <div class="flex items-end justify-center">
-          <a
-            routerLink="/project/add"
+          <button
+            (click)="showModelInvite()"
             class="btn-Primary bg-linear-to-r from-primary to-primary-container flex justify-center items-center"
           >
             <span
@@ -33,7 +33,7 @@
                 />
               </svg> </span
             ><span class="hidden lg:inline ms-2">Invite Member</span>
-          </a>
+          </button>
         </div>
       </div>
 
@@ -72,4 +72,7 @@
       </div>
     </section>
   }
+}
+@if (showModel()) {
+  <app-invite-member-form></app-invite-member-form>
 }
