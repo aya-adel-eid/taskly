@@ -1,9 +1,8 @@
+<app-toast-massage [message]="errorMessage()" [flag]="false"></app-toast-massage>
 <div
   class="flex flex-col gap-4 w-[288px] shrink-0 rounded-lg p-3 transition-colors"
   [class.bg-[#F7F8FA]]="dragOverStatus() !== statu()?.value"
   [class.bg-[#EEF2FF]]="dragOverStatus() === statu()?.value"
-  [class.ring-2]="dragOverStatus() === statu()?.value"
-  [class.ring-[#0052CC]]="dragOverStatus() === statu()?.value"
   (dragover)="onDragOverColumn($event, statu()!.value)"
   (dragleave)="onDragLeaveColumn()"
   (drop)="onDropColumn($event, statu()!.value)"

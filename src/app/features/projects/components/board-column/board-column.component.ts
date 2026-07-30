@@ -5,11 +5,11 @@ import { ProjectsService } from '../../services/projects.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TaskDetailsPageComponent } from '../../pages/task-details-page/task-details-page.component';
-
+import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
 @Component({
   selector: 'app-board-column',
   standalone: true,
-  imports: [CardTaskViewComponent, TaskDetailsPageComponent],
+  imports: [CardTaskViewComponent, TaskDetailsPageComponent, ToastMassageComponent],
   templateUrl: './board-column.component.html',
   styleUrl: './board-column.component.css',
 })
@@ -165,6 +165,8 @@ export class BoardColumnComponent implements OnInit {
             [oldStatus]: fromList,
           };
         });
+
+        this.errorMessage.set('Failed to update task status. Please try again.');
       },
     });
 
