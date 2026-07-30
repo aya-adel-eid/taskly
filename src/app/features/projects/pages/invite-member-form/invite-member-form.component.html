@@ -9,8 +9,8 @@
             class="block lg:hidden text-[11px] leading-[16.5px] tracking-[0.55px] font-bold text-[#003D9B]"
             >PROJECT NAME</span
           >
-          <span
-            ><svg
+          <button (click)="close()" class="cursor-pointer">
+            <svg
               width="14"
               height="14"
               viewBox="0 0 14 14"
@@ -22,7 +22,7 @@
                 fill="#434654"
               />
             </svg>
-          </span>
+          </button>
         </div>
         <h2 class="font-bold text-2xl leading-8 tracking-[-0.6px] text-[#041B3C]">
           Invite Team Member
@@ -32,8 +32,8 @@
         Send an invitation to join the Architectural Studio workspace.
       </p>
     </div>
+    <!-- header Desctope -->
     <div class="px-8 pt-8 lg:flex flex-col gap-2 hidden">
-      <!-- header Desctope -->
       <div class="flex justify-between items-center">
         <span class="size-12 rounded-lg bg-[#F1F3FF] lg:flex items-center justify-center hidden">
           <svg
@@ -50,8 +50,8 @@
           </svg>
         </span>
 
-        <span
-          ><svg
+        <button (click)="close()" class="cursor-pointer">
+          <svg
             width="14"
             height="14"
             viewBox="0 0 14 14"
@@ -63,7 +63,7 @@
               fill="#737685"
             />
           </svg>
-        </span>
+        </button>
       </div>
 
       <!-- title -->
@@ -73,6 +73,46 @@
       <p class="text-sm leading-5 tracking-normal text-[#4F5F7B]">
         Send an invitation to join the Architectural Studio workspace.
       </p>
+    </div>
+    <!-- input email -->
+    <div class="px-8 pt-6 pb-8 gap-6 flex flex-col">
+      <div>
+        <label class="label-input">Email Address</label>
+        <div class="relative">
+          <input
+            type="email"
+            class="input-control text-[16px] leading-[100%] tracking-normal text-[#73768599] w-full"
+            placeholder="Enter email address"
+          />
+          <span class="absolute top-1/2 inset-e-4 -translate-y-1/2">
+            <svg
+              width="15"
+              height="48"
+              viewBox="0 0 15 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1.5 30C1.0875 30 0.734375 29.8531 0.440625 29.5594C0.146875 29.2656 0 28.9125 0 28.5V19.5C0 19.0875 0.146875 18.7344 0.440625 18.4406C0.734375 18.1469 1.0875 18 1.5 18H13.5C13.9125 18 14.2656 18.1469 14.5594 18.4406C14.8531 18.7344 15 19.0875 15 19.5V28.5C15 28.9125 14.8531 29.2656 14.5594 29.5594C14.2656 29.8531 13.9125 30 13.5 30H1.5ZM7.5 24.75L1.5 21V28.5H13.5V21L7.5 24.75ZM7.5 23.25L13.5 19.5H1.5L7.5 23.25ZM1.5 21V19.5V21V28.5V21Z"
+                fill="#737685"
+              />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+    <!-- actions -->
+    <div class="flex flex-col lg:flex-row px-8 pb-8 pt-2 gap-3">
+      <button
+        class="order-2 lg:order-1 pb-[14.5px] pt-[13.5px] rounded-[2px] text-[#4F5F7B] h-5 font-semibold text-sm leading-5 tracking-normal w-full"
+      >
+        Cancel
+      </button>
+      <button
+        class="order-1 lg:order-2 btn-Primary bg-linear-to-r from-primary to-primary-container flex justify-center items-center w-full lg:rounded-xs rounded-lg"
+      >
+        Send Invitation
+      </button>
     </div>
   </div>
 </div>
