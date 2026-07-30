@@ -129,6 +129,7 @@ export class BoardColumnComponent implements OnInit {
 
     const oldStatus = fromStatus;
 
+    //  Optimistic update
     this.projectsService.tasksByStatus.update((byStatus) => {
       const fromList = (byStatus[oldStatus] ?? []).filter((t) => t.id !== task.id);
       const toList = [
@@ -142,5 +143,31 @@ export class BoardColumnComponent implements OnInit {
         [targetStatus]: toList,
       };
     });
+
+    //call api
+    this.projectsService.updateTask({ status: targetStatus }, task.id).subscribe({
+      next: () => {
+        this.errorMessage.set('');
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+
+        this.projectsService.tasksByStatus.update((byStatus) => {
+          const toList = (byStatus[targetStatus] ?? []).filter((t) => t.id !== task.id);
+          const fromList = [
+            ...(byStatus[oldStatus] ?? []),
+            { ...task, status: oldStatus as ITask['status'] },
+          ];
+
+          return {
+            ...byStatus,
+            [targetStatus]: toList,
+            [oldStatus]: fromList,
+          };
+        });
+      },
+    });
+
+    this.onDragEnd();
   }
 }
