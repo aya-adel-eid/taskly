@@ -262,6 +262,7 @@
     [class.status-ready-for-production]="selectedStatus() === 'READY_FOR_PRODUCTION'"
     [class.status-reopened]="selectedStatus() === 'REOPENED'"
     (change)="onStatusChange($event)"
+    
   >
     @for (s of statues; track s.value) {
       <option [value]="s.value" [selected]="s.value === selectedStatus()">

@@ -139,6 +139,13 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     const value = (event.target as HTMLSelectElement).value;
     this.selectedStatus.set(value);
     this.taskDetails.patchValue({ status: value });
+      const control = this.taskDetails.get('status')!;
+    const newValue = control.value!;
+    const oldValue = this.task()?.status;
+
+    if (newValue !== oldValue) {
+      this.updateTask({ status: newValue }, 'status', oldValue);
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -186,6 +193,16 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
       this.updateTask({ description: newValue || null }, 'description', this.task()?.description);
     }
   }
+    // ---------- Status ----------
+  // onStatusChanges() {
+  //   const control = this.taskDetails.get('status')!;
+  //   const newValue = control.value!;
+  //   const oldValue = this.task()?.status;
+
+  //   if (newValue !== oldValue) {
+  //     this.updateTask({ status: newValue }, 'status', oldValue);
+  //   }
+  // }
 
 
 

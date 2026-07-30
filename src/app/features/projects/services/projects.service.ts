@@ -290,24 +290,70 @@ return  this.httpClient.get<ITask[]>(`${APIS_KEYS.projects.getEpicTasks}?project
     return this.httpClient.patch(`${APIS_KEYS.projects.updateTasks}?id=eq.${taskId}`, taskInfo);
   }
   currentView = signal<'board' | 'list'>('board');
-  patchLocalTask(taskId: string, partial: Partial<ITask>) {
-    if(this.tasksByStatus()){
-      this.tasksByStatus.update((tasksMap) => {
-        const updated: typeof tasksMap = { ...tasksMap };
-        for (const status in updated) {
-          updated[status] = updated[status]?.map((task) =>
-            task.id === taskId ? { ...task, ...partial } : task
-          ) ?? null;
+//   patchLocalTask(taskId: string, partial: Partial<ITask>) {
+//     if(this.tasksByStatus()){
+//       this.tasksByStatus.update((tasksMap) => {
+//         const updated: typeof tasksMap = { ...tasksMap };
+//         for (const status in updated) {
+//           updated[status] = updated[status]?.map((task) =>
+//             task.id === taskId ? { ...task, ...partial } : task
+//           ) ?? null;
+//         }
+//         return updated;
+//       });
+
+//     }
+//     if(this.allTasks()){
+
+//       this.allTasks.update((tasks) =>
+//         tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
+//        );
+//     }
+// }
+patchLocalTask(taskId: string, partial: Partial<ITask>) {
+  // ===== تحديث allTasks (للـ List View) =====
+  if (this.allTasks()?.length) {
+    this.allTasks.update((tasks) =>
+      tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
+    );
+  }
+
+  // ===== تحديث tasksByStatus (للـ Board View) =====
+  if (Object.keys(this.tasksByStatus()).length > 0) {
+    this.tasksByStatus.update((tasksMap) => {
+      const updated: typeof tasksMap = { ...tasksMap };
+
+      // 1) دوّر على التاسك القديم في أي عمود، واحفظه
+      let foundTask: ITask | null = null;
+      let oldStatus: string | null = null;
+
+      for (const status in updated) {
+        const task = updated[status]?.find((t) => t.id === taskId);
+        if (task) {
+          foundTask = task;
+          oldStatus = status;
+          break;
         }
-        return updated;
-      });
+      }
 
-    }
-    if(this.allTasks()){
+      if (!foundTask || !oldStatus) return updated; // مش لاقي التاسك، ما تعملش حاجة
 
-      this.allTasks.update((tasks) =>
-        tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
-       );
-    }
+      const updatedTask = { ...foundTask, ...partial };
+      const newStatus = partial.status ?? oldStatus; // لو مفيش status في partial، سيبه في نفس العمود
+
+      // 2) لو الـ status اتغيّر فعليًا → شيله من العمود القديم، وحطه في الجديد
+      if (newStatus !== oldStatus) {
+        updated[oldStatus] = updated[oldStatus]?.filter((t) => t.id !== taskId) ?? [];
+        updated[newStatus] = [updatedTask, ...(updated[newStatus] ?? [])];
+      } else {
+        // 3) لو الـ status متغيرش، بس حدّث باقي الحقول في مكانه
+        updated[oldStatus] = updated[oldStatus]?.map((t) =>
+          t.id === taskId ? updatedTask : t
+        ) ?? [];
+      }
+
+      return updated;
+    });
+  }
 }
 }
