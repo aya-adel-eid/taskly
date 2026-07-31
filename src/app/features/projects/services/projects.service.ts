@@ -353,4 +353,8 @@ export class ProjectsService {
       });
     }
   }
+  // invite Member
+  inviteMember(infoMember: {}) {
+    return this.httpClient.post(APIS_KEYS.projects.inviteMember, infoMember);
+  }
 }
