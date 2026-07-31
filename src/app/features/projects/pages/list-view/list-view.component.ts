@@ -3,9 +3,10 @@ import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { combineLatest, distinctUntilChanged, filter, map, tap } from 'rxjs';
-import { TaskDetailsPageComponent } from "../task-details-page/task-details-page.component";
+import { TaskDetailsPageComponent } from '../task-details-page/task-details-page.component';
 import { ITask } from '../../interfaces/ITask';
 import { HttpErrorResponse } from '@angular/common/http';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-list-view',
@@ -19,34 +20,58 @@ export class ListViewComponent {
   projectId = signal<string>('');
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+
   allTasks = this.projectservice.allTasks;
   totalCount = this.projectservice.totalCountTasks;
   hasError = this.projectservice.tasksError;
   isLoading = this.projectservice.tasksIsLoading;
+
   page = signal(1);
   limit = signal(5);
   isMobile = signal(window.innerWidth < 1024);
-  taskDetails=signal<ITask|null>(null)
-showDetails=this.projectservice.showTaskDetails
+
+  // --- Search Signals ---
+  searchTerm = signal<string>('');
+
+  get isSearching(): boolean {
+    return this.searchTerm().trim().length > 0;
+  }
+
+  taskDetails = signal<ITask | null>(null);
+  showDetails = this.projectservice.showTaskDetails;
+
   constructor() {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
         tap(([params]) => {
-          // projectId is a route param (/project/:projectId/tasks), not a query param
           this.projectId.set(params.get('projectId')!);
         }),
-        map(([, queryParams]) => +(queryParams.get('offset') ?? 0)),
-        distinctUntilChanged(),
-        filter(() => !!this.projectId())
+
+        map(([, queryParams]) => ({
+          offset: +(queryParams.get('offset') ?? 0),
+          search: queryParams.get('search') ?? '',
+        })),
+
+        distinctUntilChanged((a, b) => a.offset === b.offset && a.search === b.search),
+        filter(() => !!this.projectId()),
+        takeUntilDestroyed()
       )
-      .subscribe((offset) => {
-        this.page.set(offset / this.limit() + 1);
+      .subscribe(({ offset, search }) => {
+        this.page.set(Math.floor(offset / this.limit()) + 1);
+        this.searchTerm.set(search);
+
         this.getAllTasks();
       });
   }
 
-  getAllTasks() {
-    this.projectservice.getAllTasks(this.projectId(), this.limit(), this.page(), false);
+  getAllTasks(append = false) {
+    this.projectservice.getAllTasks(
+      this.projectId(),
+      this.limit(),
+      this.page(),
+      append,
+      this.searchTerm() // تمرير كلمة البحث للسيرفيس
+    );
   }
 
   changePage(page: number) {
@@ -83,7 +108,7 @@ showDetails=this.projectservice.showTaskDetails
         queryParamsHandling: 'merge',
       });
 
-      this.getAllTasks(); // append = false
+      this.getAllTasks(false); // append = false
     }
   }
 
@@ -99,24 +124,19 @@ showDetails=this.projectservice.showTaskDetails
     if (reachedBottom && this.page() < this.pages.length) {
       this.page.update((p) => p + 1);
 
-      this.projectservice.getAllTasks(
-        this.projectId(),
-        this.limit(),
-        this.page(),
-        true // append
-      );
+      this.getAllTasks(true);
     }
   }
-  getTaskDetails(projectId:string,taskId:string){
-    this.projectservice.getTaskDetails(projectId,taskId).subscribe({
-next:(resp)=>{
-  this.taskDetails.set(resp[0])
-  this.showDetails.set(true)
-},
-error:(error:HttpErrorResponse)=>{
-  console.log(error);
-  
-}
-    })
+
+  getTaskDetails(projectId: string, taskId: string) {
+    this.projectservice.getTaskDetails(projectId, taskId).subscribe({
+      next: (resp) => {
+        this.taskDetails.set(resp[0]);
+        this.showDetails.set(true);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
   }
 }
