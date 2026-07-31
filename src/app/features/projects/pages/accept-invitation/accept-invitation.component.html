@@ -3,7 +3,7 @@
 >
   <div class="py-[129.5px] px-6">
     <div class="flex flex-col gap-12 w-full lg:w-[576px]">
-      <div class="flex gap-2">
+      <div class="flex gap-2 justify-center">
         <span>
           <svg
             width="18"
@@ -21,10 +21,10 @@
         <h2 class="font-bold text-[24px] leading-7 tracking-[-0.5px] text-[#041B3C]">TASKLY</h2>
       </div>
       <div
-        class="border-t-4 rounded-lg p-12 bg-white border-t-gradient-to-lr from-[#003D9B] to-[#0052CC]"
+        class="relative rounded-lg overflow-hidden bg-white p-12 flex flex-col items-center gradient-border-top"
       >
         <div class="pb-6">
-          <span class="py-1 px-3 rounded-xl bg-[#E0E8FF] flex gap-[5.99px]">
+          <span class="py-1 px-3 rounded-xl bg-[#E0E8FF] flex gap-[5.99px] w-fit items-center">
             <span
               ><svg
                 width="12"
@@ -45,17 +45,19 @@
             >
           </span>
         </div>
+        <div class="pb-4">
+          <h2
+            class="text-[#041B3C] text-[30px] leading-9 tracking-[-0.75px] w-[412.32px] text-center"
+          >
+            You've been invited to join new project
+          </h2>
+        </div>
+        <button
+          class="order-1 lg:order-2 btn-Primary bg-linear-to-r cursor-pointer from-primary to-primary-container flex justify-center items-center w-full lg:rounded-xs rounded-lg px-6 py-4"
+        >
+          Accept Invitation
+        </button>
       </div>
-      <div class="pb-4">
-        <h2 class="text-[#041B3C] text-[30px] leading-9 tracking-[-0.75px]">
-          You've been invited to join new project
-        </h2>
-      </div>
-      <button
-        class="order-1 lg:order-2 btn-Primary bg-linear-to-r cursor-pointer from-primary to-primary-container flex justify-center items-center w-full lg:rounded-xs rounded-lg"
-      >
-        Accept Invitation
-      </button>
     </div>
   </div>
 </div>
