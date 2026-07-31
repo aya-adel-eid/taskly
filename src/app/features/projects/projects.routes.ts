@@ -18,6 +18,13 @@ export const PROJECTS_ROUtES: Routes = [
         loadComponent: () =>
           import('./pages/add-project/add-project.component').then((c) => c.AddProjectComponent),
       },
+      {
+        path: 'invite',
+        loadComponent: () =>
+          import('./pages/accept-invitation/accept-invitation.component').then(
+            (c) => c.AcceptInvitationComponent
+          ),
+      },
 
       {
         path: ':projectId',
