@@ -6,6 +6,7 @@ import { ListViewComponent } from '../list-view/list-view.component';
 // import { combineLatest, distinctUntilChanged, filter, map, tap } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 type TasksView = 'list' | 'board';
 
 interface IViewOption {
@@ -29,6 +30,11 @@ export class TasksComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private elementRef = inject(ElementRef);
+  private searchInput$ = new Subject<string>();
+  private destroy$ = new Subject<void>();
+
+  searchValue = signal<string>('');
+  activeSearchTerm = signal<string>('');
   arrPaths = computed(() => [
     {
       label: 'Tasks',
@@ -66,8 +72,17 @@ export class TasksComponent {
 
     const viewFromUrl = this.route.snapshot.queryParamMap.get('view');
     this.selectedView.set(viewFromUrl === 'list' ? 'list' : 'board');
+    this.searchInput$
+      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+      .subscribe((term) => {
+        this.activeSearchTerm.set(term);
+      });
   }
-
+  // search
+  onSearchChange(value: string): void {
+    this.searchValue.set(value);
+    this.searchInput$.next(value);
+  }
   get selectedViewLabel(): string {
     return this.viewOptions.find((o) => o.value === this.selectedView())?.label ?? '';
   }
