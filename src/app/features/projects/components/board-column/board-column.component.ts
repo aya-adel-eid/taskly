@@ -2,9 +2,11 @@ import { Component, computed, inject, input, OnInit, signal } from '@angular/cor
 import { CardTaskViewComponent } from '../card-task-view/card-task-view.component';
 import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
 import { ProjectsService } from '../../services/projects.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TaskDetailsPageComponent } from "../../pages/task-details-page/task-details-page.component";
+import { TaskDetailsPageComponent } from '../../pages/task-details-page/task-details-page.component';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
   selector: 'app-board-column',
@@ -15,16 +17,22 @@ import { TaskDetailsPageComponent } from "../../pages/task-details-page/task-det
 })
 export class BoardColumnComponent implements OnInit {
   projectId = input.required<string>();
-  /** The full status config entry (value, title, dotClass, badgeClass) from task-status.config.ts */
   statu = input.required<ITaskStatusConfig>();
+
+  // Search
+  searchTerm = signal<string>('');
+  get isSearching(): boolean {
+    return this.searchTerm().trim().length > 0;
+  }
 
   private projectsService = inject(ProjectsService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   readonly limit = 5;
   page = signal(1);
+  offset = signal(0);
 
-  // read this column's own slice out of the shared keyed Record
   tasks = computed(() => this.projectsService.tasksByStatus()[this.statu().value] ?? null);
   totalCount = computed(
     () => this.projectsService.tasksByStatusTotalCount()[this.statu().value] ?? 0
@@ -38,21 +46,44 @@ export class BoardColumnComponent implements OnInit {
     return (this.tasks()?.length ?? 0) < this.totalCount();
   }
 
+  constructor() {
+    combineLatest([this.route.paramMap, this.route.queryParamMap])
+      .pipe(
+        map(([, queryParams]) => ({
+          offset: +(queryParams.get('offset') ?? 0),
+          search: queryParams.get('search') ?? '',
+        })),
+        distinctUntilChanged((a, b) => a.offset === b.offset && a.search === b.search),
+        takeUntilDestroyed()
+      )
+      .subscribe(({ offset, search }) => {
+        this.page.set(Math.floor(offset / this.limit) + 1);
+        this.offset.set(offset);
+        this.searchTerm.set(search);
+
+        if (this.projectId()) {
+          this.loadTasks(false);
+        }
+      });
+  }
+
   ngOnInit(): void {
-    this.loadTasks();
+    this.loadTasks(false);
   }
 
   loadTasks(append = false): void {
+    if (!this.projectId()) return;
+
     this.projectsService.getTasksByStatus(
       this.projectId(),
       this.statu().value,
       this.limit,
       this.page(),
-      append
+      append,
+      this.searchTerm()
     );
   }
 
-  /** Fires on the column's own inner scroll container, not the window */
   onScroll(event: Event): void {
     if (this.isLoading() || !this.hasMore) return;
 
@@ -61,7 +92,7 @@ export class BoardColumnComponent implements OnInit {
 
     if (reachedBottom) {
       this.page.update((p) => p + 1);
-      this.loadTasks(true); // append = true
+      this.loadTasks(true);
     }
   }
 
@@ -70,22 +101,19 @@ export class BoardColumnComponent implements OnInit {
       queryParams: { status: this.statu().value },
     });
   }
-  taskDetails=signal<ITask|null>(null)
-showDetails=this.projectsService.showTaskDetails
 
-    getTaskDetails(projectId:string,taskId:string){
-    this.projectsService.getTaskDetails(projectId,taskId).subscribe({
-next:(resp)=>{
-  this.taskDetails.set(resp[0])
-  this.showDetails.set(true)
-  console.log(this.taskDetails(),444);
-  
-},
-error:(error:HttpErrorResponse)=>{
-  console.log(error);
-  
-}
-    })
+  taskDetails = signal<ITask | null>(null);
+  showDetails = this.projectsService.showTaskDetails;
+
+  getTaskDetails(projectId: string, taskId: string) {
+    this.projectsService.getTaskDetails(projectId, taskId).subscribe({
+      next: (resp) => {
+        this.taskDetails.set(resp[0]);
+        this.showDetails.set(true);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
   }
-
 }

@@ -7,6 +7,7 @@ import { ListViewComponent } from '../list-view/list-view.component';
 import { DatePipe } from '@angular/common';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 type TasksView = 'list' | 'board';
 
 interface IViewOption {
@@ -22,7 +23,14 @@ interface IBoardStatusConfig {
 @Component({
   selector: 'app-tasks',
   standalone: true,
-  imports: [RouterLink, BoardViewComponent, ListViewComponent, DatePipe, BreadcrumbComponent],
+  imports: [
+    RouterLink,
+    BoardViewComponent,
+    ListViewComponent,
+    DatePipe,
+    BreadcrumbComponent,
+    ReactiveFormsModule,
+  ],
   templateUrl: './tasks.component.html',
   styleUrl: './tasks.component.css',
 })
@@ -30,8 +38,7 @@ export class TasksComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private elementRef = inject(ElementRef);
-  private searchInput$ = new Subject<string>();
-  private destroy$ = new Subject<void>();
+  searchControl = new FormControl<string>('', { nonNullable: true });
 
   searchValue = signal<string>('');
   activeSearchTerm = signal<string>('');
@@ -72,17 +79,26 @@ export class TasksComponent {
 
     const viewFromUrl = this.route.snapshot.queryParamMap.get('view');
     this.selectedView.set(viewFromUrl === 'list' ? 'list' : 'board');
-    this.searchInput$
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+
+    // search
+    const initialSearch = this.route.snapshot.queryParamMap.get('search') ?? '';
+    this.searchControl.setValue(initialSearch, { emitEvent: false });
+
+    // 2. تحديث الـ URL عند الكتابة بعد 400ms
+    this.searchControl.valueChanges
+      .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((term) => {
-        this.activeSearchTerm.set(term);
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {
+            search: term.trim() ? term.trim() : null, // لو فاضي بيمسحه من الـ URL
+            offset: 0, // Reset offset عند كل بحث جديد
+          },
+          queryParamsHandling: 'merge',
+        });
       });
   }
-  // search
-  onSearchChange(value: string): void {
-    this.searchValue.set(value);
-    this.searchInput$.next(value);
-  }
+
   get selectedViewLabel(): string {
     return this.viewOptions.find((o) => o.value === this.selectedView())?.label ?? '';
   }

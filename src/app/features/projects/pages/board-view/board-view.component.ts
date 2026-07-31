@@ -1,8 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { BoardColumnComponent } from '../../components/board-column/board-column.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
-import { TaskDetailsPageComponent } from "../task-details-page/task-details-page.component";
+import { TaskDetailsPageComponent } from '../task-details-page/task-details-page.component';
 
 @Component({
   selector: 'app-board-view',
@@ -14,9 +14,10 @@ import { TaskDetailsPageComponent } from "../task-details-page/task-details-page
 export class BoardViewComponent implements OnInit {
   projectId = signal<string>('');
   private route = inject(ActivatedRoute);
-  private readonly projectService=inject(ProjectsService)
-  showDetails=this.projectService.showTaskDetails
-  taskDetails=this.projectService.selectedTask
+  private readonly projectService = inject(ProjectsService);
+  showDetails = this.projectService.showTaskDetails;
+  taskDetails = this.projectService.selectedTask;
+
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.projectId.set(params.get('projectId')!);
