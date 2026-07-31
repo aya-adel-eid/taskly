@@ -16,6 +16,7 @@ export class AcceptInvitationComponent implements OnInit {
   private readonly projectService = inject(ProjectsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  errorMessage = signal<string>('');
   successMessage = signal<string>('');
   token = signal<string>('');
   ngOnInit(): void {
@@ -24,13 +25,13 @@ export class AcceptInvitationComponent implements OnInit {
   }
   acceptInvitation() {
     this.successMessage.set('');
+    this.errorMessage.set('');
     this.projectService
       .AcceptInvitation({
         p_token: this.token(),
       })
       .subscribe({
-        next: (resp) => {
-          console.log(resp);
+        next: () => {
           this.successMessage.set('Invitation accepted successfully!');
           interval(1000)
             .pipe(take(5))
@@ -40,8 +41,26 @@ export class AcceptInvitationComponent implements OnInit {
             });
         },
         error: (error: HttpErrorResponse) => {
-          console.log(error);
+          this.handleError(error);
         },
       });
+  }
+  private handleError(error: HttpErrorResponse): void {
+    const code = error.error?.code;
+    const message: string = error.error?.message ?? '';
+
+    if (error.status === 401 || error.status === 403) {
+      this.errorMessage.set('You are not authorized to accept this invitation.');
+    } else if (message.toLowerCase().includes('expired')) {
+      this.errorMessage.set('This invitation has expired.');
+    } else if (
+      error.status === 404 ||
+      message.toLowerCase().includes('invalid') ||
+      message.toLowerCase().includes('not found')
+    ) {
+      this.errorMessage.set('This invitation link is invalid.');
+    } else {
+      this.errorMessage.set('Failed to accept invitation. Please try again.');
+    }
   }
 }
