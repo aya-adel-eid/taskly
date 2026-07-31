@@ -25,128 +25,156 @@
 
     <!-- Table Body -->
     <tbody class="divide-y divide-[#F1F3FF]">
-      @if (allTasks()?.length) {
-        @for (task of allTasks(); track task.task_id) {
-          <tr class="bg-white cursor-pointer" (click)="getTaskDetails(task.project_id, task.id)">
-            <!-- Task ID -->
-
-            <td class="text-xs text-[#003D9B] px-6 py-5 align-middle leading-4 tracking-normal">
-              {{ task.task_id }}
-            </td>
-
-            <!-- Title -->
-            <td
-              class="text-sm font-medium text-[#041B3C] px-6 py-5 align-middle tracking-normal leading-[100%]"
-            >
-              {{ task.title }}
-            </td>
-
-            <!-- Status Badge -->
+      @if (allTasks() === null && isLoading()) {
+        @for (i of [1, 2, 3, 4, 5]; track i) {
+          <tr class="bg-white">
             <td class="px-6 py-5 align-middle">
-              <span
-                class="status-badge"
-                [class.status-todo]="task.status === 'TO_DO'"
-                [class.status-in-progress]="task.status === 'IN_PROGRESS'"
-                [class.status-completed]="task.status === 'COMPLETED'"
-                [class.status-blocked]="task.status === 'BLOCKED'"
-                [class.status-urgent]="task.status === 'URGENT'"
-                [class.status-ready-for-qa]="task.status === 'READY_FOR_QA'"
-                [class.status-ready-for-production]="task.status === 'READY_FOR_PRODUCTION'"
-                [class.status-reopened]="task.status === 'REOPENED'"
-                class="inline-flex items-center justify-center text-[10px] font-bold tracking-wider uppercase bg-[#CDDDFF] text-[#374763] px-2.5 py-1 rounded-xs"
-              >
-                {{ task.status.replaceAll('_', ' ') }}
-              </span>
+              <div class="h-3 w-12 rounded skeleton-shimmer"></div>
             </td>
-
-            <!-- Due Date -->
-            <td
-              class="text-sm text-[#434654] px-6 py-5 align-middle whitespace-nowrap tracking-normal leading-[100%]"
-            >
-              {{ task.due_date ? (task.due_date | date: 'd MMM yyyy') : '_' }}
+            <td class="px-6 py-5 align-middle">
+              <div class="h-4 w-40 rounded skeleton-shimmer"></div>
             </td>
-
-            <!-- Assignee -->
+            <td class="px-6 py-5 align-middle">
+              <div class="h-5 w-20 rounded-xs skeleton-shimmer"></div>
+            </td>
+            <td class="px-6 py-5 align-middle">
+              <div class="h-3 w-20 rounded skeleton-shimmer"></div>
+            </td>
             <td class="px-6 py-5 align-middle">
               <div class="flex items-center gap-3">
-                <span
-                  class="size-7 flex items-center justify-center rounded-full bg-[#DAE2FF] text-[#001848] text-[11px] font-bold shrink-0 tracking-normal leading-[100%]"
-                >
-                  @if (task.assignee?.name) {
-                    {{ projectservice.getInitials(task.assignee?.name!) }}
-                  } @else {
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 12 12"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M10.7333 11.5646L9.20208 10.0333H1.53125V8.4C1.53125 8.06944 1.61632 7.76562 1.78646 7.48854C1.9566 7.21146 2.18264 7 2.46458 6.85417C2.90208 6.63056 3.34687 6.45069 3.79896 6.31458C4.25104 6.17847 4.71042 6.07639 5.17708 6.00833L0 0.83125L0.83125 0L11.5646 10.7333L10.7333 11.5646ZM2.69792 8.86667H8.03542L6.28542 7.11667C6.26597 7.11667 6.25139 7.11667 6.24167 7.11667C6.23194 7.11667 6.21736 7.11667 6.19792 7.11667C5.65347 7.11667 5.11389 7.18229 4.57917 7.31354C4.04444 7.44479 3.51458 7.64167 2.98958 7.90417C2.90208 7.95278 2.8316 8.02083 2.77813 8.10833C2.72465 8.19583 2.69792 8.29306 2.69792 8.4V8.86667ZM9.93125 6.85417C10.2132 6.99028 10.4368 7.19688 10.6021 7.47396C10.7674 7.75104 10.8549 8.05 10.8646 8.37083L8.91042 6.41667C9.08542 6.48472 9.25799 6.55278 9.42813 6.62083C9.59826 6.68889 9.76597 6.76667 9.93125 6.85417ZM7.48125 4.9875L6.62083 4.12708C6.84444 4.03958 7.02431 3.89618 7.16042 3.69688C7.29653 3.49757 7.36458 3.27639 7.36458 3.03333C7.36458 2.7125 7.25035 2.43785 7.02187 2.20937C6.7934 1.9809 6.51875 1.86667 6.19792 1.86667C5.95486 1.86667 5.73368 1.93472 5.53438 2.07083C5.33507 2.20694 5.19167 2.38681 5.10417 2.61042L4.24375 1.75C4.46736 1.41944 4.74931 1.16181 5.08958 0.977083C5.42986 0.792361 5.79931 0.7 6.19792 0.7C6.83958 0.7 7.38889 0.928472 7.84583 1.38542C8.30278 1.84236 8.53125 2.39167 8.53125 3.03333C8.53125 3.43194 8.43889 3.80139 8.25417 4.14167C8.06944 4.48194 7.81181 4.76389 7.48125 4.9875ZM8.03542 8.86667H2.69792C2.69792 8.86667 2.72465 8.86667 2.77813 8.86667C2.8316 8.86667 2.90208 8.86667 2.98958 8.86667C3.25208 8.86667 3.52431 8.86667 3.80625 8.86667C4.08819 8.86667 4.42118 8.86667 4.80521 8.86667C5.18924 8.86667 5.64132 8.86667 6.16146 8.86667C6.6816 8.86667 7.30625 8.86667 8.03542 8.86667Z"
-                        fill="#4F5F7B"
-                      />
-                    </svg>
-                  }
-                </span>
-                <span
-                  class="text-sm text-[#041B3C] font-normal whitespace-nowrap tracking-normal leading-[100%]"
-                >
-                  @if (task.assignee?.name) {
-                    {{ task.assignee?.name }}
-                  } @else {
-                    Unassigned
-                  }
-                </span>
+                <div class="size-7 rounded-full skeleton-shimmer shrink-0"></div>
+                <div class="h-3 w-24 rounded skeleton-shimmer"></div>
               </div>
             </td>
-
-            <!-- Action Button -->
             <td class="px-6 py-5 align-middle text-right">
-              <button
-                type="button"
-                class="inline-flex items-center justify-center p-1 text-slate-500 hover:text-slate-900 rounded transition-colors"
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M8.00016 8.66634C8.36835 8.66634 8.66683 8.36786 8.66683 7.99967C8.66683 7.63148 8.36835 7.33301 8.00016 7.33301C7.63197 7.33301 7.3335 7.63148 7.3335 7.99967C7.3335 8.36786 7.63197 8.66634 8.00016 8.66634Z"
-                    stroke="#020617"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M12.6667 8.66634C13.0349 8.66634 13.3333 8.36786 13.3333 7.99967C13.3333 7.63148 13.0349 7.33301 12.6667 7.33301C12.2985 7.33301 12 7.63148 12 7.99967C12 8.36786 12.2985 8.66634 12.6667 8.66634Z"
-                    stroke="#020617"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M3.33317 8.66634C3.70136 8.66634 3.99984 8.36786 3.99984 7.99967C3.99984 7.63148 3.70136 7.33301 3.33317 7.33301C2.96498 7.33301 2.6665 7.63148 2.6665 7.99967C2.6665 8.36786 2.96498 8.66634 3.33317 8.66634Z"
-                    stroke="#020617"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
+              <div class="h-4 w-4 rounded skeleton-shimmer inline-block"></div>
             </td>
           </tr>
         }
-      } @else if (allTasks()?.length === 0) {
-        <tr>
-          <td colspan="6" class="py-6 text-center text-[16px] text-primary font-bold">
-            @if (isSearching) {
-              No tasks found matching "{{ searchTerm() }}"
-            } @else {
-              No tasks
-            }
-          </td>
-        </tr>
+      } @else {
+        @if (allTasks()?.length) {
+          @for (task of allTasks(); track task.task_id) {
+            <tr class="bg-white cursor-pointer" (click)="getTaskDetails(task.project_id, task.id)">
+              <!-- Task ID -->
+
+              <td class="text-xs text-[#003D9B] px-6 py-5 align-middle leading-4 tracking-normal">
+                {{ task.task_id }}
+              </td>
+
+              <!-- Title -->
+              <td
+                class="text-sm font-medium text-[#041B3C] px-6 py-5 align-middle tracking-normal leading-[100%]"
+              >
+                {{ task.title }}
+              </td>
+
+              <!-- Status Badge -->
+              <td class="px-6 py-5 align-middle">
+                <span
+                  class="status-badge"
+                  [class.status-todo]="task.status === 'TO_DO'"
+                  [class.status-in-progress]="task.status === 'IN_PROGRESS'"
+                  [class.status-completed]="task.status === 'COMPLETED'"
+                  [class.status-blocked]="task.status === 'BLOCKED'"
+                  [class.status-urgent]="task.status === 'URGENT'"
+                  [class.status-ready-for-qa]="task.status === 'READY_FOR_QA'"
+                  [class.status-ready-for-production]="task.status === 'READY_FOR_PRODUCTION'"
+                  [class.status-reopened]="task.status === 'REOPENED'"
+                  class="inline-flex items-center justify-center text-[10px] font-bold tracking-wider uppercase bg-[#CDDDFF] text-[#374763] px-2.5 py-1 rounded-xs"
+                >
+                  {{ task.status.replaceAll('_', ' ') }}
+                </span>
+              </td>
+
+              <!-- Due Date -->
+              <td
+                class="text-sm text-[#434654] px-6 py-5 align-middle whitespace-nowrap tracking-normal leading-[100%]"
+              >
+                {{ task.due_date ? (task.due_date | date: 'd MMM yyyy') : '_' }}
+              </td>
+
+              <!-- Assignee -->
+              <td class="px-6 py-5 align-middle">
+                <div class="flex items-center gap-3">
+                  <span
+                    class="size-7 flex items-center justify-center rounded-full bg-[#DAE2FF] text-[#001848] text-[11px] font-bold shrink-0 tracking-normal leading-[100%]"
+                  >
+                    @if (task.assignee?.name) {
+                      {{ projectservice.getInitials(task.assignee?.name!) }}
+                    } @else {
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M10.7333 11.5646L9.20208 10.0333H1.53125V8.4C1.53125 8.06944 1.61632 7.76562 1.78646 7.48854C1.9566 7.21146 2.18264 7 2.46458 6.85417C2.90208 6.63056 3.34687 6.45069 3.79896 6.31458C4.25104 6.17847 4.71042 6.07639 5.17708 6.00833L0 0.83125L0.83125 0L11.5646 10.7333L10.7333 11.5646ZM2.69792 8.86667H8.03542L6.28542 7.11667C6.26597 7.11667 6.25139 7.11667 6.24167 7.11667C6.23194 7.11667 6.21736 7.11667 6.19792 7.11667C5.65347 7.11667 5.11389 7.18229 4.57917 7.31354C4.04444 7.44479 3.51458 7.64167 2.98958 7.90417C2.90208 7.95278 2.8316 8.02083 2.77813 8.10833C2.72465 8.19583 2.69792 8.29306 2.69792 8.4V8.86667ZM9.93125 6.85417C10.2132 6.99028 10.4368 7.19688 10.6021 7.47396C10.7674 7.75104 10.8549 8.05 10.8646 8.37083L8.91042 6.41667C9.08542 6.48472 9.25799 6.55278 9.42813 6.62083C9.59826 6.68889 9.76597 6.76667 9.93125 6.85417ZM7.48125 4.9875L6.62083 4.12708C6.84444 4.03958 7.02431 3.89618 7.16042 3.69688C7.29653 3.49757 7.36458 3.27639 7.36458 3.03333C7.36458 2.7125 7.25035 2.43785 7.02187 2.20937C6.7934 1.9809 6.51875 1.86667 6.19792 1.86667C5.95486 1.86667 5.73368 1.93472 5.53438 2.07083C5.33507 2.20694 5.19167 2.38681 5.10417 2.61042L4.24375 1.75C4.46736 1.41944 4.74931 1.16181 5.08958 0.977083C5.42986 0.792361 5.79931 0.7 6.19792 0.7C6.83958 0.7 7.38889 0.928472 7.84583 1.38542C8.30278 1.84236 8.53125 2.39167 8.53125 3.03333C8.53125 3.43194 8.43889 3.80139 8.25417 4.14167C8.06944 4.48194 7.81181 4.76389 7.48125 4.9875ZM8.03542 8.86667H2.69792C2.69792 8.86667 2.72465 8.86667 2.77813 8.86667C2.8316 8.86667 2.90208 8.86667 2.98958 8.86667C3.25208 8.86667 3.52431 8.86667 3.80625 8.86667C4.08819 8.86667 4.42118 8.86667 4.80521 8.86667C5.18924 8.86667 5.64132 8.86667 6.16146 8.86667C6.6816 8.86667 7.30625 8.86667 8.03542 8.86667Z"
+                          fill="#4F5F7B"
+                        />
+                      </svg>
+                    }
+                  </span>
+                  <span
+                    class="text-sm text-[#041B3C] font-normal whitespace-nowrap tracking-normal leading-[100%]"
+                  >
+                    @if (task.assignee?.name) {
+                      {{ task.assignee?.name }}
+                    } @else {
+                      Unassigned
+                    }
+                  </span>
+                </div>
+              </td>
+
+              <!-- Action Button -->
+              <td class="px-6 py-5 align-middle text-right">
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center p-1 text-slate-500 hover:text-slate-900 rounded transition-colors"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M8.00016 8.66634C8.36835 8.66634 8.66683 8.36786 8.66683 7.99967C8.66683 7.63148 8.36835 7.33301 8.00016 7.33301C7.63197 7.33301 7.3335 7.63148 7.3335 7.99967C7.3335 8.36786 7.63197 8.66634 8.00016 8.66634Z"
+                      stroke="#020617"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M12.6667 8.66634C13.0349 8.66634 13.3333 8.36786 13.3333 7.99967C13.3333 7.63148 13.0349 7.33301 12.6667 7.33301C12.2985 7.33301 12 7.63148 12 7.99967C12 8.36786 12.2985 8.66634 12.6667 8.66634Z"
+                      stroke="#020617"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M3.33317 8.66634C3.70136 8.66634 3.99984 8.36786 3.99984 7.99967C3.99984 7.63148 3.70136 7.33301 3.33317 7.33301C2.96498 7.33301 2.6665 7.63148 2.6665 7.99967C2.6665 8.36786 2.96498 8.66634 3.33317 8.66634Z"
+                      stroke="#020617"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          }
+        } @else if (allTasks()?.length === 0) {
+          <tr>
+            <td colspan="6" class="py-6 text-center text-[16px] text-primary font-bold">
+              @if (isSearching) {
+                No tasks found matching "{{ searchTerm() }}"
+              } @else {
+                No tasks
+              }
+            </td>
+          </tr>
+        }
       }
     </tbody>
     @if (allTasks()?.length) {
@@ -221,92 +249,133 @@
   </table>
 </div>
 <div class="lg:hidden flex flex-col gap-3 py-4 mb-6">
-  @for (task of allTasks(); track task.task_id) {
-    <div
-      class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3 cursor-pointer"
-      (click)="getTaskDetails(task.project_id, task.id)"
-    >
-      <div>
-        <div class="flex items-center justify-between">
-          <span
-            class="text-[11px] font-bold text-[#43465480]/50 uppercase tracking-[-0.55px] leading-[16.5px]"
-          >
-            {{ task.task_id }}
-          </span>
+  @if (allTasks() === null && isLoading()) {
+    @for (i of [1, 2, 3, 4]; track i) {
+      <div class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3">
+        <div>
+          <div class="flex items-center justify-between">
+            <div class="h-3 w-14 rounded skeleton-shimmer"></div>
+            <div class="h-4 w-16 rounded-xs skeleton-shimmer"></div>
+          </div>
 
-          <span
-            class="status-badge"
-            [class.status-todo]="task.status === 'TO_DO'"
-            [class.status-in-progress]="task.status === 'IN_PROGRESS'"
-            [class.status-completed]="task.status === 'COMPLETED'"
-            [class.status-blocked]="task.status === 'BLOCKED'"
-            [class.status-urgent]="task.status === 'URGENT'"
-            [class.status-ready-for-qa]="task.status === 'READY_FOR_QA'"
-            [class.status-ready-for-production]="task.status === 'READY_FOR_PRODUCTION'"
-            [class.status-reopened]="task.status === 'REOPENED'"
-            class="inline-flex items-center justify-center text-[11px] font-bold uppercase bg-[#CDDDFF] text-[#374763] px-2 py-0.5 rounded-xs leading-[16.5px] tracking-normal"
-          >
-            {{ task.status.replaceAll('_', ' ') }}
-          </span>
+          <div class="h-5 w-3/4 rounded skeleton-shimmer mt-2"></div>
         </div>
 
-        <h3 class="text-[18px] font-medium text-[#041B3C] leading-[24.75px] tracking-normal">
-          {{ task.title }}
-        </h3>
-      </div>
-
-      <div class="flex items-center justify-between pt-1">
-        <div class="flex items-center gap-2">
-          <div
-            class="size-7 rounded-xl bg-[#D8DEFF] flex items-center justify-center text-[11px] font-bold text-[#041B3C] shrink-0 leading-[100%] tracking-normal"
-          >
-            @if (task.assignee?.name) {
-              {{ projectservice.getInitials(task.assignee?.name!) }}
-            } @else {
-              <span>
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10.7333 11.5646L9.20208 10.0333H1.53125V8.4C1.53125 8.06944 1.61632 7.76562 1.78646 7.48854C1.9566 7.21146 2.18264 7 2.46458 6.85417C2.90208 6.63056 3.34687 6.45069 3.79896 6.31458C4.25104 6.17847 4.71042 6.07639 5.17708 6.00833L0 0.83125L0.83125 0L11.5646 10.7333L10.7333 11.5646ZM2.69792 8.86667H8.03542L6.28542 7.11667C6.26597 7.11667 6.25139 7.11667 6.24167 7.11667C6.23194 7.11667 6.21736 7.11667 6.19792 7.11667C5.65347 7.11667 5.11389 7.18229 4.57917 7.31354C4.04444 7.44479 3.51458 7.64167 2.98958 7.90417C2.90208 7.95278 2.8316 8.02083 2.77813 8.10833C2.72465 8.19583 2.69792 8.29306 2.69792 8.4V8.86667ZM9.93125 6.85417C10.2132 6.99028 10.4368 7.19688 10.6021 7.47396C10.7674 7.75104 10.8549 8.05 10.8646 8.37083L8.91042 6.41667C9.08542 6.48472 9.25799 6.55278 9.42813 6.62083C9.59826 6.68889 9.76597 6.76667 9.93125 6.85417ZM7.48125 4.9875L6.62083 4.12708C6.84444 4.03958 7.02431 3.89618 7.16042 3.69688C7.29653 3.49757 7.36458 3.27639 7.36458 3.03333C7.36458 2.7125 7.25035 2.43785 7.02187 2.20937C6.7934 1.9809 6.51875 1.86667 6.19792 1.86667C5.95486 1.86667 5.73368 1.93472 5.53438 2.07083C5.33507 2.20694 5.19167 2.38681 5.10417 2.61042L4.24375 1.75C4.46736 1.41944 4.74931 1.16181 5.08958 0.977083C5.42986 0.792361 5.79931 0.7 6.19792 0.7C6.83958 0.7 7.38889 0.928472 7.84583 1.38542C8.30278 1.84236 8.53125 2.39167 8.53125 3.03333C8.53125 3.43194 8.43889 3.80139 8.25417 4.14167C8.06944 4.48194 7.81181 4.76389 7.48125 4.9875ZM8.03542 8.86667H2.69792C2.69792 8.86667 2.72465 8.86667 2.77813 8.86667C2.8316 8.86667 2.90208 8.86667 2.98958 8.86667C3.25208 8.86667 3.52431 8.86667 3.80625 8.86667C4.08819 8.86667 4.42118 8.86667 4.80521 8.86667C5.18924 8.86667 5.64132 8.86667 6.16146 8.86667C6.6816 8.86667 7.30625 8.86667 8.03542 8.86667Z"
-                    fill="#4F5F7B"
-                  /></svg
-              ></span>
-            }
+        <div class="flex items-center justify-between pt-1">
+          <div class="flex items-center gap-2">
+            <div class="size-7 rounded-xl skeleton-shimmer shrink-0"></div>
+            <div class="flex flex-col gap-1">
+              <div class="h-2.5 w-14 rounded skeleton-shimmer"></div>
+              <div class="h-3 w-20 rounded skeleton-shimmer"></div>
+            </div>
           </div>
+
+          <div class="h-4 w-1 rounded skeleton-shimmer"></div>
+        </div>
+      </div>
+    }
+  } @else {
+    @if (allTasks()?.length) {
+      @for (task of allTasks(); track task.task_id) {
+        <div
+          class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3 cursor-pointer"
+          (click)="getTaskDetails(task.project_id, task.id)"
+        >
           <div>
-            <p
-              class="text-[11px] font-bold text-[#434654B2]/70 uppercase tracking-normal leading-[16.5px] mb-0.5"
+            <div class="flex items-center justify-between">
+              <span
+                class="text-[11px] font-bold text-[#43465480]/50 uppercase tracking-[-0.55px] leading-[16.5px]"
+              >
+                {{ task.task_id }}
+              </span>
+
+              <span
+                class="status-badge"
+                [class.status-todo]="task.status === 'TO_DO'"
+                [class.status-in-progress]="task.status === 'IN_PROGRESS'"
+                [class.status-completed]="task.status === 'COMPLETED'"
+                [class.status-blocked]="task.status === 'BLOCKED'"
+                [class.status-urgent]="task.status === 'URGENT'"
+                [class.status-ready-for-qa]="task.status === 'READY_FOR_QA'"
+                [class.status-ready-for-production]="task.status === 'READY_FOR_PRODUCTION'"
+                [class.status-reopened]="task.status === 'REOPENED'"
+                class="inline-flex items-center justify-center text-[11px] font-bold uppercase bg-[#CDDDFF] text-[#374763] px-2 py-0.5 rounded-xs leading-[16.5px] tracking-normal"
+              >
+                {{ task.status.replaceAll('_', ' ') }}
+              </span>
+            </div>
+
+            <h3 class="text-[18px] font-medium text-[#041B3C] leading-[24.75px] tracking-normal">
+              {{ task.title }}
+            </h3>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <div class="flex items-center gap-2">
+              <div
+                class="size-7 rounded-xl bg-[#D8DEFF] flex items-center justify-center text-[11px] font-bold text-[#041B3C] shrink-0 leading-[100%] tracking-normal"
+              >
+                @if (task.assignee?.name) {
+                  {{ projectservice.getInitials(task.assignee?.name!) }}
+                } @else {
+                  <span>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M10.7333 11.5646L9.20208 10.0333H1.53125V8.4C1.53125 8.06944 1.61632 7.76562 1.78646 7.48854C1.9566 7.21146 2.18264 7 2.46458 6.85417C2.90208 6.63056 3.34687 6.45069 3.79896 6.31458C4.25104 6.17847 4.71042 6.07639 5.17708 6.00833L0 0.83125L0.83125 0L11.5646 10.7333L10.7333 11.5646ZM2.69792 8.86667H8.03542L6.28542 7.11667C6.26597 7.11667 6.25139 7.11667 6.24167 7.11667C6.23194 7.11667 6.21736 7.11667 6.19792 7.11667C5.65347 7.11667 5.11389 7.18229 4.57917 7.31354C4.04444 7.44479 3.51458 7.64167 2.98958 7.90417C2.90208 7.95278 2.8316 8.02083 2.77813 8.10833C2.72465 8.19583 2.69792 8.29306 2.69792 8.4V8.86667ZM9.93125 6.85417C10.2132 6.99028 10.4368 7.19688 10.6021 7.47396C10.7674 7.75104 10.8549 8.05 10.8646 8.37083L8.91042 6.41667C9.08542 6.48472 9.25799 6.55278 9.42813 6.62083C9.59826 6.68889 9.76597 6.76667 9.93125 6.85417ZM7.48125 4.9875L6.62083 4.12708C6.84444 4.03958 7.02431 3.89618 7.16042 3.69688C7.29653 3.49757 7.36458 3.27639 7.36458 3.03333C7.36458 2.7125 7.25035 2.43785 7.02187 2.20937C6.7934 1.9809 6.51875 1.86667 6.19792 1.86667C5.95486 1.86667 5.73368 1.93472 5.53438 2.07083C5.33507 2.20694 5.19167 2.38681 5.10417 2.61042L4.24375 1.75C4.46736 1.41944 4.74931 1.16181 5.08958 0.977083C5.42986 0.792361 5.79931 0.7 6.19792 0.7C6.83958 0.7 7.38889 0.928472 7.84583 1.38542C8.30278 1.84236 8.53125 2.39167 8.53125 3.03333C8.53125 3.43194 8.43889 3.80139 8.25417 4.14167C8.06944 4.48194 7.81181 4.76389 7.48125 4.9875ZM8.03542 8.86667H2.69792C2.69792 8.86667 2.72465 8.86667 2.77813 8.86667C2.8316 8.86667 2.90208 8.86667 2.98958 8.86667C3.25208 8.86667 3.52431 8.86667 3.80625 8.86667C4.08819 8.86667 4.42118 8.86667 4.80521 8.86667C5.18924 8.86667 5.64132 8.86667 6.16146 8.86667C6.6816 8.86667 7.30625 8.86667 8.03542 8.86667Z"
+                        fill="#4F5F7B"
+                      /></svg
+                  ></span>
+                }
+              </div>
+              <div>
+                <p
+                  class="text-[11px] font-bold text-[#434654B2]/70 uppercase tracking-normal leading-[16.5px] mb-0.5"
+                >
+                  Due Date
+                </p>
+                <p class="text-xs leading-4 tracking-normal font-medium text-[#041B3C]">
+                  {{ task.due_date ? (task.due_date | date: 'd MMM yyyy') : '_' }}
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="text-[#94A3B8] p-1 cursor-pointer"
+              aria-label="More options"
             >
-              Due Date
-            </p>
-            <p class="text-xs leading-4 tracking-normal font-medium text-[#041B3C]">
-              {{ task.due_date ? (task.due_date | date: 'd MMM yyyy') : '_' }}
-            </p>
+              <svg
+                width="4"
+                height="16"
+                viewBox="0 0 4 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14C0 13.45 0.195833 12.9792 0.5875 12.5875C0.979167 12.1958 1.45 12 2 12C2.55 12 3.02083 12.1958 3.4125 12.5875C3.80417 12.9792 4 13.45 4 14C4 14.55 3.80417 15.0208 3.4125 15.4125C3.02083 15.8042 2.55 16 2 16ZM2 10C1.45 10 0.979167 9.80417 0.5875 9.4125C0.195833 9.02083 0 8.55 0 8C0 7.45 0.195833 6.97917 0.5875 6.5875C0.979167 6.19583 1.45 6 2 6C2.55 6 3.02083 6.19583 3.4125 6.5875C3.80417 6.97917 4 7.45 4 8C4 8.55 3.80417 9.02083 3.4125 9.4125C3.02083 9.80417 2.55 10 2 10ZM2 4C1.45 4 0.979167 3.80417 0.5875 3.4125C0.195833 3.02083 0 2.55 0 2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0C2.55 0 3.02083 0.195833 3.4125 0.5875C3.80417 0.979167 4 1.45 4 2C4 2.55 3.80417 3.02083 3.4125 3.4125C3.02083 3.80417 2.55 4 2 4Z"
+                  fill="#434654"
+                  fill-opacity="0.4"
+                />
+              </svg>
+            </button>
           </div>
         </div>
-
-        <button type="button" class="text-[#94A3B8] p-1 cursor-pointer" aria-label="More options">
-          <svg
-            width="4"
-            height="16"
-            viewBox="0 0 4 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14C0 13.45 0.195833 12.9792 0.5875 12.5875C0.979167 12.1958 1.45 12 2 12C2.55 12 3.02083 12.1958 3.4125 12.5875C3.80417 12.9792 4 13.45 4 14C4 14.55 3.80417 15.0208 3.4125 15.4125C3.02083 15.8042 2.55 16 2 16ZM2 10C1.45 10 0.979167 9.80417 0.5875 9.4125C0.195833 9.02083 0 8.55 0 8C0 7.45 0.195833 6.97917 0.5875 6.5875C0.979167 6.19583 1.45 6 2 6C2.55 6 3.02083 6.19583 3.4125 6.5875C3.80417 6.97917 4 7.45 4 8C4 8.55 3.80417 9.02083 3.4125 9.4125C3.02083 9.80417 2.55 10 2 10ZM2 4C1.45 4 0.979167 3.80417 0.5875 3.4125C0.195833 3.02083 0 2.55 0 2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0C2.55 0 3.02083 0.195833 3.4125 0.5875C3.80417 0.979167 4 1.45 4 2C4 2.55 3.80417 3.02083 3.4125 3.4125C3.02083 3.80417 2.55 4 2 4Z"
-              fill="#434654"
-              fill-opacity="0.4"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
+      }
+    } @else if (allTasks()?.length === 0) {
+      <p class="py-6 text-center text-[16px] text-primary font-bold">
+        @if (isSearching) {
+          No tasks found matching "{{ searchTerm() }}"
+        } @else {
+          No tasks
+        }
+      </p>
+    }
   }
 </div>
 @if (showDetails()) {

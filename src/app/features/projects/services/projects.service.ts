@@ -251,7 +251,7 @@ export class ProjectsService {
   //     `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}`
   //   );
   // }
-
+  isloadingTask = signal<boolean>(false);
   getAllTasks(projectId: string, limit = 5, page = 1, append = false, searchTerm = '') {
     const offset = (page - 1) * limit;
 

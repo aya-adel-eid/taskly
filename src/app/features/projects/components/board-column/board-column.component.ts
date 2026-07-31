@@ -1,11 +1,11 @@
-import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { CardTaskViewComponent } from '../card-task-view/card-task-view.component';
 import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
 import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TaskDetailsPageComponent } from '../../pages/task-details-page/task-details-page.component';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
@@ -28,6 +28,7 @@ export class BoardColumnComponent implements OnInit {
   private projectsService = inject(ProjectsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef); // 👈 جديد
 
   readonly limit = 5;
   page = signal(1);
@@ -46,7 +47,8 @@ export class BoardColumnComponent implements OnInit {
     return (this.tasks()?.length ?? 0) < this.totalCount();
   }
 
-  constructor() {
+  ngOnInit(): void {
+    // مفيش داعي لـ loadTasks(false) هنا لوحدها؛ الاشتراك تحت بيعمل أول تحميل تلقائيًا
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
         map(([, queryParams]) => ({
@@ -54,21 +56,15 @@ export class BoardColumnComponent implements OnInit {
           search: queryParams.get('search') ?? '',
         })),
         distinctUntilChanged((a, b) => a.offset === b.offset && a.search === b.search),
-        takeUntilDestroyed()
+        takeUntilDestroyed(this.destroyRef) // 👈 بنبعت الـ destroyRef صراحةً
       )
       .subscribe(({ offset, search }) => {
         this.page.set(Math.floor(offset / this.limit) + 1);
         this.offset.set(offset);
         this.searchTerm.set(search);
 
-        if (this.projectId()) {
-          this.loadTasks(false);
-        }
+        this.loadTasks(false);
       });
-  }
-
-  ngOnInit(): void {
-    this.loadTasks(false);
   }
 
   loadTasks(append = false): void {

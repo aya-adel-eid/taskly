@@ -53,7 +53,19 @@
   >
     @if (tasks() === null) {
       @for (i of [1, 2, 3]; track i) {
-        <div class="h-[70px] rounded-lg skeleton-shimmer"></div>
+        <div
+          class="relative rounded-lg p-4 border border-[#C3C6D61A]/10 shadow-[0px_2px_8px_0px_rgba(0,0,0,0.02)] bg-white"
+        >
+          <div class="flex flex-col gap-1.5">
+            <div class="h-3.5 w-[85%] rounded skeleton-shimmer"></div>
+            <div class="h-3.5 w-[55%] rounded skeleton-shimmer"></div>
+          </div>
+
+          <div class="flex items-center justify-between mt-3">
+            <div class="h-3 w-16 rounded skeleton-shimmer"></div>
+            <div class="w-6 h-6 rounded-full skeleton-shimmer shrink-0"></div>
+          </div>
+        </div>
       }
     } @else if (hasError()) {
       <p class="text-[11px] text-[#E0433C] text-center py-4">Failed to load tasks</p>
