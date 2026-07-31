@@ -23,5 +23,6 @@ export const APIS_KEYS = {
     getEpicTasks: `${environment.baseUrRL}/rest/v1/project_tasks`,
     updateTasks: `${environment.baseUrRL}/rest/v1/tasks`,
     inviteMember: `${environment.baseUrRL}/rest/v1/rpc/invite_member`,
+    acceptInvitation: `${environment.baseUrRL}/rest/v1/rpc/accept_invitation`,
   },
 };

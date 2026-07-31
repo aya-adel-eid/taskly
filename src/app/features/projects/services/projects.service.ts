@@ -357,4 +357,8 @@ export class ProjectsService {
   inviteMember(infoMember: {}) {
     return this.httpClient.post(APIS_KEYS.projects.inviteMember, infoMember);
   }
+  // accept Invitation
+  AcceptInvitation(token: {}) {
+    return this.httpClient.post(APIS_KEYS.projects.acceptInvitation, token);
+  }
 }
