@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { RusableInputComponent } from '../../components/rusable-input/rusable-input.component';
 import { HeaderAuthComponent } from '../../components/header-auth/header-auth.component';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -19,6 +19,7 @@ import { interval, take, timer } from 'rxjs';
 export class LoginPageComponent {
   private readonly authService = inject(AuthServicesService);
   private readonly router = inject(Router);
+  route = inject(ActivatedRoute);
   errorMessage!: string;
   successMessage!: string;
   loading = signal<boolean>(false);
@@ -50,8 +51,9 @@ export class LoginPageComponent {
           this.loading.set(false);
           this.successMessage =
             'Your sign In successfully. You will be redirected to the Projects page.';
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
           timer(5000).subscribe(() => {
-            this.router.navigateByUrl('/project');
+            this.router.navigateByUrl(returnUrl || '/project');
           });
           this.authService.storeSession(resp, rememberMe!);
 
