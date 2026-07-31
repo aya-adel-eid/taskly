@@ -18,6 +18,13 @@ export const PROJECTS_ROUtES: Routes = [
         loadComponent: () =>
           import('./pages/add-project/add-project.component').then((c) => c.AddProjectComponent),
       },
+      {
+        path: 'my-statistics',
+        loadComponent: () =>
+          import('./statistics/pages/statistics-page/statistics-page.component').then(
+            (c) => c.StatisticsPageComponent
+          ),
+      },
 
       {
         path: ':projectId',
