@@ -74,6 +74,7 @@ export class InviteMemberFormComponent implements OnInit {
             .pipe(take(5))
             .subscribe(() => {
               this.succesMessage.set('');
+              this.projectService.showModelInviteMember.set(false);
             });
         },
         error: (error: HttpErrorResponse) => {

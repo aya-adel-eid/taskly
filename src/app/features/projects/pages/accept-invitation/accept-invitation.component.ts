@@ -20,7 +20,6 @@ export class AcceptInvitationComponent implements OnInit {
   successMessage = signal<string>('');
   token = signal<string>('');
   ngOnInit(): void {
-    console.log(this.route.snapshot.queryParamMap.get('token'));
     this.token.set(this.route.snapshot.queryParamMap.get('token')!);
   }
   acceptInvitation() {
