@@ -1,12 +1,14 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
-import { interval, take } from 'rxjs';
+import { interval, single, take } from 'rxjs';
 import { Member } from '../../interfaces/IMembers';
+import { platformBrowser } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-invite-member-form',
@@ -22,9 +24,14 @@ export class InviteMemberFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   succesMessage = signal<string>('');
   errorMessage = signal<string>('');
+  private readonly plat_Id = inject(PLATFORM_ID);
+  projectName = signal<string>('');
   projectId!: string;
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe((param) => (this.projectId = param.get('projectId')!));
+    if (isPlatformBrowser(this.plat_Id)) {
+      this.projectName.set(sessionStorage.getItem(StORED_KEYS.projectName) ?? '');
+    }
   }
   inviteMemberForm = this.fb.group({
     p_email: [null, [Validators.required, Validators.email]],
