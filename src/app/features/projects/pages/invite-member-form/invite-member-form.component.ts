@@ -5,9 +5,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
-import { interval, single, take } from 'rxjs';
+import { interval, take } from 'rxjs';
 import { Member } from '../../interfaces/IMembers';
-import { platformBrowser } from '@angular/platform-browser';
+
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -68,7 +68,6 @@ export class InviteMemberFormComponent implements OnInit {
     if (this.inviteMemberForm.valid) {
       this.projectService.inviteMember(this.inviteMemberForm.value).subscribe({
         next: (resp) => {
-          console.log('done', resp);
           this.succesMessage.set('Invitation sent successfully');
           interval(1000)
             .pipe(take(5))
