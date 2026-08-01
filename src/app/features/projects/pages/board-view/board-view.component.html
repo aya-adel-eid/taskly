@@ -1,7 +1,5 @@
-
-
 <div
-  class="flex gap-4 overflow-x-auto pb-4 flex-nowrap [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-[#F1F3FF] [&::-webkit-scrollbar-thumb]:bg-[#C3C6D6] [&::-webkit-scrollbar-thumb]:rounded-ful"
+  class="flex gap-4 items-stretch h-[calc(100vh-220px)] overflow-x-auto pb-4 flex-nowrap [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-[#F1F3FF] [&::-webkit-scrollbar-thumb]:bg-[#C3C6D6] [&::-webkit-scrollbar-thumb]:rounded-ful"
 >
   @for (col of statues; track col.value) {
     <app-board-column [projectId]="projectId()" [statu]="col"></app-board-column>
