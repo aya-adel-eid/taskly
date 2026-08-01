@@ -4,12 +4,12 @@ import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
 import { ProjectsService } from '../../services/projects.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TaskDetailsPageComponent } from '../../pages/task-details-page/task-details-page.component';
+
 import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
 @Component({
   selector: 'app-board-column',
   standalone: true,
-  imports: [CardTaskViewComponent, TaskDetailsPageComponent, ToastMassageComponent],
+  imports: [CardTaskViewComponent, ToastMassageComponent],
   templateUrl: './board-column.component.html',
   styleUrl: './board-column.component.css',
 })
@@ -73,21 +73,6 @@ export class BoardColumnComponent implements OnInit {
   addTask(): void {
     this.router.navigate(['/project', this.projectId(), 'tasks', 'new'], {
       queryParams: { status: this.statu().value },
-    });
-  }
-
-  taskDetails = signal<ITask | null>(null);
-  showDetails = this.projectsService.showTaskDetails;
-
-  getTaskDetails(projectId: string, taskId: string) {
-    this.projectsService.getTaskDetails(projectId, taskId).subscribe({
-      next: (resp) => {
-        this.taskDetails.set(resp[0]);
-        this.showDetails.set(true);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      },
     });
   }
 
