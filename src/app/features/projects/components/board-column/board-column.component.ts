@@ -133,8 +133,6 @@ export class BoardColumnComponent implements OnInit {
         this.errorMessage.set('');
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
-
         this.projectsService.tasksByStatus.update((byStatus) => {
           const toList = (byStatus[targetStatus] ?? []).filter((t) => t.id !== task.id);
           const fromList = [
