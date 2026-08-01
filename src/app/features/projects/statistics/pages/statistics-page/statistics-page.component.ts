@@ -210,11 +210,11 @@ export class StatisticsPageComponent implements OnInit {
 
   statusBadgeClass(status: string): string {
     const map: Record<string, string> = {
-      TO_DO: 'bg-[#E0E8FF] text-[#374763]',
-      IN_PROGRESS: 'bg-[#0052CC] text-white',
-      BLOCKED: 'bg-[#FFDAD6] text-[#BA1A1A]',
-      ACTIVE: 'bg-[#E0E8FF] text-[#374763]',
-      DONE: 'bg-[#D4EDDA] text-[#0B815A]',
+      TO_DO: 'bg-[#C3C6D61A] text-[#737685]',
+      IN_PROGRESS: 'bg-[#0052CC33] text-[#003D9B] lg:border-s-4 border-s-[#003D9B]',
+      BLOCKED: 'bg-[#FFDAD61A] text-[#BA1A1A]',
+      ACTIVE: 'bg-[#0052CC1A] text-[#003D9B]',
+      DONE: 'bg-[#0068441A] text-[#004E32]',
       IN_REVIEW: 'bg-[#E5E8F0] text-[#4F5F7B]',
       READY_FOR_QA: 'bg-[#D6F5F2] text-[#0B7A6E]',
       REOPENED: 'bg-[#FFE3D1] text-[#B85C1F]',

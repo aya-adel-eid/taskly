@@ -1,4 +1,4 @@
-<section class="flex flex-col gap-6 lg:gap-8">
+<section class="flex flex-col gap-6 lg:gap-8 pb-10">
   <!-- header -->
   <div class="lg:flex flex-col gap-1 hidden">
     <h2 class="font-bold text-[30px] leading-9 tracking-[-0.75px] text-[#041B3C]">
@@ -412,6 +412,159 @@
                 />
               </svg>
             </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <!-- ============ Weekly Calendar ============ -->
+    @if (statisticsService.isLoadingCalendarStats()) {
+      <!-- Desktop skeleton -->
+      <div
+        class="hidden lg:grid grid-cols-7 gap-0 mt-6 border border-[#E8EDFF] rounded-lg overflow-hidden divide-x divide-[#E8EDFF]"
+      >
+        @for (i of [1, 2, 3, 4, 5, 6, 7]; track i) {
+          <div class="p-4 h-[280px] skeleton-shimmer"></div>
+        }
+      </div>
+      <!-- Mobile skeleton -->
+      <div class="flex lg:hidden flex-col gap-2 mt-6">
+        @for (i of [1, 2, 3, 4, 5, 6, 7]; track i) {
+          <div class="rounded-lg h-14 skeleton-shimmer"></div>
+        }
+      </div>
+    } @else if (weekDays().length === 0) {
+      <p class="text-sm text-[#737685] text-center py-8">No Tasks</p>
+    } @else {
+      <!-- ===== Desktop: 7 columns ===== -->
+      <div class="hidden lg:grid grid-cols-7 gap-3">
+        @for (day of weekDays(); track day.day) {
+          <div
+            class="p-4 flex flex-col gap-3 h-[420px] shadow shadow-[#0000000D] rounded-lg"
+            [class]="
+              isToday(day.day) ? 'bg-[#F1F5FF]  relative  border-2 border-[#003D9B]' : 'bg-white'
+            "
+          >
+            @if (isToday(day.day)) {
+              <span
+                class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] font-bold uppercase text-white bg-[#003D9B] px-2 py-0.5 rounded-full"
+              >
+                Today
+              </span>
+              <!-- <div
+                class="absolute inset-y-0 left-0 right-0 border-x-2 border-[#0052CC] pointer-events-none"
+              ></div> -->
+            }
+
+            <div class="flex flex-col">
+              <span
+                class="text-[12px] leading-4 font-bold uppercase tracking-normal"
+                [class]="isToday(day.day) ? 'text-[#003D9B]' : 'text-[#041B3C66]/40'"
+              >
+                {{ formatDayName(day.day) }}
+              </span>
+              <span
+                class="text-[18px] leading-7 tracking-normal font-bold"
+                [class]="
+                  isToday(day.day) ? 'text-[#003D9B] text-[20px] font-extrabold' : 'text-[#041B3C]'
+                "
+              >
+                {{ formatDayNumber(day.day) }} {{ formatDayMonth(day.day) }}
+              </span>
+            </div>
+
+            @if (getStatusEntries(day.statuses).length === 0) {
+              <div
+                class="flex-1 flex flex-col items-center justify-center gap-2 py-6 text-[#C3C6D6]"
+              >
+                <svg
+                  width="27"
+                  height="30"
+                  viewBox="0 0 27 30"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.05 25.05L7.95 22.95L11.4 19.5L7.95 16.05L10.05 13.95L13.5 17.4L16.95 13.95L19.05 16.05L15.6 19.5L19.05 22.95L16.95 25.05L13.5 21.6L10.05 25.05ZM3 30C2.175 30 1.46875 29.7062 0.88125 29.1187C0.29375 28.5312 0 27.825 0 27V6C0 5.175 0.29375 4.46875 0.88125 3.88125C1.46875 3.29375 2.175 3 3 3H4.5V0H7.5V3H19.5V0H22.5V3H24C24.825 3 25.5312 3.29375 26.1187 3.88125C26.7062 4.46875 27 5.175 27 6V27C27 27.825 26.7062 28.5312 26.1187 29.1187C25.5312 29.7062 24.825 30 24 30H3ZM3 27H24V12H3V27ZM3 9H24V6H3V9ZM3 9V6V9Z"
+                    fill="#041B3C"
+                  />
+                </svg>
+
+                <span
+                  class="text-[10px] leading-3.75 tracking-[1px] font-bold uppercase text-[#041B3C]"
+                  >No Tasks</span
+                >
+              </div>
+            } @else {
+              <div class="flex flex-col gap-1.5">
+                @for (entry of getStatusEntries(day.statuses); track entry.status) {
+                  <div
+                    class="flex items-center justify-between px-2 py-1.5 rounded text-[11px] font-bold"
+                    [class]="statusBadgeClass(entry.status)"
+                  >
+                    <span class="uppercase">{{ formatStatusLabel(entry.status) }}</span>
+                    <span>{{ entry.count }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- ===== Mobile: vertical list ===== -->
+      <div class="flex lg:hidden flex-col gap-2 mt-6">
+        <h3 class="text-[16px] font-semibold text-[#041B3C] mb-1">Calendar</h3>
+
+        @for (day of weekDays(); track day.day) {
+          <div
+            class="rounded-lg p-3 flex items-center justify-between gap-3"
+            [class]="
+              isToday(day.day) ? 'bg-[#FFFFFF] border-s-4 border-s-[#0052CC]' : 'bg-[#F1F3FF]'
+            "
+          >
+            <div class="flex items-center gap-4">
+              <div class="flex flex-col items-center gap-2">
+                <span
+                  class="text-[10px] font-bold uppercase"
+                  [class]="isToday(day.day) ? 'text-[#0052CC]' : 'text-[#94A3B8]'"
+                >
+                  {{ formatDayName(day.day) }}
+                </span>
+                <span
+                  class="text-[15px] font-bold"
+                  [class]="isToday(day.day) ? 'text-[#0052CC]' : 'text-[#041B3C]'"
+                >
+                  {{ formatDayNumber(day.day) }}
+                </span>
+              </div>
+              <div class="w-[1px] h-[24px] divide-y-2 bg-[#C3C6D64D]"></div>
+
+              @if (getStatusEntries(day.statuses).length === 0) {
+                <span class="text-[11px] text-[#94A3B8] italic">No Tasks</span>
+              } @else {
+                <div class="flex items-center gap-1.5">
+                  @for (entry of getStatusEntries(day.statuses); track entry.status) {
+                    <span
+                      class="text-[10px] font-bold px-2 py-1 rounded"
+                      [class]="statusBadgeClass(entry.status)"
+                    >
+                      {{ entry.count }}
+                    </span>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (isToday(day.day)) {
+              <span
+                class="text-[7px] font-bold uppercase text-white bg-[#0052CC] px-1.5 py-0.5 rounded-xl shrink-0 leading-[10.5px] tracking-normal"
+              >
+                Today
+              </span>
+            }
           </div>
         }
       </div>
