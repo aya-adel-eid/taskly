@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { interval, take } from 'rxjs';
+import { interval, take, timer } from 'rxjs';
 import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
 
 @Component({
@@ -32,12 +32,10 @@ export class AcceptInvitationComponent implements OnInit {
       .subscribe({
         next: () => {
           this.successMessage.set('Invitation accepted successfully!');
-          interval(1000)
-            .pipe(take(5))
-            .subscribe(() => {
-              this.router.navigateByUrl('/project');
-              this.successMessage.set('');
-            });
+          timer(2000).subscribe(() => {
+            this.router.navigateByUrl('/project');
+            this.successMessage.set('');
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.handleError(error);

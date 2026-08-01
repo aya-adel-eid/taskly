@@ -50,9 +50,9 @@ export class LoginPageComponent {
         next: (resp: ISignIn) => {
           this.loading.set(false);
           this.successMessage =
-            'Your sign In successfully. You will be redirected to the Projects page.';
+            'Your sign In successfully. You will be redirected to the Projects page after 2 second.';
           const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-          timer(5000).subscribe(() => {
+          timer(2000).subscribe(() => {
             this.router.navigateByUrl(returnUrl || '/project');
           });
           this.authService.storeSession(resp, rememberMe!);
