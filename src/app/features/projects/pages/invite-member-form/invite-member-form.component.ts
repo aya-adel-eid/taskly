@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
 import { interval, take } from 'rxjs';
+import { Member } from '../../interfaces/IMembers';
 
 @Component({
   selector: 'app-invite-member-form',
@@ -17,6 +18,7 @@ import { interval, take } from 'rxjs';
 export class InviteMemberFormComponent implements OnInit {
   private readonly projectService = inject(ProjectsService);
   private readonly activateRoute = inject(ActivatedRoute);
+  allMember = input<Member[]>();
   private readonly fb = inject(FormBuilder);
   succesMessage = signal<string>('');
   errorMessage = signal<string>('');
@@ -37,7 +39,25 @@ export class InviteMemberFormComponent implements OnInit {
   sendInvitation() {
     this.succesMessage.set('');
     this.errorMessage.set('');
-    console.log(this.inviteMemberForm.value);
+
+    if (!this.inviteMemberForm.valid) {
+      return;
+    }
+
+    const email = this.inviteMemberForm.value.p_email!;
+
+    const existingMember = this.allMember()?.find((member) => member.email === email);
+
+    if (existingMember) {
+      this.errorMessage.set('This user is already a member of this project.');
+      interval(1000)
+        .pipe(take(5))
+        .subscribe(() => {
+          this.errorMessage.set('');
+        });
+      return;
+    }
+
     if (this.inviteMemberForm.valid) {
       this.projectService.inviteMember(this.inviteMemberForm.value).subscribe({
         next: (resp) => {
