@@ -1,4 +1,12 @@
-<div class="flex flex-col gap-4 w-[288px] shrink-0 bg-[#F7F8FA] rounded-lg p-3">
+<app-toast-massage [message]="errorMessage()" [flag]="false"></app-toast-massage>
+<div
+  class="flex flex-col gap-4 w-[288px] shrink-0 rounded-lg p-3 transition-colors h-full"
+  [class.bg-[#F7F8FA]]="dragOverStatus() !== statu()?.value"
+  [class.bg-[#EEF2FF]]="dragOverStatus() === statu()?.value"
+  (dragover)="onDragOverColumn($event, statu()!.value)"
+  (dragleave)="onDragLeaveColumn()"
+  (drop)="onDropColumn($event, statu()!.value)"
+>
   <div class="flex items-center justify-between mb-3">
     <div class="flex items-center gap-2">
       <span class="size-2 rounded-xl" [class]="statu()?.dotClass"></span>
@@ -48,7 +56,7 @@
   </button>
 
   <div
-    class="flex flex-col gap-2 min-h-[40px] max-h-[calc(100vh-320px)] overflow-y-auto pr-1 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-[#F1F3FF] [&::-webkit-scrollbar-thumb]:bg-[#C3C6D6] [&::-webkit-scrollbar-thumb]:rounded-ful"
+    class="flex-1 flex flex-col gap-2 min-h-[40px] overflow-y-auto pr-1 [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-[#F1F3FF] [&::-webkit-scrollbar-thumb]:bg-[#C3C6D6] [&::-webkit-scrollbar-thumb]:rounded-ful"
     (scroll)="onScroll($event)"
   >
     @if (tasks() === null) {
@@ -79,7 +87,13 @@
       }
     } @else {
       @for (task of tasks()!; track task.id) {
-        <div class="cursor-pointer">
+        <div
+          class="cursor-grab active:cursor-grabbing transition-opacity"
+          [class.opacity-40]="draggedTask()?.id === task.id"
+          draggable="true"
+          (dragstart)="onDragStart(task, statu()!.value)"
+          (dragend)="onDragEnd()"
+        >
           <app-card-task-view [task]="task"></app-card-task-view>
         </div>
       }
@@ -90,6 +104,3 @@
     }
   </div>
 </div>
-<!-- @if (showDetails()) {
-  <app-task-details-page [task]="taskDetails()!"></app-task-details-page>
-} -->

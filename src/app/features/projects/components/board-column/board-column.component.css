@@ -12,3 +12,8 @@
     background-position: 0% 50%;
   }
 }
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

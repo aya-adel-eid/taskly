@@ -4,14 +4,14 @@ import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
 import { ProjectsService } from '../../services/projects.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TaskDetailsPageComponent } from '../../pages/task-details-page/task-details-page.component';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
+import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
 
 @Component({
   selector: 'app-board-column',
   standalone: true,
-  imports: [CardTaskViewComponent, TaskDetailsPageComponent],
+  imports: [CardTaskViewComponent, ToastMassageComponent],
   templateUrl: './board-column.component.html',
   styleUrl: './board-column.component.css',
 })
@@ -25,10 +25,17 @@ export class BoardColumnComponent implements OnInit {
     return this.searchTerm().trim().length > 0;
   }
 
+  errorMessage = signal<string>('');
+
   private projectsService = inject(ProjectsService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private destroyRef = inject(DestroyRef); // 👈 جديد
+  private destroyRef = inject(DestroyRef);
+
+  // ---------- Drag state ----------
+  draggedTask = this.projectsService.draggedTask;
+  draggedFromStatus = this.projectsService.draggedFromStatus;
+  dragOverStatus = this.projectsService.dragOverStatus;
 
   readonly limit = 5;
   page = signal(1);
@@ -48,7 +55,6 @@ export class BoardColumnComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // مفيش داعي لـ loadTasks(false) هنا لوحدها؛ الاشتراك تحت بيعمل أول تحميل تلقائيًا
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(
         map(([, queryParams]) => ({
@@ -56,7 +62,7 @@ export class BoardColumnComponent implements OnInit {
           search: queryParams.get('search') ?? '',
         })),
         distinctUntilChanged((a, b) => a.offset === b.offset && a.search === b.search),
-        takeUntilDestroyed(this.destroyRef) // 👈 بنبعت الـ destroyRef صراحةً
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(({ offset, search }) => {
         this.page.set(Math.floor(offset / this.limit) + 1);
@@ -98,18 +104,81 @@ export class BoardColumnComponent implements OnInit {
     });
   }
 
-  taskDetails = signal<ITask | null>(null);
-  showDetails = this.projectsService.showTaskDetails;
+  // ---------- Drag events ----------
+  onDragStart(task: ITask, fromStatus: string): void {
+    this.draggedTask.set(task);
+    this.draggedFromStatus.set(fromStatus);
+  }
 
-  getTaskDetails(projectId: string, taskId: string) {
-    this.projectsService.getTaskDetails(projectId, taskId).subscribe({
-      next: (resp) => {
-        this.taskDetails.set(resp[0]);
-        this.showDetails.set(true);
+  onDragEnd(): void {
+    this.draggedTask.set(null);
+    this.draggedFromStatus.set(null);
+    this.dragOverStatus.set(null);
+  }
+
+  onDragOverColumn(event: DragEvent, status: string): void {
+    event.preventDefault();
+    this.dragOverStatus.set(status);
+  }
+
+  onDragLeaveColumn(): void {
+    this.dragOverStatus.set(null);
+  }
+
+  onDropColumn(event: DragEvent, targetStatus: string): void {
+    event.preventDefault();
+
+    const task = this.draggedTask();
+    const fromStatus = this.draggedFromStatus();
+
+    this.dragOverStatus.set(null);
+
+    if (!task || !fromStatus || fromStatus === targetStatus) {
+      this.onDragEnd();
+      return;
+    }
+
+    const oldStatus = fromStatus;
+
+    // Optimistic update
+    this.projectsService.tasksByStatus.update((byStatus) => {
+      const fromList = (byStatus[oldStatus] ?? []).filter((t) => t.id !== task.id);
+      const toList = [
+        ...(byStatus[targetStatus] ?? []),
+        { ...task, status: targetStatus as ITask['status'] },
+      ];
+
+      return {
+        ...byStatus,
+        [oldStatus]: fromList,
+        [targetStatus]: toList,
+      };
+    });
+
+    // call api
+    this.projectsService.updateTask({ status: targetStatus }, task.id).subscribe({
+      next: () => {
+        this.errorMessage.set('');
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error);
+        this.projectsService.tasksByStatus.update((byStatus) => {
+          const toList = (byStatus[targetStatus] ?? []).filter((t) => t.id !== task.id);
+          const fromList = [
+            ...(byStatus[oldStatus] ?? []),
+            { ...task, status: oldStatus as ITask['status'] },
+          ];
+
+          return {
+            ...byStatus,
+            [targetStatus]: toList,
+            [oldStatus]: fromList,
+          };
+        });
+
+        this.errorMessage.set('Failed to update task status. Please try again.');
       },
     });
+
+    this.onDragEnd();
   }
 }

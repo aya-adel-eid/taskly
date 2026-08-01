@@ -7,7 +7,6 @@ import { IEpicsProject } from '../interfaces/IEpicsProject';
 import { IEpicDetails } from '../interfaces/IEpicDetails';
 import { IEpicTasks } from '../interfaces/IEpicTasks';
 import { ITask } from '../interfaces/ITask';
-import { single } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -36,12 +35,14 @@ export class ProjectsService {
   tasksError = signal<boolean>(false);
   allTasks = signal<ITask[] | null>(null);
   showTaskDetails = signal<boolean>(false);
+  draggedTask = signal<ITask | null>(null);
+  draggedFromStatus = signal<string | null>(null);
+  dragOverStatus = signal<string | null>(null);
+
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
-  // getAllProjects(){
-  //   return this.httpClient.get<IProject[]>(APIS_KEYS.projects.listProjects)
-  // }ط
+
   getAllProjects(limit = 5, page = 1, append = false) {
     const offset = (page - 1) * limit;
 
@@ -77,16 +78,17 @@ export class ProjectsService {
         },
       });
   }
-  // edit project
+
   updateProject(id: string, projectEdit: {}) {
     return this.httpClient.patch(`${APIS_KEYS.projects.editProject}?id=eq.${id}`, projectEdit);
   }
+
   getAllMembers(idProject: string) {
     return this.httpClient.get<Member[]>(
       `${APIS_KEYS.projects.allMembers}?project_id=eq.${idProject}`
     );
   }
-  //
+
   getInitials(name: string): string {
     if (!name) return '';
     const words = name.trim().split(/\s+/);
@@ -94,12 +96,11 @@ export class ProjectsService {
       ? (words[0][0] + words[1][0]).toUpperCase()
       : name.substring(0, 2).toUpperCase();
   }
-  //Add new Epics
+
   addNewEpics(epicData: {}) {
     return this.httpClient.post(APIS_KEYS.projects.NewEpics, epicData);
   }
-  // get allEpics
-  // get allEpics
+
   getAllEpics(limit = 5, page = 1, append = false, projectId: string, searchTerm = '') {
     const offset = (page - 1) * limit;
 
@@ -109,7 +110,6 @@ export class ProjectsService {
 
     const trimmedTerm = searchTerm.trim();
     if (trimmedTerm) {
-      // title=ilike.%25{term}%25  ->  case-insensitive "contains" match
       url += `&title=ilike.%25${encodeURIComponent(trimmedTerm)}%25`;
     }
 
@@ -143,6 +143,7 @@ export class ProjectsService {
         },
       });
   }
+
   getEpicsProject(projectId: string) {
     return this.httpClient
       .get<IEpicsProject[]>(`${APIS_KEYS.projects.getEpics}?project_id=eq.${projectId}`)
@@ -155,43 +156,40 @@ export class ProjectsService {
         },
       });
   }
+
   createNewtTask(taskInfo: {}) {
     return this.httpClient.post(APIS_KEYS.projects.NewTask, taskInfo);
   }
-  // get epics Details
+
   getEpicsDetails(projectID: string, epicID: string) {
     return this.httpClient.get<IEpicDetails[]>(
       `${APIS_KEYS.projects.getEpics}?project_id=eq.${projectID}&&id=eq.${epicID}`
     );
   }
+
   updateEpic(editInfo: Partial<IEpicDetails>, epicId: string) {
     return this.httpClient.patch(`${APIS_KEYS.projects.updateEpic}?id=eq.${epicId}`, editInfo);
   }
+
   patchLocalEpic(epicId: string, partial: Partial<IEpicsProject>) {
     this.allEpics.update((epics) =>
       epics ? epics.map((epic) => (epic.id === epicId ? { ...epic, ...partial } : epic)) : epics
     );
   }
-  // get epicTasks
+
   getEpicTasks(epicId: string) {
     return this.httpClient.get<IEpicTasks[]>(
       `${APIS_KEYS.projects.getEpicTasks}?epic_id=eq.${epicId}`
     );
   }
-  // get tasks by statues
-  // getTasksByStatus(projectId: string, statu: string) {
-  //   return this.httpClient.get<ITask[]>(
-  //     `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&status=eq.${statu}`
-  //   );
-  // }
 
   // --- signals dedicated to per-status (board column) fetching ---
-  // keyed by status value, e.g. tasksByStatus()['TO_DO']
   tasksByStatus = signal<Record<string, ITask[]>>({});
   tasksByStatusTotalCount = signal<Record<string, number>>({});
   tasksByStatusLoading = signal<Record<string, boolean>>({});
   tasksByStatusError = signal<Record<string, boolean>>({});
   selectedTask = signal<ITask | null>(null);
+
   getTasksByStatus(
     projectId: string,
     statu: string,
@@ -206,7 +204,6 @@ export class ProjectsService {
 
     const trimmedTerm = searchTerm.trim();
     if (trimmedTerm) {
-      // title=ilike.%25{term}%25  ->  case-insensitive "contains" match
       url += `&title=ilike.%25${encodeURIComponent(trimmedTerm)}%25`;
     }
 
@@ -246,12 +243,8 @@ export class ProjectsService {
       });
   }
 
-  // getAllTasks(projectId: string) {
-  //   return this.httpClient.get<ITask[]>(
-  //     `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}`
-  //   );
-  // }
   isloadingTask = signal<boolean>(false);
+
   getAllTasks(projectId: string, limit = 5, page = 1, append = false, searchTerm = '') {
     const offset = (page - 1) * limit;
 
@@ -294,36 +287,19 @@ export class ProjectsService {
         },
       });
   }
-  // get task details
+
   getTaskDetails(projectId: string, taskId: string) {
     return this.httpClient.get<ITask[]>(
       `${APIS_KEYS.projects.getEpicTasks}?project_id=eq.${projectId}&id=eq.${taskId}`
     );
   }
+
   updateTask(taskInfo: Partial<ITask>, taskId: string) {
     return this.httpClient.patch(`${APIS_KEYS.projects.updateTasks}?id=eq.${taskId}`, taskInfo);
   }
+
   currentView = signal<'board' | 'list'>('board');
-  //   patchLocalTask(taskId: string, partial: Partial<ITask>) {
-  //     if(this.tasksByStatus()){
-  //       this.tasksByStatus.update((tasksMap) => {
-  //         const updated: typeof tasksMap = { ...tasksMap };
-  //         for (const status in updated) {
-  //           updated[status] = updated[status]?.map((task) =>
-  //             task.id === taskId ? { ...task, ...partial } : task
-  //           ) ?? null;
-  //         }
-  //         return updated;
-  //       });
 
-  //     }
-  //     if(this.allTasks()){
-
-  //       this.allTasks.update((tasks) =>
-  //         tasks ? tasks.map((task) => (task.id === taskId ? { ...task, ...partial } : task)) : tasks
-  //        );
-  //     }
-  // }
   patchLocalTask(taskId: string, partial: Partial<ITask>) {
     if (this.allTasks()?.length) {
       this.allTasks.update((tasks) =>
@@ -331,7 +307,7 @@ export class ProjectsService {
       );
     }
 
-    // ===== تحديث tasksByStatus (للـ Board View) =====
+    // ===== tasksByStatus =====
     if (Object.keys(this.tasksByStatus()).length > 0) {
       this.tasksByStatus.update((tasksMap) => {
         const updated: typeof tasksMap = { ...tasksMap };
