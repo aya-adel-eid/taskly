@@ -10,6 +10,7 @@ import { Member } from '../../interfaces/IMembers';
 
 import { isPlatformBrowser } from '@angular/common';
 import { MembersService } from '../../services/members.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-invite-member-form',
@@ -37,8 +38,8 @@ export class InviteMemberFormComponent implements OnInit {
   inviteMemberForm = this.fb.group({
     p_email: [null, [Validators.required, Validators.email]],
     p_project_id: [sessionStorage.getItem(StORED_KEYS.projectId)],
-    p_app_url: ['http://localhost:3000'],
-    p_base_url: ['https://abhwzcmvupkoivbmgyve.supabase.co'],
+    p_app_url: ['https://taskly-99u5.vercel.app'],
+    p_base_url: [`${environment.baseUrRL}`],
   });
 
   close() {
