@@ -220,11 +220,6 @@
             }
           </div>
 
-
-
-
-
-          
           <!-- Deadline -->
           <div class="lg:flex flex-col gap-2 hidden">
             <span class="text-[10px] font-semibold text-[#737685] tracking-wide uppercase">
@@ -333,7 +328,7 @@
           0 Tasks
         </button>
       </div>
-      @if (projectService.hasErrorEpicTask()) {
+      @if (epicsService.hasErrorEpicTask()) {
         <div class="flex justify-center items-center p-10">
           <span class="text-red-600 text-lg font-bold">Failed to load tasks</span>
         </div>

@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { IEpicsProject } from '../../interfaces/IEpicsProject';
 import { DatePipe } from '@angular/common';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 
 @Component({
   selector: 'app-card-epic',

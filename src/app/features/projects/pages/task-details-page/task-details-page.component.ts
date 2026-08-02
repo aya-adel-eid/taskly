@@ -14,11 +14,13 @@ import { Epic, IEpicTasks } from '../../interfaces/IEpicTasks';
 import { ProjectsService } from '../../services/projects.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Member } from '../../../members/interfaces/IMembers';
-import { IEpicsProject } from '../../interfaces/IEpicsProject';
+import { IEpicsProject } from '../../../epics/interfaces/IEpicsProject';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MembersService } from '../../../members/services/members.service';
+import { EpicsService } from '../../../epics/services/epics.service';
 
 @Component({
   selector: 'app-task-details-page',
@@ -30,6 +32,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   readonly projectServices = inject(ProjectsService);
+  private readonly memberService = inject(MembersService);
+  private readonly epicsService = inject(EpicsService);
   todayDateString = new Date().toISOString().split('T')[0];
   task = input<ITask>();
 
@@ -38,7 +42,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   // Epic dropdown state
   isEditingEpic = signal(false);
   // currentEpic = signal<Epic | null>(null);
-  allEpics = this.projectServices.epics;
+  allEpics = this.epicsService.epics;
 
   // Assignee dropdown state
   isEditingAssignee = signal(false);
@@ -109,11 +113,11 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     return `${year}-${month}-${day}`;
   }
   getEpicsProject() {
-    this.projectServices.getEpicsProject(this.task()?.project_id!);
+    this.epicsService.getEpicsProject(this.task()?.project_id!);
   }
 
   getAllMembers() {
-    this.projectServices
+    this.memberService
       .getAllMembers(this.task()?.project_id!)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

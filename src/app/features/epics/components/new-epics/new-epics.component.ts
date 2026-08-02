@@ -1,13 +1,15 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { RusableInputComponent } from '../../../auth/components/rusable-input/rusable-input.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import { Member } from '../../../members/interfaces/IMembers';
 import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
-import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
+import { EpicsService } from '../../services/epics.service';
+import { MembersService } from '../../../members/services/members.service';
 
 @Component({
   selector: 'app-new-epics',
@@ -17,8 +19,9 @@ import { ToastMassageComponent } from '../toast-massage/toast-massage.component'
   styleUrl: './new-epics.component.css',
 })
 export class NewEpicsComponent implements OnInit, OnDestroy {
-  private readonly projectServices = inject(ProjectsService);
+  private readonly epicServices = inject(EpicsService);
   private readonly activateRoute = inject(ActivatedRoute);
+  private readonly membersService = inject(MembersService);
   private readonly route = inject(Router);
   successMessage = signal<string>('');
   allMembers = signal<Member[] | null>(null);
@@ -52,7 +55,7 @@ export class NewEpicsComponent implements OnInit, OnDestroy {
     console.log(this.addNewEpics.value);
     this.successMessage.set('');
     if (this.addNewEpics.valid) {
-      this.projectServices.addNewEpics(this.addNewEpics.value).subscribe({
+      this.epicServices.addNewEpics(this.addNewEpics.value).subscribe({
         next: (resp) => {
           console.log(resp);
           this.successMessage.set('Your epic has been created successfully.');
@@ -73,7 +76,7 @@ export class NewEpicsComponent implements OnInit, OnDestroy {
   }
 
   getAllMembers() {
-    this.projectServices
+    this.membersService
       .getAllMembers(this.projectId())
       .pipe(takeUntil(this.destroy$))
       .subscribe({

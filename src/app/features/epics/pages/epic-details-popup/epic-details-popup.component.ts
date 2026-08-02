@@ -1,6 +1,5 @@
 import { Component, inject, input, signal, OnInit, OnDestroy, computed } from '@angular/core';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ProjectsService } from '../../services/projects.service';
 
 import { Member } from '../../../members/interfaces/IMembers';
 import { DatePipe } from '@angular/common';
@@ -8,10 +7,13 @@ import { IEpicDetails } from '../../interfaces/IEpicDetails';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { IEpicTasks } from '../../interfaces/IEpicTasks';
-import { TaskCardComponent } from '../../components/task-card/task-card.component';
-import { TaskSkelltoneComponent } from '../../components/task-skelltone/task-skelltone.component';
-import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
+import { IEpicTasks } from '../../../projects/interfaces/IEpicTasks';
+import { TaskCardComponent } from '../../../projects/components/task-card/task-card.component';
+import { TaskSkelltoneComponent } from '../../../projects/components/task-skelltone/task-skelltone.component';
+import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
+
+import { EpicsService } from '../../services/epics.service';
+import { MembersService } from '../../../members/services/members.service';
 
 @Component({
   selector: 'app-epic-details-popup',
@@ -29,7 +31,8 @@ import { ToastMassageComponent } from '../../components/toast-massage/toast-mass
 })
 export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
-  projectService = inject(ProjectsService);
+  epicsService = inject(EpicsService);
+  private readonly memberService = inject(MembersService);
   errorMessage = signal<string>('');
   epic = input.required<IEpicDetails>();
   allMembers = signal<Member[]>([]);
@@ -124,7 +127,7 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
 
     this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
 
-    this.projectService.patchLocalEpic(this.epic().id, {
+    this.epicsService.patchLocalEpic(this.epic().id, {
       assignee: member
         ? {
             sub: member.user_id,
@@ -156,9 +159,9 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
 
   // ---------- Generic update + rollback ----------
   updateEpic(partial: Record<string, any>, field: string, oldValue: any) {
-    this.projectService.updateEpic(partial, this.epic().id).subscribe({
+    this.epicsService.updateEpic(partial, this.epic().id).subscribe({
       next: () => {
-        this.projectService.patchLocalEpic(this.epic().id, partial);
+        this.epicsService.patchLocalEpic(this.epic().id, partial);
       },
       error: () => {
         this.epicForm.get(field)?.setValue(oldValue ?? (field === 'assignee_id' ? null : ''));
@@ -168,7 +171,7 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   }
 
   closeModal() {
-    this.projectService.showPoupDetail.set(false);
+    this.epicsService.showPoupDetail.set(false);
   }
 
   // selectAssignee(member: Member | null) {
@@ -204,7 +207,7 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   }
 
   getAllMembers() {
-    this.projectService
+    this.memberService
       .getAllMembers(this.epic().project_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({

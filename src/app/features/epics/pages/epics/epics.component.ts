@@ -4,14 +4,15 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CardEpicComponent } from '../../components/card-epic/card-epic.component';
 import { combineLatest, distinctUntilChanged, filter, map, Subject, tap, debounceTime } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import { ViewportScroller } from '@angular/common';
 import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-skelltone.component';
 import { EmptyEpicsComponent } from '../../components/empty-epics/empty-epics.component';
 
-import { HandleErrorComponent } from '../../components/handle-error/handle-error.component';
+import { HandleErrorComponent } from '../../../projects/components/handle-error/handle-error.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EpicDetailsPopupComponent } from '../epic-details-popup/epic-details-popup.component';
+import { EpicsService } from '../../services/epics.service';
 
 @Component({
   selector: 'app-epics',
@@ -31,14 +32,14 @@ import { EpicDetailsPopupComponent } from '../epic-details-popup/epic-details-po
 })
 export class EpicsComponent {
   private readonly activateRoute = inject(ActivatedRoute);
-  private readonly projectsService = inject(ProjectsService);
-  showPoupDetail = this.projectsService.showPoupDetail;
+  private readonly epicsService = inject(EpicsService);
+  showPoupDetail = this.epicsService.showPoupDetail;
   private readonly viewPortScroller = inject(ViewportScroller);
   private readonly router = inject(Router);
   private destroy$ = new Subject<void>();
-  epic = this.projectsService.epic;
+  epic = this.epicsService.epic;
   projectId = signal<string>('');
-  epicTasks = this.projectsService.epicTasks;
+  epicTasks = this.epicsService.epicTasks;
 
   arrPaths = computed(() => [
     {
@@ -58,10 +59,10 @@ export class EpicsComponent {
     return this.searchTerm().trim().length > 0;
   }
 
-  allEpics = this.projectsService.allEpics;
-  totalCount = this.projectsService.totalCountEpics;
-  hasError = this.projectsService.epicsError;
-  isLoading = this.projectsService.epicsIsLoadding;
+  allEpics = this.epicsService.allEpics;
+  totalCount = this.epicsService.totalCountEpics;
+  hasError = this.epicsService.epicsError;
+  isLoading = this.epicsService.epicsIsLoadding;
 
   isMobile = signal(window.innerWidth < 1024);
   selectedProjectId = signal<string | null>(null);
@@ -136,7 +137,7 @@ export class EpicsComponent {
     if (reachedBottom && this.page() < this.pages.length) {
       this.page.update((p) => p + 1);
 
-      this.projectsService.getAllEpics(
+      this.epicsService.getAllEpics(
         this.limit(),
         this.page(),
         true,
@@ -147,7 +148,7 @@ export class EpicsComponent {
   }
 
   getAllEpics() {
-    this.projectsService.getAllEpics(
+    this.epicsService.getAllEpics(
       this.limit(),
       this.page(),
       false,
@@ -181,7 +182,7 @@ export class EpicsComponent {
   }
   // epicsDetails
   epicsDetails(projectId: string, epicId: string) {
-    this.projectsService.getEpicsDetails(projectId, epicId).subscribe({
+    this.epicsService.getEpicsDetails(projectId, epicId).subscribe({
       next: (resp) => {
         console.log(resp);
         this.epic.set(resp[0]);
@@ -196,20 +197,20 @@ export class EpicsComponent {
   }
   // get epic Tasks
   getEpicTasks(epicId: string) {
-    this.projectsService.isLoadingEpicTask.set(true);
-    this.projectsService.hasErrorEpicTask.set(false);
-    this.projectsService
+    this.epicsService.isLoadingEpicTask.set(true);
+    this.epicsService.hasErrorEpicTask.set(false);
+    this.epicsService
       .getEpicTasks(epicId)
       .pipe()
       .subscribe({
         next: (resp) => {
           this.epicTasks.set(resp);
-          this.projectsService.isLoadingEpicTask.set(false);
-          this.projectsService.hasErrorEpicTask.set(false);
+          this.epicsService.isLoadingEpicTask.set(false);
+          this.epicsService.hasErrorEpicTask.set(false);
         },
         error: (error: HttpErrorResponse) => {
-          this.projectsService.isLoadingEpicTask.set(false);
-          this.projectsService.hasErrorEpicTask.set(true);
+          this.epicsService.isLoadingEpicTask.set(false);
+          this.epicsService.hasErrorEpicTask.set(true);
         },
       });
   }

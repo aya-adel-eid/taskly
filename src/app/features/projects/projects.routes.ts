@@ -35,7 +35,7 @@ export const PROJECTS_ROUtES: Routes = [
           {
             path: 'epics',
             loadComponent: () =>
-              import('./pages/epics/epics.component').then((c) => c.EpicsComponent),
+              import('../epics/pages/epics/epics.component').then((c) => c.EpicsComponent),
             // children: [
             //   {
             //     path: 'new',
@@ -49,7 +49,7 @@ export const PROJECTS_ROUtES: Routes = [
           {
             path: 'epics/new',
             loadComponent: () =>
-              import('./pages/add-new-epics-page/add-new-epics-page.component').then(
+              import('../epics/pages/add-new-epics-page/add-new-epics-page.component').then(
                 (c) => c.AddNewEpicsPageComponent
               ),
           },

@@ -8,6 +8,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
+import { MembersService } from '../../../members/services/members.service';
+import { EpicsService } from '../../../epics/services/epics.service';
 
 @Component({
   selector: 'app-add-task-form',
@@ -20,10 +22,12 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly activateRoute = inject(ActivatedRoute);
   private readonly projectServices = inject(ProjectsService);
+  private readonly memberService = inject(MembersService);
+  private readonly epicService = inject(EpicsService);
   private readonly route = inject(Router);
   successMessage = signal<string>('');
   allMembers = signal<Member[] | null>(null);
-  allEpics = this.projectServices.epics;
+  allEpics = this.epicService.epics;
 
   private destroy$ = new Subject<void>();
   projectId = signal<string>('');
@@ -31,7 +35,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
     this.activateRoute.paramMap.subscribe((param) => {
       this.projectId.set(param.get('projectId')!);
       this.getAllMembers();
-      this.projectServices.getEpicsProject(this.projectId());
+      this.epicService.getEpicsProject(this.projectId());
     });
     const status = this.activateRoute.snapshot.queryParamMap.get('status');
     if (status) {
@@ -86,7 +90,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
     return title.length > 100 ? title.slice(0, 100) + '...' : title;
   }
   getAllMembers() {
-    this.projectServices
+    this.memberService
       .getAllMembers(this.projectId())
       .pipe(takeUntil(this.destroy$))
       .subscribe({
