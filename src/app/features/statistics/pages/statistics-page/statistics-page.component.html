@@ -1,0 +1,573 @@
+<section class="flex flex-col gap-6 lg:gap-8 pb-10">
+  <!-- header -->
+  <div class="lg:flex flex-col gap-1 hidden">
+    <h2 class="font-bold text-[30px] leading-9 tracking-[-0.75px] text-[#041B3C]">
+      Weekly Planner
+    </h2>
+    <p class="text-[16px] leading-6 tracking-normal text-[#434654]">
+      Manage your deadlines and track team velocity.
+    </p>
+  </div>
+  <!--  -->
+
+  <!-- ============ Filters ============ -->
+  <div>
+    <!-- Desktop layout -->
+    <div class="hidden lg:flex items-center justify-between gap-3 lg:bg-[#F1F3FF] lg:p-4">
+      <div class="relative">
+        <button
+          type="button"
+          (click)="toggleDatePicker()"
+          class="flex items-center gap-3 border border-[#C3C6D633]/20 py-2 px-4 rounded-lg lg:rounded-xs text-[14px] font-bold text-[#041B3C] leading-5"
+        >
+          <span
+            (click)="prevWeek($event)"
+            class="cursor-pointer px-1 text-[#94A3B8] hover:text-[#041B3C]"
+          >
+            <svg
+              width="20"
+              height="24"
+              viewBox="0 0 20 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 18L6 12L12 6L13.4 7.4L8.8 12L13.4 16.6L12 18Z" fill="#434654" />
+            </svg>
+          </span>
+          <span>{{ dateRangeLabel() }}</span>
+          <span
+            (click)="nextWeek($event)"
+            class="cursor-pointer px-1 text-[#94A3B8] hover:text-[#041B3C]"
+            ><svg
+              width="20"
+              height="24"
+              viewBox="0 0 20 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M10.6 12L6 7.4L7.4 6L13.4 12L7.4 18L6 16.6L10.6 12Z" fill="#434654" />
+            </svg>
+          </span>
+        </button>
+
+        @if (isDatePickerOpen()) {
+          <div
+            class="absolute z-20 mt-2 left-0 bg-white rounded-lg shadow-lg border border-[#E8EDFF] p-4 w-[280px]"
+          >
+            <ng-container *ngTemplateOutlet="calendarPicker"></ng-container>
+          </div>
+        }
+      </div>
+
+      <div class="flex gap-4">
+        <div class="relative w-[160px]">
+          <ng-container *ngTemplateOutlet="projectDropdown"></ng-container>
+        </div>
+        <div class="relative w-[150px]">
+          <ng-container *ngTemplateOutlet="statusDropdown"></ng-container>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile layout -->
+    <div class="flex lg:hidden flex-col gap-3">
+      <div class="relative w-full">
+        <ng-container *ngTemplateOutlet="projectDropdown"></ng-container>
+      </div>
+
+      <div class="flex gap-3">
+        <div class="relative flex-1">
+          <ng-container *ngTemplateOutlet="statusDropdown"></ng-container>
+        </div>
+
+        <div class="relative flex-1">
+          <button
+            type="button"
+            (click)="toggleDatePicker()"
+            class="w-full flex items-center justify-center gap-2 border border-[#C3C6D633]/20 bg-white py-2 px-3 rounded-sm text-[13px] font-semibold text-[#041B3C]"
+          >
+            <svg
+              width="9"
+              height="10"
+              viewBox="0 0 9 10"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1 10C0.725 10 0.489583 9.90208 0.29375 9.70625C0.0979166 9.51042 0 9.275 0 9V2C0 1.725 0.0979166 1.48958 0.29375 1.29375C0.489583 1.09792 0.725 1 1 1H1.5V0H2.5V1H6.5V0H7.5V1H8C8.275 1 8.51042 1.09792 8.70625 1.29375C8.90208 1.48958 9 1.725 9 2V9C9 9.275 8.90208 9.51042 8.70625 9.70625C8.51042 9.90208 8.275 10 8 10H1ZM1 9H8V4H1V9ZM1 3H8V2H1V3ZM1 3V2V3Z"
+                fill="#434654"
+              />
+            </svg>
+
+            {{ dateRangeLabel() }}
+          </button>
+
+          @if (isDatePickerOpen()) {
+            <div
+              class="fixed inset-0 z-30 bg-black/40 flex items-end lg:hidden"
+              (click)="closeDatePicker()"
+            >
+              <div class="bg-white rounded-t-2xl p-4 w-full" (click)="$event.stopPropagation()">
+                <div class="flex justify-center pb-3">
+                  <div class="w-12 h-1.5 rounded-full bg-[#C3C6D6]/30"></div>
+                </div>
+                <ng-container *ngTemplateOutlet="calendarPicker"></ng-container>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (dateRangeError()) {
+      <p class="text-red-600 text-sm">{{ dateRangeError() }}</p>
+    }
+
+    <!-- ============ Templates ============ -->
+
+    <ng-template #projectDropdown>
+      <button
+        type="button"
+        (click)="toggleProjectMenu()"
+        class="flex items-center justify-between gap-2 border border-[#C3C6D633]/20 shadow shadow-[#0000000D] bg-[#F1F3FF] rounded-lg lg:rounded-xs lg:bg-white py-2 ps-10 pe-4 text-[14px] text-[#041B3C] font-medium w-full lg:w-[204]"
+      >
+        <span class="truncate">{{ selectedProjectLabel() }}</span>
+        <svg
+          width="10"
+          height="6"
+          viewBox="0 0 10 6"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0.787598 0.787109L4.9876 4.98711L9.1876 0.787109"
+            stroke="#6B7280"
+            stroke-width="1.575"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      @if (isProjectMenuOpen()) {
+        <ul
+          class="absolute z-10 mt-1 w-full bg-white border border-[#E8EDFF] rounded-sm shadow-md overflow-hidden max-h-48 overflow-y-auto"
+        >
+          <li
+            (click)="selectProject(null)"
+            class="py-2 px-4 text-[14px] text-[#041B3C] leading-4 tracking-normal cursor-pointer"
+          >
+            All <span class="lg:hidden"> Active </span> Projects
+          </li>
+          @for (project of projects(); track project.id) {
+            <li
+              (click)="selectProject(project.id)"
+              class="py-2 px-4 text-[14px] leading-4 tracking-normal text-[#041B3C] cursor-pointer"
+            >
+              {{ project.name }}
+            </li>
+          }
+        </ul>
+      }
+    </ng-template>
+
+    <ng-template #statusDropdown>
+      <button
+        type="button"
+        (click)="toggleStatusMenu()"
+        class="w-full flex items-center justify-between rounded-lg lg:rounded-xs gap-2 border border-[#C3C6D633]/20 bg-[#F1F3FF] lg:bg-white py-2 ps-10 pe-4 shadow shadow-[#0000000D] text-[14px] text-[#041B3C] font-medium"
+      >
+        <span class="truncate">{{ selectedStatusLabel() }}</span>
+        <svg
+          width="10"
+          height="6"
+          viewBox="0 0 10 6"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0.787598 0.787109L4.9876 4.98711L9.1876 0.787109"
+            stroke="#6B7280"
+            stroke-width="1.575"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      @if (isStatusMenuOpen()) {
+        <ul
+          class="absolute z-10 mt-1 w-full bg-white border border-[#E8EDFF] rounded-sm shadow-md overflow-hidden max-h-56 overflow-y-auto"
+        >
+          <li
+            (click)="selectStatus(null)"
+            class="py-2 px-4 text-[14px] font-medium leading-5 tracking-normal text-[#041B3C] cursor-pointer"
+          >
+            All Status
+          </li>
+          @for (status of statusOptions; track status.value) {
+            <li
+              (click)="selectStatus(status.value)"
+              class="py-2 px-4 text-[14px] font-medium leading-5 tracking-normal text-[#041B3C] cursor-pointer"
+            >
+              {{ status.label }}
+            </li>
+          }
+        </ul>
+      }
+    </ng-template>
+    <ng-template #calendarPicker>
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-[14px] font-semibold text-[#041B3C]">{{ calendarMonthLabel() }}</span>
+        <div class="flex items-center">
+          <button (click)="prevCalendarMonth()" class="text-[#737685] px-2 cursor-pointer">
+            <svg
+              width="8"
+              height="12"
+              viewBox="0 0 8 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M6 12L0 6L6 0L7.4 1.4L2.8 6L7.4 10.6L6 12Z" fill="#4F5F7B" />
+            </svg>
+          </button>
+
+          <button (click)="nextCalendarMonth()" class="text-[#737685] px-2 cursor-pointer">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12.6 10L8 5.4L9.4 4L15.4 10L9.4 16L8 14.6L12.6 10Z" fill="#4F5F7B" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-7 gap-1 text-center mb-1">
+        @for (d of ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']; track d) {
+          <span class="text-[10px] font-bold leading-3.75 text-[#94A3B8] uppercase">{{ d }}</span>
+        }
+      </div>
+
+      <div class="grid grid-cols-7 gap-1">
+        @for (day of calendarDays(); track day.date) {
+          <button
+            type="button"
+            (click)="day.inMonth && selectTempDate(day.date)"
+            [disabled]="!day.inMonth"
+            class="h-8 text-[12px] leading-4"
+            [class]="
+              !day.inMonth
+                ? 'text-[#C3C6D6] cursor-default'
+                : isInSelectedRange(day.date)
+                  ? 'bg-[#0052CC33] text-[#003D9B] font-bold p-2  '
+                  : 'text-[#041B3C] hover:bg-[#F1F3FF] cursor-pointer'
+            "
+            [class.rounded-l-md]="day.date === tempStartDate()"
+            [class.rounded-r-md]="day.date === tempEndDate()"
+          >
+            {{ day.label }}
+          </button>
+        }
+      </div>
+
+      <div class="flex justify-end gap-2 pt-4">
+        <button (click)="closeDatePicker()" class="text-[13px] text-[#737685] px-3 py-1.5">
+          Cancel
+        </button>
+        <button
+          (click)="applyDateRange()"
+          class="bg-linear-to-r from-primary to-primary-container btn-Primary px-7"
+        >
+          Apply Range
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- ============ KPI Cards ============ -->
+  <div>
+    @if (statisticsService.calendarStatsError()) {
+      <p class="text-red-600 text-sm text-center py-8">Failed to load statistics</p>
+    } @else {
+      <div class="grid grid-cols-3 gap-6">
+        @if (statisticsService.isLoadingCalendarStats()) {
+          @for (i of [1, 2, 3]; track i) {
+            <div class="bg-white rounded-lg p-5 shadow-sm h-[88px] skeleton-shimmer"></div>
+          }
+        } @else {
+          <!-- Total Tasks -->
+          <div
+            class="bg-white rounded-lg p-4 lg:p-6 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3"
+          >
+            <!-- Content -->
+            <div class="flex flex-col gap-1 order-2 lg:order-1">
+              <span
+                class="text-[10px] lg:text-[12px] leading-4 font-bold uppercase tracking-[0.6px] text-[#041B3C99]/60"
+              >
+                Total Tasks
+              </span>
+
+              <span
+                class="text-[24px] lg:text-[30px] leading-8 lg:leading-9 font-bold text-[#041B3C]"
+              >
+                {{ totalTasks() }}
+              </span>
+            </div>
+
+            <!-- Icon -->
+            <div
+              class="order-1 lg:order-2 w-10 h-10 lg:w-12 lg:h-12 rounded-lg lg:bg-[#0052CC1A] flex items-center justify-center shrink-0"
+            >
+              <svg
+                width="18"
+                height="20"
+                viewBox="0 0 18 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2 20C1.45 20 0.979167 19.8042 0.5875 19.4125C0.195833 19.0208 0 18.55 0 18V4C0 3.45 0.195833 2.97917 0.5875 2.5875C0.979167 2.19583 1.45 2 2 2H6.2C6.41667 1.4 6.77917 0.916667 7.2875 0.55C7.79583 0.183333 8.36667 0 9 0C9.63333 0 10.2042 0.183333 10.7125 0.55C11.2208 0.916667 11.5833 1.4 11.8 2H16C16.55 2 17.0208 2.19583 17.4125 2.5875C17.8042 2.97917 18 3.45 18 4V18C18 18.55 17.8042 19.0208 17.4125 19.4125C17.0208 19.8042 16.55 20 16 20H2ZM2 18H16V4H2V18ZM4 16H11V14H4V16ZM4 12H14V10H4V12ZM4 8H14V6H4V8ZM9 3.25C9.21667 3.25 9.39583 3.17917 9.5375 3.0375C9.67917 2.89583 9.75 2.71667 9.75 2.5C9.75 2.28333 9.67917 2.10417 9.5375 1.9625C9.39583 1.82083 9.21667 1.75 9 1.75C8.78333 1.75 8.60417 1.82083 8.4625 1.9625C8.32083 2.10417 8.25 2.28333 8.25 2.5C8.25 2.71667 8.32083 2.89583 8.4625 3.0375C8.60417 3.17917 8.78333 3.25 9 3.25ZM2 18V4V18Z"
+                  fill="#0052CC"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Completed Tasks -->
+
+          <div
+            class="bg-white rounded-lg p-4 lg:p-6 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3"
+          >
+            <!-- Content -->
+            <div class="flex flex-col gap-1 order-2 lg:order-1">
+              <span
+                class="text-[10px] lg:text-[12px] leading-4 font-bold uppercase tracking-[0.6px] text-[#041B3C99]/60"
+              >
+                Completed Tasks
+              </span>
+
+              <span
+                class="text-[24px] lg:text-[30px] leading-8 lg:leading-9 font-bold text-[#041B3C]"
+              >
+                {{ doneTasks() }}
+              </span>
+            </div>
+
+            <!-- Icon -->
+            <div
+              class="order-1 lg:order-2 w-10 h-10 lg:w-12 lg:h-12 rounded-lg lg:bg-[#0068441A] flex items-center justify-center shrink-0"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.6 14.6L15.65 7.55L14.25 6.15L8.6 11.8L5.75 8.95L4.35 10.35L8.6 14.6ZM10 20C8.61667 20 7.31667 19.7375 6.1 19.2125C4.88333 18.6875 3.825 17.975 2.925 17.075C2.025 16.175 1.3125 15.1167 0.7875 13.9C0.2625 12.6833 0 11.3833 0 10C0 8.61667 0.2625 7.31667 0.7875 6.1C1.3125 4.88333 2.025 3.825 2.925 2.925C3.825 2.025 4.88333 1.3125 6.1 0.7875C7.31667 0.2625 8.61667 0 10 0C11.3833 0 12.6833 0.2625 13.9 0.7875C15.1167 1.3125 16.175 2.025 17.075 2.925C17.975 3.825 18.6875 4.88333 19.2125 6.1C19.7375 7.31667 20 8.61667 20 10C20 11.3833 19.7375 12.6833 19.2125 13.9C18.6875 15.1167 17.975 16.175 17.075 17.075C16.175 17.975 15.1167 18.6875 13.9 19.2125C12.6833 19.7375 11.3833 20 10 20ZM10 18C12.2333 18 14.125 17.225 15.675 15.675C17.225 14.125 18 12.2333 18 10C18 7.76667 17.225 5.875 15.675 4.325C14.125 2.775 12.2333 2 10 2C7.76667 2 5.875 2.775 4.325 4.325C2.775 5.875 2 7.76667 2 10C2 12.2333 2.775 14.125 4.325 15.675C5.875 17.225 7.76667 18 10 18Z"
+                  fill="#004E32"
+                />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Overdue Tasks -->
+          <div
+            class="bg-white rounded-lg p-4 lg:p-6 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3"
+          >
+            <!-- Content -->
+            <div class="flex flex-col gap-1 order-2 lg:order-1">
+              <span
+                class="text-[10px] lg:text-[12px] leading-4 font-bold uppercase tracking-[0.6px] text-[#041B3C99]/60"
+              >
+                Overdue Tasks
+              </span>
+
+              <span
+                class="text-[24px] lg:text-[30px] leading-8 lg:leading-9 font-bold text-[#BA1A1A]"
+              >
+                {{ overdueTasks() }}
+              </span>
+            </div>
+
+            <!-- Icon -->
+            <div
+              class="order-1 lg:order-2 w-10 h-10 lg:w-12 lg:h-12 rounded-lg lg:bg-[#FFDAD633] flex items-center justify-center shrink-0"
+            >
+              <svg
+                width="22"
+                height="19"
+                viewBox="0 0 22 19"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 19L11 0L22 19H0ZM3.45 17H18.55L11 4L3.45 17ZM11 16C11.2833 16 11.5208 15.9042 11.7125 15.7125C11.9042 15.5208 12 15.2833 12 15C12 14.7167 11.9042 14.4792 11.7125 14.2875C11.5208 14.0958 11.2833 14 11 14C10.7167 14 10.4792 14.0958 10.2875 14.2875C10.0958 14.4792 10 14.7167 10 15C10 15.2833 10.0958 15.5208 10.2875 15.7125C10.4792 15.9042 10.7167 16 11 16ZM10 13H12V8H10V13Z"
+                  fill="#BA1A1A"
+                />
+              </svg>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <!-- ============ Weekly Calendar ============ -->
+    @if (statisticsService.isLoadingCalendarStats()) {
+      <!-- Desktop skeleton -->
+      <div
+        class="hidden lg:grid grid-cols-7 gap-0 mt-6 border border-[#E8EDFF] rounded-lg overflow-hidden divide-x divide-[#E8EDFF]"
+      >
+        @for (i of [1, 2, 3, 4, 5, 6, 7]; track i) {
+          <div class="p-4 h-[280px] skeleton-shimmer"></div>
+        }
+      </div>
+      <!-- Mobile skeleton -->
+      <div class="flex lg:hidden flex-col gap-2 mt-6">
+        @for (i of [1, 2, 3, 4, 5, 6, 7]; track i) {
+          <div class="rounded-lg h-14 skeleton-shimmer"></div>
+        }
+      </div>
+    } @else if (weekDays().length === 0) {
+      <p class="text-sm text-[#737685] text-center py-8">No Tasks</p>
+    } @else {
+      <!-- ===== Desktop: 7 columns ===== -->
+      <div class="hidden lg:grid grid-cols-7 gap-3">
+        @for (day of weekDays(); track day.day) {
+          <div
+            class="p-4 flex flex-col gap-3 h-[420px] shadow shadow-[#0000000D] rounded-lg"
+            [class]="isToday(day.day) ? '  relative  border-2 border-[#003D9B]' : 'bg-white'"
+          >
+            @if (isToday(day.day)) {
+              <span
+                class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] font-bold uppercase text-white bg-[#003D9B] px-2 py-0.5 rounded-full"
+              >
+                Today
+              </span>
+              <!-- <div
+                class="absolute inset-y-0 left-0 right-0 border-x-2 border-[#0052CC] pointer-events-none"
+              ></div> -->
+            }
+
+            <div class="flex flex-col">
+              <span
+                class="text-[12px] leading-4 font-bold uppercase tracking-normal"
+                [class]="isToday(day.day) ? 'text-[#003D9B]' : 'text-[#041B3C66]/40'"
+              >
+                {{ formatDayName(day.day) }}
+              </span>
+              <span
+                class="text-[18px] leading-7 tracking-normal font-bold"
+                [class]="
+                  isToday(day.day) ? 'text-[#003D9B] text-[20px] font-extrabold' : 'text-[#041B3C]'
+                "
+              >
+                {{ formatDayNumber(day.day) }} {{ formatDayMonth(day.day) }}
+              </span>
+            </div>
+
+            @if (getStatusEntries(day.statuses).length === 0) {
+              <div
+                class="flex-1 flex flex-col items-center justify-center gap-2 py-6 text-[#C3C6D6]"
+              >
+                <span class="pb-2 block">
+                  <svg
+                    width="27"
+                    height="30"
+                    viewBox="0 0 27 30"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.05 25.05L7.95 22.95L11.4 19.5L7.95 16.05L10.05 13.95L13.5 17.4L16.95 13.95L19.05 16.05L15.6 19.5L19.05 22.95L16.95 25.05L13.5 21.6L10.05 25.05ZM3 30C2.175 30 1.46875 29.7062 0.88125 29.1187C0.29375 28.5312 0 27.825 0 27V6C0 5.175 0.29375 4.46875 0.88125 3.88125C1.46875 3.29375 2.175 3 3 3H4.5V0H7.5V3H19.5V0H22.5V3H24C24.825 3 25.5312 3.29375 26.1187 3.88125C26.7062 4.46875 27 5.175 27 6V27C27 27.825 26.7062 28.5312 26.1187 29.1187C25.5312 29.7062 24.825 30 24 30H3ZM3 27H24V12H3V27ZM3 9H24V6H3V9ZM3 9V6V9Z"
+                      fill="#041B3C"
+                    />
+                  </svg>
+                </span>
+
+                <span
+                  class="text-[10px] leading-3.75 tracking-[1px] font-bold uppercase text-[#041B3C]/20"
+                  >No Tasks</span
+                >
+              </div>
+            } @else {
+              <div class="flex flex-col gap-1.5">
+                @for (entry of getStatusEntries(day.statuses); track entry.status) {
+                  <div
+                    class="flex items-center justify-between px-2 py-1.5 rounded text-[11px] font-bold"
+                    [class]="statusBadgeClass(entry.status)"
+                  >
+                    <span class="uppercase">{{ formatStatusLabel(entry.status) }}</span>
+                    <span>{{ entry.count }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- ===== Mobile: vertical list ===== -->
+      <div class="flex lg:hidden flex-col gap-2 mt-6">
+        <h3 class="text-[16px] font-semibold text-[#041B3C] mb-1">Calendar</h3>
+
+        @for (day of weekDays(); track day.day) {
+          <div
+            class="rounded-lg p-3 flex items-center justify-between gap-3"
+            [class]="
+              isToday(day.day) ? 'bg-[#FFFFFF] border-s-4 border-s-[#0052CC]' : 'bg-[#F1F3FF]'
+            "
+          >
+            <div class="flex items-center gap-4">
+              <div class="flex flex-col items-center gap-2">
+                <span
+                  class="text-[10px] font-bold uppercase"
+                  [class]="isToday(day.day) ? 'text-[#0052CC]' : 'text-[#94A3B8]'"
+                >
+                  {{ formatDayName(day.day) }}
+                </span>
+                <span
+                  class="text-[15px] font-bold"
+                  [class]="isToday(day.day) ? 'text-[#0052CC]' : 'text-[#041B3C]'"
+                >
+                  {{ formatDayNumber(day.day) }}
+                </span>
+              </div>
+              <div class="w-[1px] h-[24px] divide-y-2 bg-[#C3C6D64D]"></div>
+
+              @if (getStatusEntries(day.statuses).length === 0) {
+                <span class="text-[11px] text-[#94A3B8] italic">No Tasks</span>
+              } @else {
+                <div class="flex items-center gap-1.5">
+                  @for (entry of getStatusEntries(day.statuses); track entry.status) {
+                    <span
+                      class="text-[10px] font-bold px-2 py-1 rounded"
+                      [class]="statusBadgeClass(entry.status)"
+                    >
+                      {{ entry.count }}
+                    </span>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (isToday(day.day)) {
+              <span
+                class="text-[7px] font-bold uppercase text-white bg-[#0052CC] px-1.5 py-0.5 rounded-xl shrink-0 leading-[10.5px] tracking-normal"
+              >
+                Today
+              </span>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>

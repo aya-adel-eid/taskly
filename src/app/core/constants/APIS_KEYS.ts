@@ -25,5 +25,7 @@ export const APIS_KEYS = {
     updateTasks: `${environment.baseUrRL}${REST_BASE}/tasks`,
     inviteMember: `${environment.baseUrRL}${REST_BASE}/rpc/invite_member`,
     acceptInvitation: `${environment.baseUrRL}${REST_BASE}/rpc/accept_invitation`,
+    tasksClander: `${environment.baseUrRL}${REST_BASE}/rpc/get_tasks_calendar_stats`,
+    tasksCount: `${environment.baseUrRL}${REST_BASE}/rpc/get_tasks_count_per_project`,
   },
 };

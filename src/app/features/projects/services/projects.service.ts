@@ -24,6 +24,9 @@ export class ProjectsService {
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
   }
+  getProjects() {
+    return this.httpClient.get<IProject[]>(APIS_KEYS.projects.listProjects);
+  }
 
   getAllProjects(limit = 5, page = 1, append = false) {
     const offset = (page - 1) * limit;
