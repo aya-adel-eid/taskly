@@ -1,14 +1,15 @@
 import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { ProjectsService } from '../../services/projects.service';
+
 import { ActivatedRoute } from '@angular/router';
 import { Member } from '../../interfaces/IMembers';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MemberCardSkelttonComponent } from '../../components/member-card-skeltton/member-card-skeltton.component';
 import { MemberCardComponent } from '../../components/member-card/member-card.component';
-import { HandleErrorComponent } from '../../components/handle-error/handle-error.component';
+import { HandleErrorComponent } from '../../../projects/components/handle-error/handle-error.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { Subject, takeUntil } from 'rxjs';
 import { InviteMemberFormComponent } from '../invite-member-form/invite-member-form.component';
+import { MembersService } from '../../services/members.service';
 
 @Component({
   selector: 'app-members',
@@ -24,7 +25,7 @@ import { InviteMemberFormComponent } from '../invite-member-form/invite-member-f
   styleUrl: './members.component.css',
 })
 export class MembersComponent implements OnInit, OnDestroy {
-  private readonly projectServices = inject(ProjectsService);
+  private readonly memberServices = inject(MembersService);
   private readonly activateRoute = inject(ActivatedRoute);
   allMembers = signal<Member[] | null>(null);
   hassError = signal<boolean>(false);
@@ -43,9 +44,8 @@ export class MembersComponent implements OnInit, OnDestroy {
   ];
   getAllMembers() {
     this.hassError.set(false);
-    console.log(this.projectServices.selectedProjectId());
 
-    this.projectServices
+    this.memberServices
       .getAllMembers(this.projectId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -58,7 +58,7 @@ export class MembersComponent implements OnInit, OnDestroy {
         },
       });
   }
-  showModel = this.projectServices.showModelInviteMember;
+  showModel = this.memberServices.showModelInviteMember;
   showModelInvite() {
     this.showModel.set(true);
   }

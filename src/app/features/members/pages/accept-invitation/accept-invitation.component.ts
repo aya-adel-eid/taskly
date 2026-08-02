@@ -1,9 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ProjectsService } from '../../services/projects.service';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { interval, take, timer } from 'rxjs';
-import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
+import { timer } from 'rxjs';
+
+import { MembersService } from '../../services/members.service';
+import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
 
 @Component({
   selector: 'app-accept-invitation',
@@ -13,7 +15,7 @@ import { ToastMassageComponent } from '../../components/toast-massage/toast-mass
   styleUrl: './accept-invitation.component.css',
 })
 export class AcceptInvitationComponent implements OnInit {
-  private readonly projectService = inject(ProjectsService);
+  private readonly memberService = inject(MembersService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   errorMessage = signal<string>('');
@@ -22,10 +24,11 @@ export class AcceptInvitationComponent implements OnInit {
   ngOnInit(): void {
     this.token.set(this.route.snapshot.queryParamMap.get('token')!);
   }
+
   acceptInvitation() {
     this.successMessage.set('');
     this.errorMessage.set('');
-    this.projectService
+    this.memberService
       .AcceptInvitation({
         p_token: this.token(),
       })

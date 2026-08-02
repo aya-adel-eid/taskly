@@ -30,7 +30,7 @@ export const PROJECTS_ROUtES: Routes = [
           {
             path: 'members',
             loadComponent: () =>
-              import('./pages/members/members.component').then((c) => c.MembersComponent),
+              import('../members/pages/members/members.component').then((c) => c.MembersComponent),
           },
           {
             path: 'epics',

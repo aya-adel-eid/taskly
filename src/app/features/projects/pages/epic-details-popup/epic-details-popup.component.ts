@@ -2,7 +2,7 @@ import { Component, inject, input, signal, OnInit, OnDestroy, computed } from '@
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProjectsService } from '../../services/projects.service';
 
-import { Member } from '../../interfaces/IMembers';
+import { Member } from '../../../members/interfaces/IMembers';
 import { DatePipe } from '@angular/common';
 import { IEpicDetails } from '../../interfaces/IEpicDetails';
 import { HttpErrorResponse } from '@angular/common/http';

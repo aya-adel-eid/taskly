@@ -1,14 +1,15 @@
 import { Component, inject, input, OnInit, PLATFORM_ID, signal } from '@angular/core';
-import { ProjectsService } from '../../services/projects.service';
+
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
-import { ToastMassageComponent } from '../../components/toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
 import { interval, take } from 'rxjs';
 import { Member } from '../../interfaces/IMembers';
 
 import { isPlatformBrowser } from '@angular/common';
+import { MembersService } from '../../services/members.service';
 
 @Component({
   selector: 'app-invite-member-form',
@@ -18,7 +19,7 @@ import { isPlatformBrowser } from '@angular/common';
   styleUrl: './invite-member-form.component.css',
 })
 export class InviteMemberFormComponent implements OnInit {
-  private readonly projectService = inject(ProjectsService);
+  private readonly memberService = inject(MembersService);
   private readonly activateRoute = inject(ActivatedRoute);
   allMember = input<Member[]>();
   private readonly fb = inject(FormBuilder);
@@ -41,7 +42,7 @@ export class InviteMemberFormComponent implements OnInit {
   });
 
   close() {
-    this.projectService.showModelInviteMember.set(false);
+    this.memberService.showModelInviteMember.set(false);
   }
   sendInvitation() {
     this.succesMessage.set('');
@@ -66,14 +67,14 @@ export class InviteMemberFormComponent implements OnInit {
     }
 
     if (this.inviteMemberForm.valid) {
-      this.projectService.inviteMember(this.inviteMemberForm.value).subscribe({
+      this.memberService.inviteMember(this.inviteMemberForm.value).subscribe({
         next: (resp) => {
           this.succesMessage.set('Invitation sent successfully');
           interval(1000)
             .pipe(take(5))
             .subscribe(() => {
               this.succesMessage.set('');
-              this.projectService.showModelInviteMember.set(false);
+              this.memberService.showModelInviteMember.set(false);
             });
         },
         error: (error: HttpErrorResponse) => {

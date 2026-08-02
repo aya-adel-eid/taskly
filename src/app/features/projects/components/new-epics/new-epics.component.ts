@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { RusableInputComponent } from '../../../auth/components/rusable-input/rusable-input.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
-import { Member } from '../../interfaces/IMembers';
+import { Member } from '../../../members/interfaces/IMembers';
 import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';

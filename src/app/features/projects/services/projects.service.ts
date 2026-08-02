@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { APIS_KEYS } from '../../../core/constants/APIS_KEYS';
 import { IProject } from '../interfaces/Iprojects';
-import { Member } from '../interfaces/IMembers';
+import { Member } from '../../members/interfaces/IMembers';
 import { IEpicsProject } from '../interfaces/IEpicsProject';
 import { IEpicDetails } from '../interfaces/IEpicDetails';
 import { IEpicTasks } from '../interfaces/IEpicTasks';
@@ -38,7 +38,6 @@ export class ProjectsService {
   draggedTask = signal<ITask | null>(null);
   draggedFromStatus = signal<string | null>(null);
   dragOverStatus = signal<string | null>(null);
-  showModelInviteMember = signal<boolean>(false);
 
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
@@ -82,12 +81,6 @@ export class ProjectsService {
 
   updateProject(id: string, projectEdit: {}) {
     return this.httpClient.patch(`${APIS_KEYS.projects.editProject}?id=eq.${id}`, projectEdit);
-  }
-
-  getAllMembers(idProject: string) {
-    return this.httpClient.get<Member[]>(
-      `${APIS_KEYS.projects.allMembers}?project_id=eq.${idProject}`
-    );
   }
 
   getInitials(name: string): string {
@@ -341,15 +334,5 @@ export class ProjectsService {
         return updated;
       });
     }
-  }
-
-  // invite Member
-  inviteMember(infoMember: {}) {
-    return this.httpClient.post(APIS_KEYS.projects.inviteMember, infoMember);
-  }
-
-  // accept Invitation
-  AcceptInvitation(token: {}) {
-    return this.httpClient.post(APIS_KEYS.projects.acceptInvitation, token);
   }
 }

@@ -24,7 +24,7 @@ export const routes: Routes = [
     path: 'invite',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/projects/pages/accept-invitation/accept-invitation.component').then(
+      import('./features/members/pages/accept-invitation/accept-invitation.component').then(
         (c) => c.AcceptInvitationComponent
       ),
   },

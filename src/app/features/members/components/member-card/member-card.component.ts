@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { Member } from '../../interfaces/IMembers';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 
 @Component({
   selector: 'app-member-card',
