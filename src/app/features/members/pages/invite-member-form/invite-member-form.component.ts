@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
-import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { interval, take } from 'rxjs';
 import { Member } from '../../interfaces/IMembers';
 

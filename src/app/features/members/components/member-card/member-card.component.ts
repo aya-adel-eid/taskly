@@ -1,6 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { Member } from '../../interfaces/IMembers';
-import { ProjectsService } from '../../../projects/services/projects.service';
+
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-member-card',
@@ -10,7 +11,7 @@ import { ProjectsService } from '../../../projects/services/projects.service';
   styleUrl: './member-card.component.css',
 })
 export class MemberCardComponent {
-  projectServices = inject(ProjectsService);
+  sharedService = inject(SharedServiceService);
   titleRow = ['MEMBER', 'Role', 'Actions'];
   members = input<Member[]>();
 }

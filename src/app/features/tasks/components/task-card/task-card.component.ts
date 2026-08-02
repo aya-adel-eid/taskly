@@ -1,6 +1,6 @@
 import { Component, inject, input } from '@angular/core';
 import { IEpicTasks } from '../../interfaces/IEpicTasks';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import { DatePipe } from '@angular/common';
 
 @Component({

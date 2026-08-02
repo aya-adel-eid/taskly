@@ -3,7 +3,7 @@ import { Component, inject, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { interval, take } from 'rxjs';
 import { ProjectsService } from '../../services/projects.service';
-import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { Router, RouterLink } from '@angular/router';
 
 @Component({

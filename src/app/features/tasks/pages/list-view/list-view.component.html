@@ -100,7 +100,7 @@
                     class="size-7 flex items-center justify-center rounded-full bg-[#DAE2FF] text-[#001848] text-[11px] font-bold shrink-0 tracking-normal leading-[100%]"
                   >
                     @if (task.assignee?.name) {
-                      {{ projectservice.getInitials(task.assignee?.name!) }}
+                      {{ sharedService.getInitials(task.assignee?.name!) }}
                     } @else {
                       <svg
                         width="12"
@@ -316,7 +316,7 @@
                 class="size-7 rounded-xl bg-[#D8DEFF] flex items-center justify-center text-[11px] font-bold text-[#041B3C] shrink-0 leading-[100%] tracking-normal"
               >
                 @if (task.assignee?.name) {
-                  {{ projectservice.getInitials(task.assignee?.name!) }}
+                  {{ sharedService.getInitials(task.assignee?.name!) }}
                 } @else {
                   <span>
                     <svg

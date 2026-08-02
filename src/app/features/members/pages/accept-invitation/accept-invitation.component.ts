@@ -5,7 +5,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { timer } from 'rxjs';
 
 import { MembersService } from '../../services/members.service';
-import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 
 @Component({
   selector: 'app-accept-invitation',

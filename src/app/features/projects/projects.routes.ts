@@ -25,7 +25,7 @@ export const PROJECTS_ROUtES: Routes = [
           {
             path: 'tasks',
             loadComponent: () =>
-              import('./pages/tasks/tasks.component').then((c) => c.TasksComponent),
+              import('../tasks/pages/tasks/tasks.component').then((c) => c.TasksComponent),
           },
           {
             path: 'members',
@@ -56,7 +56,7 @@ export const PROJECTS_ROUtES: Routes = [
           {
             path: 'tasks/new',
             loadComponent: () =>
-              import('./pages/task-form-page/task-form-page.component').then(
+              import('../tasks/pages/task-form-page/task-form-page.component').then(
                 (c) => c.TaskFormPageComponent
               ),
           },

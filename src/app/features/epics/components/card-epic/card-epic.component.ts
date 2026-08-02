@@ -2,6 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { IEpicsProject } from '../../interfaces/IEpicsProject';
 import { DatePipe } from '@angular/common';
 import { ProjectsService } from '../../../projects/services/projects.service';
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-card-epic',
@@ -11,6 +12,6 @@ import { ProjectsService } from '../../../projects/services/projects.service';
   styleUrl: './card-epic.component.css',
 })
 export class CardEpicComponent {
-  projectServices = inject(ProjectsService);
+  sharedService = inject(SharedServiceService);
   epic = input<IEpicsProject>();
 }

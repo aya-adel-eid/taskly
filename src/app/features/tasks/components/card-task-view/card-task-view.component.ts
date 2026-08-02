@@ -1,20 +1,23 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ITask } from '../../interfaces/ITask';
-import { ProjectsService } from '../../services/projects.service';
+
 import { DatePipe, UpperCasePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { TaskDetailsPageComponent } from "../../pages/task-details-page/task-details-page.component";
+
+import { TasksService } from '../../services/tasks.service';
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 const AVATAR_COLORS = ['#2F6FED', '#7C5CFC', '#FF8A5C', '#1A9D5C', '#E0527A', '#12B3A8'];
 @Component({
   selector: 'app-card-task-view',
   standalone: true,
-  imports: [DatePipe, UpperCasePipe, TaskDetailsPageComponent],
+  imports: [DatePipe, UpperCasePipe],
   templateUrl: './card-task-view.component.html',
   styleUrl: './card-task-view.component.css',
 })
 export class CardTaskViewComponent {
   task = input<ITask>();
-  projectService = inject(ProjectsService);
+  tasksService = inject(TasksService);
+  sharedService = inject(SharedServiceService);
 
   get assigneeColor(): string {
     const id = this.task()?.assignee?.id;
@@ -49,24 +52,21 @@ export class CardTaskViewComponent {
       due.getDate() === now.getDate()
     );
   }
-   taskDetails=this.projectService.selectedTask
-showDetails=this.projectService.showTaskDetails
+  taskDetails = this.tasksService.selectedTask;
+  showDetails = this.tasksService.showTaskDetails;
 
-    getTaskDetails(projectId:string,taskId:string){
-      this.taskDetails.set(null)
-    this.projectService.getTaskDetails(projectId,taskId).subscribe({
-next:(resp)=>{
-  this.taskDetails.set(resp[0])
-  
-  this.showDetails.set(true)
-  console.log(this.taskDetails(),444);
-  
-},
-error:(error:HttpErrorResponse)=>{
-  console.log(error);
-  
-}
-    })
+  getTaskDetails(projectId: string, taskId: string) {
+    this.taskDetails.set(null);
+    this.tasksService.getTaskDetails(projectId, taskId).subscribe({
+      next: (resp) => {
+        this.taskDetails.set(resp[0]);
+
+        this.showDetails.set(true);
+        console.log(this.taskDetails(), 444);
+      },
+      error: (error: HttpErrorResponse) => {
+        console.log(error);
+      },
+    });
   }
-    
 }

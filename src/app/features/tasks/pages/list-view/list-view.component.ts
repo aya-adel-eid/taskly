@@ -1,5 +1,5 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
-import { ProjectsService } from '../../services/projects.service';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { combineLatest, distinctUntilChanged, filter, map, tap } from 'rxjs';
@@ -7,6 +7,8 @@ import { TaskDetailsPageComponent } from '../task-details-page/task-details-page
 import { ITask } from '../../interfaces/ITask';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TasksService } from '../../services/tasks.service';
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-list-view',
@@ -16,15 +18,16 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   styleUrl: './list-view.component.css',
 })
 export class ListViewComponent {
-  projectservice = inject(ProjectsService);
   projectId = signal<string>('');
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  sharedService = inject(SharedServiceService);
+  private readonly tasksService = inject(TasksService);
 
-  allTasks = this.projectservice.allTasks;
-  totalCount = this.projectservice.totalCountTasks;
-  hasError = this.projectservice.tasksError;
-  isLoading = this.projectservice.tasksIsLoading;
+  allTasks = this.tasksService.allTasks;
+  totalCount = this.tasksService.totalCountTasks;
+  hasError = this.tasksService.tasksError;
+  isLoading = this.tasksService.tasksIsLoading;
 
   page = signal(1);
   limit = signal(5);
@@ -38,7 +41,7 @@ export class ListViewComponent {
   }
 
   taskDetails = signal<ITask | null>(null);
-  showDetails = this.projectservice.showTaskDetails;
+  showDetails = this.tasksService.showTaskDetails;
 
   constructor() {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
@@ -65,7 +68,7 @@ export class ListViewComponent {
   }
 
   getAllTasks(append = false) {
-    this.projectservice.getAllTasks(
+    this.tasksService.getAllTasks(
       this.projectId(),
       this.limit(),
       this.page(),
@@ -129,7 +132,7 @@ export class ListViewComponent {
   }
 
   getTaskDetails(projectId: string, taskId: string) {
-    this.projectservice.getTaskDetails(projectId, taskId).subscribe({
+    this.tasksService.getTaskDetails(projectId, taskId).subscribe({
       next: (resp) => {
         this.taskDetails.set(resp[0]);
         this.showDetails.set(true);

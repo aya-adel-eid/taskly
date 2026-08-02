@@ -21,7 +21,7 @@
         <div class="flex items-center gap-4">
           <div class="size-12 rounded-xl bg-[#DAE2FF] flex items-center justify-center">
             <span class="text-main-500 font-semibold">
-              {{ projectServices.getInitials(member.metadata?.name ?? '') }}
+              {{ sharedService.getInitials(member.metadata?.name ?? '') }}
             </span>
           </div>
 
@@ -75,7 +75,7 @@
           <div class="flex gap-3">
             <div class="size-12 rounded-xl bg-[#DAE2FF] flex items-center justify-center">
               <span class="text-main-500 font-semibold">
-                {{ projectServices.getInitials(member.metadata?.name ?? '') }}
+                {{ sharedService.getInitials(member.metadata?.name ?? '') }}
               </span>
             </div>
 

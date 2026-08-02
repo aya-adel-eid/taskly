@@ -1,12 +1,13 @@
 import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { CardTaskViewComponent } from '../card-task-view/card-task-view.component';
 import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { combineLatest, distinctUntilChanged, map } from 'rxjs';
-import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
+import { TasksService } from '../../services/tasks.service';
 
 @Component({
   selector: 'app-board-column',
@@ -27,28 +28,24 @@ export class BoardColumnComponent implements OnInit {
 
   errorMessage = signal<string>('');
 
-  private projectsService = inject(ProjectsService);
+  private tasksService = inject(TasksService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
   // ---------- Drag state ----------
-  draggedTask = this.projectsService.draggedTask;
-  draggedFromStatus = this.projectsService.draggedFromStatus;
-  dragOverStatus = this.projectsService.dragOverStatus;
+  draggedTask = this.tasksService.draggedTask;
+  draggedFromStatus = this.tasksService.draggedFromStatus;
+  dragOverStatus = this.tasksService.dragOverStatus;
 
   readonly limit = 5;
   page = signal(1);
   offset = signal(0);
 
-  tasks = computed(() => this.projectsService.tasksByStatus()[this.statu().value] ?? null);
-  totalCount = computed(
-    () => this.projectsService.tasksByStatusTotalCount()[this.statu().value] ?? 0
-  );
-  isLoading = computed(
-    () => this.projectsService.tasksByStatusLoading()[this.statu().value] ?? false
-  );
-  hasError = computed(() => this.projectsService.tasksByStatusError()[this.statu().value] ?? false);
+  tasks = computed(() => this.tasksService.tasksByStatus()[this.statu().value] ?? null);
+  totalCount = computed(() => this.tasksService.tasksByStatusTotalCount()[this.statu().value] ?? 0);
+  isLoading = computed(() => this.tasksService.tasksByStatusLoading()[this.statu().value] ?? false);
+  hasError = computed(() => this.tasksService.tasksByStatusError()[this.statu().value] ?? false);
 
   get hasMore(): boolean {
     return (this.tasks()?.length ?? 0) < this.totalCount();
@@ -76,7 +73,7 @@ export class BoardColumnComponent implements OnInit {
   loadTasks(append = false): void {
     if (!this.projectId()) return;
 
-    this.projectsService.getTasksByStatus(
+    this.tasksService.getTasksByStatus(
       this.projectId(),
       this.statu().value,
       this.limit,
@@ -141,7 +138,7 @@ export class BoardColumnComponent implements OnInit {
     const oldStatus = fromStatus;
 
     // Optimistic update
-    this.projectsService.tasksByStatus.update((byStatus) => {
+    this.tasksService.tasksByStatus.update((byStatus) => {
       const fromList = (byStatus[oldStatus] ?? []).filter((t) => t.id !== task.id);
       const toList = [
         ...(byStatus[targetStatus] ?? []),
@@ -156,12 +153,12 @@ export class BoardColumnComponent implements OnInit {
     });
 
     // call api
-    this.projectsService.updateTask({ status: targetStatus }, task.id).subscribe({
+    this.tasksService.updateTask({ status: targetStatus }, task.id).subscribe({
       next: () => {
         this.errorMessage.set('');
       },
       error: (error: HttpErrorResponse) => {
-        this.projectsService.tasksByStatus.update((byStatus) => {
+        this.tasksService.tasksByStatus.update((byStatus) => {
           const toList = (byStatus[targetStatus] ?? []).filter((t) => t.id !== task.id);
           const fromList = [
             ...(byStatus[oldStatus] ?? []),

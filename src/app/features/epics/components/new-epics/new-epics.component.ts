@@ -7,7 +7,7 @@ import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
-import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { EpicsService } from '../../services/epics.service';
 import { MembersService } from '../../../members/services/members.service';
 

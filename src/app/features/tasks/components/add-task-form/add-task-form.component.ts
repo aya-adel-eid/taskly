@@ -1,15 +1,16 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import { Member } from '../../../members/interfaces/IMembers';
 import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
-import { ToastMassageComponent } from '../toast-massage/toast-massage.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { MembersService } from '../../../members/services/members.service';
 import { EpicsService } from '../../../epics/services/epics.service';
+import { TasksService } from '../../services/tasks.service';
 
 @Component({
   selector: 'app-add-task-form',
@@ -24,6 +25,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   private readonly projectServices = inject(ProjectsService);
   private readonly memberService = inject(MembersService);
   private readonly epicService = inject(EpicsService);
+  private readonly tasksService = inject(TasksService);
   private readonly route = inject(Router);
   successMessage = signal<string>('');
   allMembers = signal<Member[] | null>(null);
@@ -110,7 +112,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
     console.log(this.addNewTask.value);
     this.successMessage.set('');
     if (this.addNewTask.valid) {
-      this.projectServices.createNewtTask(this.addNewTask.value).subscribe({
+      this.tasksService.createNewtTask(this.addNewTask.value).subscribe({
         next: (resp) => {
           console.log(resp);
           this.successMessage.set('Your epic has been created successfully.');

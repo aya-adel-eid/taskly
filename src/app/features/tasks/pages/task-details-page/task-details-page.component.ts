@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { ITask } from '../../interfaces/ITask';
 import { Epic, IEpicTasks } from '../../interfaces/IEpicTasks';
-import { ProjectsService } from '../../services/projects.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Member } from '../../../members/interfaces/IMembers';
 import { IEpicsProject } from '../../../epics/interfaces/IEpicsProject';
@@ -21,6 +21,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MembersService } from '../../../members/services/members.service';
 import { EpicsService } from '../../../epics/services/epics.service';
+import { TasksService } from '../../services/tasks.service';
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-task-details-page',
@@ -31,9 +33,10 @@ import { EpicsService } from '../../../epics/services/epics.service';
 })
 export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
-  readonly projectServices = inject(ProjectsService);
+  readonly tasksServices = inject(TasksService);
   private readonly memberService = inject(MembersService);
   private readonly epicsService = inject(EpicsService);
+  sharedService = inject(SharedServiceService);
   todayDateString = new Date().toISOString().split('T')[0];
   task = input<ITask>();
 
@@ -103,9 +106,8 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   formatDateForInput(dateString: string | Date | undefined) {
     if (!dateString) return '';
     const d = new Date(dateString);
-    if (isNaN(d.getTime())) return ''; // لو التاريخ مش صالح
+    if (isNaN(d.getTime())) return '';
 
-    // استخراج السنة، الشهر، واليوم بصيغة YYYY-MM-DD
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
@@ -149,7 +151,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
 
     this.updateTask({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
 
-    this.projectServices.patchLocalTask(this.task()?.id!, {
+    this.tasksServices.patchLocalTask(this.task()?.id!, {
       assignee: member
         ? {
             id: member.user_id,
@@ -177,12 +179,12 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    control.setValue(newEpicId); // ⬅️ ده اللي هيخلي currentEpic (computed) تتحدث تلقائيًا
+    control.setValue(newEpicId);
     this.isEditingEpic.set(false);
 
     this.updateTask({ epic_id: newEpicId }, 'epic_id', oldEpicId);
 
-    this.projectServices.patchLocalTask(this.task()?.id!, {
+    this.tasksServices.patchLocalTask(this.task()?.id!, {
       epic: epic ? { id: epic.id, epic_id: (epic as any).epic_id, title: epic.title } : null,
     });
   }
@@ -212,7 +214,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   }
 
   close() {
-    this.projectServices.showTaskDetails.set(!this.projectServices.showTaskDetails());
+    this.tasksServices.showTaskDetails.set(!this.tasksServices.showTaskDetails());
     console.log('flase');
   }
 
@@ -282,16 +284,16 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
 
     this.updateTask({ due_date: payloadValue }, 'due_date', oldValue);
 
-    this.projectServices.patchLocalTask(this.task()?.id!, {
+    this.tasksServices.patchLocalTask(this.task()?.id!, {
       due_date: payloadValue,
     });
   }
 
   // ---------- Generic update + rollback ----------
   updateTask(partial: Record<string, any>, field: string, oldValue: any) {
-    this.projectServices.updateTask(partial, this.task()?.id!).subscribe({
+    this.tasksServices.updateTask(partial, this.task()?.id!).subscribe({
       next: () => {
-        this.projectServices.patchLocalTask(this.task()?.id!, partial);
+        this.tasksServices.patchLocalTask(this.task()?.id!, partial);
         console.log(partial);
         console.log('done');
       },

@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { APIS_KEYS } from '../../../core/constants/APIS_KEYS';
 import { IEpicsProject } from '../interfaces/IEpicsProject';
-import { IEpicTasks } from '../../projects/interfaces/IEpicTasks';
+import { IEpicTasks } from '../../tasks/interfaces/IEpicTasks';
 import { IEpicDetails } from '../interfaces/IEpicDetails';
 
 @Injectable({

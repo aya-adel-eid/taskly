@@ -81,7 +81,7 @@
       "
     >
       @if (task()?.assignee?.name) {
-        {{ projectService.getInitials(task()?.assignee?.name!) }}
+        {{ sharedService.getInitials(task()?.assignee?.name!) }}
       } @else {
         <svg
           width="12"

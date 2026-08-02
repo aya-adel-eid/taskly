@@ -7,10 +7,10 @@ import { IEpicDetails } from '../../interfaces/IEpicDetails';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil } from 'rxjs';
 import { RouterLink } from '@angular/router';
-import { IEpicTasks } from '../../../projects/interfaces/IEpicTasks';
-import { TaskCardComponent } from '../../../projects/components/task-card/task-card.component';
-import { TaskSkelltoneComponent } from '../../../projects/components/task-skelltone/task-skelltone.component';
-import { ToastMassageComponent } from '../../../projects/components/toast-massage/toast-massage.component';
+import { IEpicTasks } from '../../../tasks/interfaces/IEpicTasks';
+import { TaskCardComponent } from '../../../tasks/components/task-card/task-card.component';
+import { TaskSkelltoneComponent } from '../../../tasks/components/task-skelltone/task-skelltone.component';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 
 import { EpicsService } from '../../services/epics.service';
 import { MembersService } from '../../../members/services/members.service';
