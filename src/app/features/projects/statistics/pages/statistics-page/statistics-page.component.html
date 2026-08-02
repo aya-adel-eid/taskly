@@ -263,9 +263,11 @@
               !day.inMonth
                 ? 'text-[#C3C6D6] cursor-default'
                 : isInSelectedRange(day.date)
-                  ? 'bg-[#0052CC33] text-[#003D9B] font-bold p-2 rounded-tl-md rounded-bl-md'
+                  ? 'bg-[#0052CC33] text-[#003D9B] font-bold p-2  '
                   : 'text-[#041B3C] hover:bg-[#F1F3FF] cursor-pointer'
             "
+            [class.rounded-l-md]="day.date === tempStartDate()"
+            [class.rounded-r-md]="day.date === tempEndDate()"
           >
             {{ day.label }}
           </button>
