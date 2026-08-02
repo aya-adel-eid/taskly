@@ -216,7 +216,6 @@
         </ul>
       }
     </ng-template>
-
     <ng-template #calendarPicker>
       <div class="flex items-center justify-between mb-3">
         <span class="text-[14px] font-semibold text-[#041B3C]">{{ calendarMonthLabel() }}</span>
@@ -254,23 +253,22 @@
       </div>
 
       <div class="grid grid-cols-7 gap-1">
-        @for (day of calendarDays(); track $index) {
-          @if (day.inMonth) {
-            <button
-              type="button"
-              (click)="selectTempDate(day.date)"
-              class="h-8 text-[12px] leading-4"
-              [class]="
-                isInSelectedRange(day.date)
-                  ? 'bg-[#0052CC33]/20 text-[#003D9B] font-bold p-2 rounded-tl-md rounded-bl-md'
-                  : 'text-[#041B3C] hover:bg-[#F1F3FF]'
-              "
-            >
-              {{ day.label }}
-            </button>
-          } @else {
-            <span class="h-8"></span>
-          }
+        @for (day of calendarDays(); track day.date) {
+          <button
+            type="button"
+            (click)="day.inMonth && selectTempDate(day.date)"
+            [disabled]="!day.inMonth"
+            class="h-8 text-[12px] leading-4"
+            [class]="
+              !day.inMonth
+                ? 'text-[#C3C6D6] cursor-default'
+                : isInSelectedRange(day.date)
+                  ? 'bg-[#0052CC33] text-[#003D9B] font-bold p-2 rounded-tl-md rounded-bl-md'
+                  : 'text-[#041B3C] hover:bg-[#F1F3FF] cursor-pointer'
+            "
+          >
+            {{ day.label }}
+          </button>
         }
       </div>
 
@@ -479,21 +477,23 @@
               <div
                 class="flex-1 flex flex-col items-center justify-center gap-2 py-6 text-[#C3C6D6]"
               >
-                <svg
-                  width="27"
-                  height="30"
-                  viewBox="0 0 27 30"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10.05 25.05L7.95 22.95L11.4 19.5L7.95 16.05L10.05 13.95L13.5 17.4L16.95 13.95L19.05 16.05L15.6 19.5L19.05 22.95L16.95 25.05L13.5 21.6L10.05 25.05ZM3 30C2.175 30 1.46875 29.7062 0.88125 29.1187C0.29375 28.5312 0 27.825 0 27V6C0 5.175 0.29375 4.46875 0.88125 3.88125C1.46875 3.29375 2.175 3 3 3H4.5V0H7.5V3H19.5V0H22.5V3H24C24.825 3 25.5312 3.29375 26.1187 3.88125C26.7062 4.46875 27 5.175 27 6V27C27 27.825 26.7062 28.5312 26.1187 29.1187C25.5312 29.7062 24.825 30 24 30H3ZM3 27H24V12H3V27ZM3 9H24V6H3V9ZM3 9V6V9Z"
-                    fill="#041B3C"
-                  />
-                </svg>
+                <span class="pb-2 block">
+                  <svg
+                    width="27"
+                    height="30"
+                    viewBox="0 0 27 30"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M10.05 25.05L7.95 22.95L11.4 19.5L7.95 16.05L10.05 13.95L13.5 17.4L16.95 13.95L19.05 16.05L15.6 19.5L19.05 22.95L16.95 25.05L13.5 21.6L10.05 25.05ZM3 30C2.175 30 1.46875 29.7062 0.88125 29.1187C0.29375 28.5312 0 27.825 0 27V6C0 5.175 0.29375 4.46875 0.88125 3.88125C1.46875 3.29375 2.175 3 3 3H4.5V0H7.5V3H19.5V0H22.5V3H24C24.825 3 25.5312 3.29375 26.1187 3.88125C26.7062 4.46875 27 5.175 27 6V27C27 27.825 26.7062 28.5312 26.1187 29.1187C25.5312 29.7062 24.825 30 24 30H3ZM3 27H24V12H3V27ZM3 9H24V6H3V9ZM3 9V6V9Z"
+                      fill="#041B3C"
+                    />
+                  </svg>
+                </span>
 
                 <span
-                  class="text-[10px] leading-3.75 tracking-[1px] font-bold uppercase text-[#041B3C]"
+                  class="text-[10px] leading-3.75 tracking-[1px] font-bold uppercase text-[#041B3C]/20"
                   >No Tasks</span
                 >
               </div>

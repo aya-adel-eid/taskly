@@ -68,12 +68,17 @@ export class StatisticsPageComponent implements OnInit {
     const firstDay = new Date(year, month, 1);
     const startOffset = (firstDay.getDay() + 6) % 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
 
     const days: { date: string; label: number; inMonth: boolean }[] = [];
 
-    for (let i = 0; i < startOffset; i++) {
-      days.push({ date: '', label: 0, inMonth: false });
+    // أيام الشهر السابق (باهتة، مش قابلة للاختيار)
+    for (let i = startOffset - 1; i >= 0; i--) {
+      const d = daysInPrevMonth - i;
+      const date = new Date(year, month - 1, d);
+      days.push({ date: date.toISOString().split('T')[0], label: d, inMonth: false });
     }
+
     for (let d = 1; d <= daysInMonth; d++) {
       const date = new Date(year, month, d);
       days.push({ date: date.toISOString().split('T')[0], label: d, inMonth: true });

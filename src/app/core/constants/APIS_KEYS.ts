@@ -21,6 +21,8 @@ export const APIS_KEYS = {
     NewTask: `${environment.baseUrRL}/rest/v1/tasks`,
     updateEpic: `${environment.baseUrRL}/rest/v1/epics`,
     getEpicTasks: `${environment.baseUrRL}/rest/v1/project_tasks`,
-    updateTasks:`${environment.baseUrRL}/rest/v1/tasks`
+    updateTasks: `${environment.baseUrRL}/rest/v1/tasks`,
+    tasksClander: `${environment.baseUrRL}/rest/v1/rpc/get_tasks_calendar_stats`,
+    tasksCount: `${environment.baseUrRL}/rest/v1/rpc/get_tasks_count_per_project`,
   },
 };

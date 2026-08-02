@@ -1,29 +1,9 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../../../../environments/environment.development';
-export interface IDailyStat {
-  day: string;
-  statuses: Record<string, number>;
-}
 
-export interface IStatisticsResponse {
-  daily: IDailyStat[];
-  totals: Record<string, number>;
-  total_tasks: number;
-  done_tasks: number;
-  overdue_tasks: number;
-}
+import { APIS_KEYS } from '../../../../core/constants/APIS_KEYS';
+import { IProjectTaskCount, IStatisticsResponse, IStatusOption } from '../interfaces/IStatistics';
 
-export interface IProjectTaskCount {
-  project_id: string;
-  project_name: string;
-  tasks_count: number;
-}
-
-export interface IStatusOption {
-  value: string;
-  label: string;
-}
 @Injectable({
   providedIn: 'root',
 })
@@ -133,7 +113,7 @@ export class StatisticsService {
   private getStartOfWeek(): string {
     const now = new Date();
     const day = now.getDay();
-    const diff = now.getDate() - day + (day === 0 ? -6 : 1); // بداية الأسبوع من الإثنين
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
     const monday = new Date(now.setDate(diff));
     return monday.toISOString().split('T')[0];
   }
@@ -165,10 +145,7 @@ export class StatisticsService {
     };
 
     return this.httpClient
-      .post<IStatisticsResponse>(
-        `${environment.baseUrRL}/rest/v1/rpc/get_tasks_calendar_stats`,
-        body
-      )
+      .post<IStatisticsResponse>(APIS_KEYS.projects.tasksClander, body)
       .subscribe({
         next: (resp) => {
           this.calendarStats.set(resp);
@@ -182,10 +159,6 @@ export class StatisticsService {
       });
   }
 
-  /**
-   * API #2 — Tasks count per project
-   * POST /rest/v1/rpc/get_tasks_count_per_project
-   */
   getTasksCountPerProject() {
     this.isLoadingTasksPerProject.set(true);
     this.tasksPerProjectError.set(false);
@@ -196,10 +169,7 @@ export class StatisticsService {
     };
 
     return this.httpClient
-      .post<IProjectTaskCount[]>(
-        `${environment.baseUrRL}/rest/v1/rpc/get_tasks_count_per_project`,
-        body
-      )
+      .post<IProjectTaskCount[]>(APIS_KEYS.projects.tasksCount, body)
       .subscribe({
         next: (resp) => {
           this.tasksPerProject.set(resp);
