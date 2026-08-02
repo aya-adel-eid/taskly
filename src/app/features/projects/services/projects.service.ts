@@ -38,6 +38,7 @@ export class ProjectsService {
   draggedTask = signal<ITask | null>(null);
   draggedFromStatus = signal<string | null>(null);
   dragOverStatus = signal<string | null>(null);
+  showModelInviteMember = signal<boolean>(false);
 
   createNewProject(data: {}) {
     return this.httpClient.post(APIS_KEYS.projects.createnewProject, data);
@@ -340,5 +341,15 @@ export class ProjectsService {
         return updated;
       });
     }
+  }
+
+  // invite Member
+  inviteMember(infoMember: {}) {
+    return this.httpClient.post(APIS_KEYS.projects.inviteMember, infoMember);
+  }
+
+  // accept Invitation
+  AcceptInvitation(token: {}) {
+    return this.httpClient.post(APIS_KEYS.projects.acceptInvitation, token);
   }
 }

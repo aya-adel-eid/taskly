@@ -14,5 +14,10 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (access_token && refresh_token && environment.apiKey) {
     return true;
   }
-  return router.navigateByUrl('/login');
+
+  router.navigate(['/login'], {
+    queryParams: { returnUrl: state.url },
+  });
+
+  return false;
 };

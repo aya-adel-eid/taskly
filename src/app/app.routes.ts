@@ -20,4 +20,12 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./features/projects/projects.routes').then((c) => c.PROJECTS_ROUtES),
   },
+  {
+    path: 'invite',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/projects/pages/accept-invitation/accept-invitation.component').then(
+        (c) => c.AcceptInvitationComponent
+      ),
+  },
 ];

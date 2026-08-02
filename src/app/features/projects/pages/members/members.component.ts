@@ -8,6 +8,7 @@ import { MemberCardComponent } from '../../components/member-card/member-card.co
 import { HandleErrorComponent } from '../../components/handle-error/handle-error.component';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { Subject, takeUntil } from 'rxjs';
+import { InviteMemberFormComponent } from '../invite-member-form/invite-member-form.component';
 
 @Component({
   selector: 'app-members',
@@ -17,6 +18,7 @@ import { Subject, takeUntil } from 'rxjs';
     MemberCardComponent,
     HandleErrorComponent,
     BreadcrumbComponent,
+    InviteMemberFormComponent,
   ],
   templateUrl: './members.component.html',
   styleUrl: './members.component.css',
@@ -55,6 +57,10 @@ export class MembersComponent implements OnInit, OnDestroy {
           this.hassError.set(true);
         },
       });
+  }
+  showModel = this.projectServices.showModelInviteMember;
+  showModelInvite() {
+    this.showModel.set(true);
   }
   ngOnDestroy(): void {
     this.destroy$.next();
