@@ -443,9 +443,7 @@
         @for (day of weekDays(); track day.day) {
           <div
             class="p-4 flex flex-col gap-3 h-[420px] shadow shadow-[#0000000D] rounded-lg"
-            [class]="
-              isToday(day.day) ? 'bg-[#F1F5FF]  relative  border-2 border-[#003D9B]' : 'bg-white'
-            "
+            [class]="isToday(day.day) ? '  relative  border-2 border-[#003D9B]' : 'bg-white'"
           >
             @if (isToday(day.day)) {
               <span
