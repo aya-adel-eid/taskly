@@ -1,10 +1,10 @@
 # Taskly
 
-> Taskly is an Angular SSR task management application for teams that lets you organize projects, tasks, and collaboration in one place.
+> Taskly is an Angular task management application for teams to organize projects, tasks, and collaboration in one place.
 
-## Overview
-
-Taskly allows teams to create projects, organize tasks with a Kanban board, invite members via email, manage epics, and collaborate efficiently.
+Important notes:
+- Taskly uses Angular with Client-Side Rendering (CSR), not SSR
+- Authentication and data are handled via Supabase
 
 ## Docs
 
@@ -25,7 +25,6 @@ Taskly allows teams to create projects, organize tasks with a Kanban board, invi
 ## Technologies
 
 - Angular
-- Angular CSR
 - TypeScript
 - RxJS
 - Tailwind CSS
