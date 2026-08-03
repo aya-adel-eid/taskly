@@ -2,17 +2,15 @@
 
 > Taskly is an Angular task management application for teams to organize projects, tasks, and collaboration in one place.
 
-Important notes:
-- Taskly uses Angular with Client-Side Rendering (CSR), not SSR
-- Authentication and data are handled via Supabase
+## Notes
+- Taskly uses Angular with Client-Side Rendering (CSR).
+- Authentication and data are handled via Supabase.
 
 ## Docs
-
-- [Home](https://taskly-99u5.vercel.app/): Main landing page and app overview
-- [Login](https://taskly-99u5.vercel.app/login): User authentication and sign-in page
+- [Home](https://taskly-99u5.vercel.app/)
+- [Login](https://taskly-99u5.vercel.app/login)
 
 ## Features
-
 - Authentication
 - Project Management
 - Kanban Board
@@ -23,13 +21,5 @@ Important notes:
 - SEO Optimization
 
 ## Technologies
-
 - Angular
-- TypeScript
-- RxJS
-- Tailwind CSS
 - Supabase
-
-## Optional
-
-- Author: Aya
