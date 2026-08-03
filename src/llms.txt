@@ -1,0 +1,38 @@
+# Taskly
+
+> Taskly is an Angular SSR task management application for teams.
+
+## Overview
+
+Taskly allows teams to create projects, organize tasks with a Kanban board, invite members via email, manage epics, and collaborate efficiently.
+
+## Documentation
+
+- Home: https://taskly-99u5.vercel.app/
+- Login: https://taskly-99u5.vercel.app/login
+
+
+## Features
+
+- Authentication
+- Project Management
+- Kanban Board
+- Task CRUD
+- Epic Management
+- Member Invitations
+- Email Verification
+- Angular CSR
+- SEO Optimization
+
+## Technologies
+
+- Angular
+- Angular CSR
+- TypeScript
+- RxJS
+- Tailwind CSS
+- Supabase
+
+## Contact
+
+Author: Aya
