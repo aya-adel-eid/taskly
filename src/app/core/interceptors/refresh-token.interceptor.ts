@@ -8,6 +8,15 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthServicesService);
   const token = authService.getToken();
   const refreshToken = authService.getRefreshToken();
+  const isAuthEndpoint =
+    req.url.includes('/auth/v1/token') ||
+    req.url.includes('/auth/v1/logout') ||
+    req.url.includes('/auth/v1/signup') ||
+    req.url.includes('/auth/v1/user');
+
+  if (isAuthEndpoint) {
+    return next(req);
+  }
   req = req.clone({
     setHeaders: {
       Authorization: `Bearer ${token}`,
