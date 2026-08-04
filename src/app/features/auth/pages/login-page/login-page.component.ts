@@ -56,9 +56,6 @@ export class LoginPageComponent {
             this.router.navigateByUrl(returnUrl || '/project');
           });
           this.authService.storeSession(resp, rememberMe!);
-
-          sessionStorage.setItem(StORED_KEYS.userToken, resp.access_token);
-          sessionStorage.setItem(StORED_KEYS.refresh_token, resp.refresh_token);
         },
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);

@@ -87,7 +87,7 @@ export class AuthServicesService {
     storage.setItem(StORED_KEYS.userToken, accessToken);
     storage.setItem(StORED_KEYS.refresh_token, refreshToken);
   }
-
+  // clear storage
   private clearSession(): void {
     localStorage.removeItem(StORED_KEYS.userToken);
     localStorage.removeItem(StORED_KEYS.refresh_token);
