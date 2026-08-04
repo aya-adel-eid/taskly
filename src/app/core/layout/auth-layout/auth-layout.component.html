@@ -1,10 +1,11 @@
-<div class="relative top-0 left-0 right-0 z-20 bg-bg h-20 px-6 lg:px-10 flex items-center">
-  <img src="/assets/images/Logo.png" alt="Logo" class="h-6 w-auto" />
-</div>
+<div class="flex flex-col min-h-screen bg-bg">
+  <!-- Navbar Header -->
+  <div class="z-20 h-20 px-6 lg:px-10 flex items-center shrink-0">
+    <img src="/assets/images/Logo.png" alt="Logo" class="h-6 w-auto" />
+  </div>
 
-<!-- logo -->
-<div class="flex pt-8 pb-12 justify-center items-center bg-bg w-full min-h-screen">
-  <!-- md:px-3 lg:w-[50%] xl:w-2/5  pb-12 pt-24 -->
-
-  <router-outlet></router-outlet>
+  <!-- Main Content Container -->
+  <div class="flex-1 flex justify-center items-center pb-6">
+    <router-outlet></router-outlet>
+  </div>
 </div>

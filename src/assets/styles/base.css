@@ -1,6 +1,6 @@
 /*  bg-gradient-to-r from-primary to-primary-container */
 @utility btn-Primary {
-  @apply py-3.5 px-6 rounded-sm cursor-pointer text-body-md leading-5 text-white tracking-normal;
+  @apply py-3.5 px-6 rounded-lg  md:rounded-xs cursor-pointer text-body-md leading-5 text-white tracking-normal;
 }
 
 @utility btn-Secondary {
@@ -13,7 +13,7 @@
 
 @utility input-control {
   @apply bg-surface-highest text-[#6B7280] leading-[100%] tracking-normal
-  px-4 py-3.5 rounded-sm outline-none border-0 text-[16px] font-[400];
+  px-4 py-3.5 rounded-sm outline-none border-0 text-[16px] font-[400] rounded-lg  md:rounded-xs;
 }
 
 @utility label-input {

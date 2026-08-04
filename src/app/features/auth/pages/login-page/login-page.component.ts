@@ -27,23 +27,17 @@ export class LoginPageComponent {
   private readonly fb = inject(FormBuilder);
   loginForm = this.fb.group({
     email: [null, [Validators.required, Validators.email]],
-    password: [
-      null,
-      [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.maxLength(64),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])\S{8,64}$/),
-      ],
-    ],
+    password: [null, [Validators.required]],
     rememberMe: [false],
   });
 
   // log in
   login() {
+    // exist remember me
     const { rememberMe, ...userData } = this.loginForm.value;
     this.errorMessage = '';
     this.successMessage = '';
+
     if (this.loginForm.valid) {
       this.loading.set(true);
       this.authService.signIn(userData).subscribe({
@@ -59,7 +53,7 @@ export class LoginPageComponent {
         },
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);
-          this.errorMessage = 'Something went wrong. Please try again';
+          this.errorMessage = 'Invalid email or password. Please try again';
           console.log(error.error.msg);
         },
       });

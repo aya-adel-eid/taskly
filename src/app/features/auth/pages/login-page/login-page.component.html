@@ -1,5 +1,5 @@
 <div
-  class="lg:bg-white w-full lg:w-xl md:p-6 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F]"
+  class="md:bg-white w-full md:max-w-xl p-4 md:p-12 rounded-lg md:shadow-sm md:shadow-[#041B3C0F]"
 >
   <app-header-auth
     [title]="'Welcome Back'"
@@ -26,6 +26,11 @@
         [label]="'Password'"
         [id]="'passwordd'"
       >
+        <a
+          routerLink="/forgot-password"
+          class="text-primary text-[11px] font-bold leading-[16.5px] tracking-normal px-2 block md:hidden"
+          >forget</a
+        >
       </app-rusable-input>
       <!-- Button -->
       <div class="flex justify-between">
@@ -34,24 +39,44 @@
             id="checked-checkbox"
             type="checkbox"
             formControlName="rememberMe"
-            class="w-4 h-4 border border-[#C3C6D6] outline-none rounded-xs bg-neutral-secondary-medium"
+            class="w-5 h-5 md:size-4 md:bg-[#F1F3FF] border-1 border-[#C3C6D6] bg-white outline-none rounded-xs"
           />
-          <label for="checked-checkbox" class="ms-2 text-sm font-medium text-[#434654]"
+          <label
+            for="checked-checkbox"
+            class="ps-2 text-sm font-medium text-[#434654] leading-5 tracking-normal"
             >Remember Me</label
           >
         </div>
-        <a class="text-primary text-sm font-medium cursor-pointer" routerLink="/forgot-password"
+        <a
+          class="text-primary text-sm font-medium cursor-pointer hidden md:block"
+          routerLink="/forgot-password"
           >Forget Password?</a
         >
       </div>
       <div>
         <button
-          class="btn-Primary bg-linear-to-r from-primary to-primary-container w-full flex justify-center items-center space-x-1.5"
+          class="btn-Primary bg-linear-to-r from-primary to-primary-container w-full flex justify-center items-center space-x-1.5 disabled:bg-primary/20"
+          [disabled]="loginForm.invalid"
         >
           @if (loading()) {
             <span class="loader"></span>
           }
-          <span> Log In </span>
+          <span class="hidden md:block"> Log In </span>
+          <span class="md:hidden block">Sign In</span>
+          <span class="md:hidden block"
+            ><svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10.1458 7.5H0V5.83333H10.1458L5.47917 1.16667L6.66667 0L13.3333 6.66667L6.66667 13.3333L5.47917 12.1667L10.1458 7.5Z"
+                fill="white"
+              />
+            </svg>
+          </span>
         </button>
       </div>
     </form>
@@ -64,8 +89,10 @@
       <p class="alert-error mt-1.5 text-center">{{ errorMessage }}</p>
     }
     <div class="mt-3">
-      <p class="pt-8 text-center text-[14px] leading-5 tracking-normal">
-        <span class="satuld">Don't have an account? ? </span>
+      <p
+        class="pt-8 text-center text-[14px] leading-5 tracking-normal border-t border-t-[#C3C6D626]"
+      >
+        <span class="satuld">Don't have an account ? </span>
         <a class="text-primary font-semibold" routerLink="/sign-up">Sign Up</a>
       </p>
     </div>
