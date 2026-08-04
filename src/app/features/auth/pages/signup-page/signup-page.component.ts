@@ -6,7 +6,7 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ISignUp } from '../../interfaces/ISignUp';
-import { interval, take, timer } from 'rxjs';
+import { timer } from 'rxjs';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 
 @Component({
@@ -83,6 +83,8 @@ export class SignupPageComponent implements OnInit {
   // send Data
 
   signUP() {
+    this.successMessage = '';
+    this.errorMessage = '';
     const { confirmPassword, ...userData } = this.signUpForm.value;
     if (this.signUpForm.valid) {
       this.isLoading.set(true);
@@ -93,13 +95,13 @@ export class SignupPageComponent implements OnInit {
           localStorage.setItem(StORED_KEYS.refresh_token, resp.refresh_token);
           this.successMessage =
             'Your account has been created successfully. You will be redirected to the Projects page.';
-          timer(5000).subscribe(() => {
+          timer(3000).subscribe(() => {
             this.router.navigateByUrl('/project');
           });
         },
         error: (error: HttpErrorResponse) => {
           this.isLoading.set(false);
-          console.log(error);
+
           this.errorMessage = error.error.msg;
         },
       });
