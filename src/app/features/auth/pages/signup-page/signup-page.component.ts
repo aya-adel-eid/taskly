@@ -38,7 +38,7 @@ export class SignupPageComponent implements OnInit {
       ],
       data: this.fb.group({
         name: [
-          null,
+          '',
           [
             Validators.required,
             Validators.required,

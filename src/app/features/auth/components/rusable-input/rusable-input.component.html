@@ -4,7 +4,7 @@
       {{ label }}
     </span>
 
-    <ng-content></ng-content>
+    <ng-content select=".forget-label"></ng-content>
   </label>
   <div class="relative">
     <input
@@ -72,12 +72,8 @@
         }
       }
     </button>
+    <ng-content select=".length-name"></ng-content>
   </div>
-  @if (id === 'name') {
-    <span class="text-[#C3C6D6] text-[11px] block py-0.5 leading-[16.5px] tracking-normal"
-      >3-50 characters, letters only.</span
-    >
-  }
 </div>
 @if (control?.touched && control?.errors) {
   <div>

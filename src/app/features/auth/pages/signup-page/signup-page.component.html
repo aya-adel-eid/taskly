@@ -1,19 +1,15 @@
 <div
-  class="lg:bg-white w-full p-0 lg:w-xl md:p-4 lg:p-12 rounded-lg lg:shadow-sm lg:shadow-[#041B3C0F] min-h-[89.49vh]"
+  class="md:bg-white w-full md:w-xl p-6 md:p-12 rounded-lg md:shadow-sm md:shadow-[#041B3C0F] min-h-[89.49vh]"
 >
   <app-header-auth
     [title]="'Create your workspace'"
     [text]="'Join the editorial approach to task management.'"
   ></app-header-auth>
   <div class="pb-4">
-    <form
-      class="flex flex-col gap-1.5 lg:gap-6 w-full"
-      [formGroup]="signUpForm"
-      (ngSubmit)="signUP()"
-    >
+    <form class="flex flex-col gap-6 w-full" [formGroup]="signUpForm" (ngSubmit)="signUP()">
       <!-- name -->
 
-      <div formGroupName="data" class="">
+      <div formGroupName="data" class="gap-6 flex flex-col">
         <app-rusable-input
           [type]="'text'"
           [placholder]="'Enter your full name'"
@@ -22,6 +18,11 @@
           [control]="signUpForm.get('data.name')"
           formControlName="name"
         >
+          <span
+            class="text-[#C3C6D6] text-[11px] py-0.5 leading-[16.5px] tracking-normal length-name mt-1.5 block"
+            >{{ signUpForm.get('data.name')?.value?.length || 0 }}-50 characters, letters
+            only.</span
+          >
         </app-rusable-input>
         <!-- email -->
         <!-- job title -->
@@ -160,7 +161,7 @@
       <!-- Button -->
       <div>
         <button
-          class="btn-Primary bg-linear-to-r from-primary to-primary-container w-full rounded-sm flex justify-center items-center space-x-1.5"
+          class="btn-Primary bg-linear-to-r from-primary to-primary-container w-full flex justify-center items-center space-x-1.5"
         >
           @if (isLoading()) {
             <span class="loader"></span>
