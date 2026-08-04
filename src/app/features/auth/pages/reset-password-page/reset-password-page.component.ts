@@ -2,7 +2,7 @@ import { Component, inject, signal, OnInit } from '@angular/core';
 import { RusableInputComponent } from '../../components/rusable-input/rusable-input.component';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
-import { interval, take } from 'rxjs';
+import { interval, take, timer } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 
@@ -89,12 +89,10 @@ export class ResetPasswordPageComponent implements OnInit {
           this.successMessage.set(
             'Your password has been updated successfully. You can now log in'
           );
-          interval(1000)
-            .pipe(take(3))
-            .subscribe(() => {
-              history.replaceState(null, '', '/login');
-              this.router.navigateByUrl('/login');
-            });
+          timer(3000).subscribe(() => {
+            history.replaceState(null, '', '/login');
+            this.router.navigateByUrl('/login');
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);
