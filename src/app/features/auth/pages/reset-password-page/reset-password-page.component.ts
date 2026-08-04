@@ -4,7 +4,7 @@ import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@
 import { AuthServicesService } from '../../services/auth-services.service';
 import { timer } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -17,18 +17,23 @@ export class ResetPasswordPageComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authServices = inject(AuthServicesService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   loading = signal<boolean>(false);
   errorMsg = signal<string>('');
   accessToken!: string;
   successMessage = signal<string>('');
   ngOnInit() {
-    const hash = window.location.hash.substring(1);
+    this.route.fragment.subscribe((fragment) => {
+      console.log(fragment);
 
-    const params = new URLSearchParams(hash);
+      if (fragment) {
+        const params = new URLSearchParams(fragment);
+        this.accessToken = params.get('access_token') ?? '';
+        const refreshToken = params.get('refresh_token');
 
-    this.accessToken = params.get('access_token') ?? '';
-    const refreshToken = params.get('refresh_token');
-    console.log(this.accessToken);
+        console.log(this.accessToken);
+      }
+    });
   }
 
   resetPasswordForm = this.fb.group(
