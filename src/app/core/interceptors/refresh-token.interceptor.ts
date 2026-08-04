@@ -18,7 +18,7 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       // 401 => Unauthorized    403=>Forbidden
-      if ((error.status === 401 || error.status === 403) && !req.url.includes('/token')) {
+      if (error.status === 401 || error.status === 403) {
         //
         console.log(error.status, 'errror');
 

@@ -52,7 +52,9 @@ export class AuthServicesService {
     storage.setItem(StORED_KEYS.refresh_token, tokens.refresh_token);
 
     if (rememberMe) {
+      // calc by ms =>after  30 day
       const expiresAt = Date.now() + this.REMEMBER_ME_DAYS * 24 * 60 * 60 * 1000;
+
       localStorage.setItem(StORED_KEYS.rememberMeExpiry, String(expiresAt));
     }
   }
@@ -93,6 +95,7 @@ export class AuthServicesService {
     sessionStorage.removeItem(StORED_KEYS.userToken);
     sessionStorage.removeItem(StORED_KEYS.refresh_token);
     sessionStorage.removeItem(StORED_KEYS.projectId);
+    sessionStorage.removeItem(StORED_KEYS.projectName);
   }
 
   // forget password
