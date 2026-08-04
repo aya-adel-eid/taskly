@@ -8,7 +8,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { StORED_KEYS } from '../../../core/constants/STORED_KEYS';
 import { ISignUp } from '../interfaces/ISignUp';
 import { environment } from '../../../../environments/environment';
-import { IResetPassword } from '../interfaces/ResetPassword';
+
+import { IRefreshToken } from '../interfaces/IRefreshToken';
 
 @Injectable({
   providedIn: 'root',
@@ -110,6 +111,6 @@ export class AuthServicesService {
   }
   // refresh Toekn
   refreshToken(refreshToken: {}) {
-    return this.httpClient.post<IResetPassword>(APIS_KEYS.AUTH.refreshToken, refreshToken);
+    return this.httpClient.post<IRefreshToken>(APIS_KEYS.AUTH.refreshToken, refreshToken);
   }
 }

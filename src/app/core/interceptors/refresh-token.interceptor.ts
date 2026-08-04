@@ -1,81 +1,49 @@
 import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { BehaviorSubject, catchError, filter, switchMap, take, throwError } from 'rxjs';
 import { AuthServicesService } from '../../features/auth/services/auth-services.service';
-import { environment } from '../../../environments/environment';
-import { StORED_KEYS } from '../constants/STORED_KEYS';
-
-let isRefreshing = false;
-const refreshTokenSubject = new BehaviorSubject<string | null>(null);
+import { environment } from '../../../environments/environment.development';
+import { catchError, switchMap, throwError } from 'rxjs';
 
 export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthServicesService);
-
   const token = authService.getToken();
-
-  if (!req.url.includes('/auth/v1/token') && token) {
-    req = req.clone({
-      setHeaders: {
-        apikey: environment.apiKey,
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
+  const refreshToken = authService.getRefreshToken();
+  req = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+      apikey: environment.apiKey,
+    },
+  });
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      // لو الطلب نفسه لطلب الـ refresh أو الطلب مش auth error، اسيبه يمشي عادي
-      if (req.url.includes('/auth/v1/token') || (error.status !== 401 && error.status !== 403)) {
-        return throwError(() => error);
-      }
+      // 401 => Unauthorized    403=>Forbidden
+      if ((error.status === 401 || error.status === 403) && !req.url.includes('/token')) {
+        //
+        console.log(error.status, 'errror');
 
-      const refreshToken = authService.getRefreshToken();
-      if (!refreshToken) {
-        authService.logOut();
-        return throwError(() => error);
-      }
+        return authService.refreshToken({ refresh_token: refreshToken! }).pipe(
+          switchMap((resp) => {
+            console.log('new token:', resp.access_token);
+            console.log('new refresh:', resp.refresh_token);
 
-      if (!isRefreshing) {
-        isRefreshing = true;
-        refreshTokenSubject.next(null);
-
-        return authService.refreshToken(refreshToken).pipe(
-          switchMap((res) => {
-            isRefreshing = false;
-            authService.updateStoredTokens(res.access_token, res.refresh_token);
-            refreshTokenSubject.next(res.access_token);
-
-            const retryRequest = req.clone({
+            authService.updateStoredTokens(resp.access_token, resp.refresh_token);
+            const newAuthToken = req.clone({
               setHeaders: {
+                Authorization: `Bearer ${resp.access_token}`,
                 apikey: environment.apiKey,
-                Authorization: `Bearer ${res.access_token}`,
               },
             });
-
-            return next(retryRequest);
+            return next(newAuthToken);
           }),
           catchError((refreshError) => {
-            isRefreshing = false;
-            refreshTokenSubject.next(null);
             authService.logOut();
             return throwError(() => refreshError);
           })
         );
       }
 
-      return refreshTokenSubject.pipe(
-        filter((newToken) => newToken !== null),
-        take(1),
-        switchMap((newToken) => {
-          const retryRequest = req.clone({
-            setHeaders: {
-              apikey: environment.apiKey,
-              Authorization: `Bearer ${newToken}`,
-            },
-          });
-          return next(retryRequest);
-        })
-      );
+      return throwError(() => error);
     })
   );
 };
