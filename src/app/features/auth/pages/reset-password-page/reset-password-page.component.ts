@@ -29,9 +29,6 @@ export class ResetPasswordPageComponent implements OnInit {
       if (fragment) {
         const params = new URLSearchParams(fragment);
         this.accessToken = params.get('access_token') ?? '';
-        const refreshToken = params.get('refresh_token');
-
-        console.log(this.accessToken);
       }
     });
   }
@@ -102,7 +99,7 @@ export class ResetPasswordPageComponent implements OnInit {
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);
           this.successMessage.set('');
-          console.log(error);
+
           this.errorMsg.set(error.error.msg);
         },
       });
