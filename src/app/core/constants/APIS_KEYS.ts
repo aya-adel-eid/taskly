@@ -14,7 +14,7 @@ export const APIS_KEYS = {
   },
   projects: {
     createnewProject: `${environment.baseUrRL}${REST_BASE}/projects`,
-    listProjects: `${environment.baseUrRL}${REST_BASE}/rpc/get_projects`,
+    listProjects: `${environment.baseUrRL}${REST_BASE}/rpc/getprojects`,
     editProject: `${environment.baseUrRL}${REST_BASE}/projects`,
     allMembers: `${environment.baseUrRL}${REST_BASE}/get_project_members`,
     NewEpics: `${environment.baseUrRL}${REST_BASE}/epics`,
