@@ -65,7 +65,7 @@ export class ListProjectsComponent implements OnInit {
   @HostListener('window:resize')
   onResize() {
     const wasMobile = this.isMobile();
-    this.isMobile.set(window.innerWidth < 1024);
+    this.isMobile.set(window.innerWidth < 768);
     const isNowDesktop = wasMobile && !this.isMobile();
 
     if (isNowDesktop) {
