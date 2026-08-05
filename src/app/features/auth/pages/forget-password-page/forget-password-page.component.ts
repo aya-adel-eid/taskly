@@ -1,9 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { HeaderAuthComponent } from '../../components/header-auth/header-auth.component';
+
 import { RusableInputComponent } from '../../components/rusable-input/rusable-input.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { interval, take } from 'rxjs';
 import { RouterLink } from '@angular/router';
 
@@ -35,7 +35,7 @@ export class ForgetPasswordPageComponent {
       this.authServices.forgetPassword(this.forgetPasswordForm.value).subscribe({
         next: (resp) => {
           this.loading.set(false);
-          console.log(resp);
+
           this.isSuccess.set(true);
           interval(1000)
             .pipe(take(300))
@@ -50,7 +50,7 @@ export class ForgetPasswordPageComponent {
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);
           this.isSuccess.set(false);
-          console.log(error);
+
           this.isDisabled.set(false);
           this.errorMessage.set(error.error.msg);
         },

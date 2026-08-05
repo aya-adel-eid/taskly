@@ -5,9 +5,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthServicesService } from '../../services/auth-services.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
+
 import { ISignIn } from '../../interfaces/IUserData';
-import { interval, take, timer } from 'rxjs';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-login-page',
@@ -54,7 +54,6 @@ export class LoginPageComponent {
         error: (error: HttpErrorResponse) => {
           this.loading.set(false);
           this.errorMessage = 'Invalid email or password. Please try again';
-          console.log(error.error.msg);
         },
       });
     }
