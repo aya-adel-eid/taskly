@@ -19,11 +19,11 @@
               Manage and curate your projects
             </p>
           </div>
-          @if (allProjects()) {
+          @if (!isLoading()) {
             <a
               (click)="addNewProject()"
               routerLink="/project/add"
-              class="fixed md:static bottom-20 inset-e-3 g:static btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center lg:flex"
+              class="fixed z-10 lg:static bottom-20 inset-e-3 g:static btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center lg:flex"
             >
               <svg
                 width="11"
@@ -34,16 +34,16 @@
               >
                 <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
               </svg>
-              <span class="md:block hidden">Create New Project</span>
+              <span class="lg:block hidden">Create New Project</span>
             </a>
           } @else {
             <div
-              class="animate-pulse bg-skeleton rounded-md py-3 px-6 w-40 h-10.5 hidden lg:inline"
+              class="animate-pulse bg-[#E8EDFF] rounded-md py-3 px-6 w-52.25 h-10 hidden lg:inline"
             ></div>
           }
         </div>
         <!-- list of projects -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
           @if (isLoading()) {
             @for (item of [1, 2, 3, 4, 5, 6]; track $index) {
               <app-project-card-skeltton />
