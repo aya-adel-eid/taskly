@@ -15,7 +15,7 @@
       </h3>
       <a
         class="cursor-pointer hover:opacity-100 opacity-70 transition"
-        (click)="editProject(project()!)"
+        (click)="$event.stopPropagation(); editProject(project()!)"
         [routerLink]="['/project', project()?.id, 'edit']"
       >
         <svg
