@@ -1,12 +1,7 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { APIS_KEYS } from '../../../core/constants/APIS_KEYS';
 import { IProject } from '../interfaces/Iprojects';
-import { Member } from '../../members/interfaces/IMembers';
-import { IEpicsProject } from '../../epics/interfaces/IEpicsProject';
-import { IEpicDetails } from '../../epics/interfaces/IEpicDetails';
-import { IEpicTasks } from '../../tasks/interfaces/IEpicTasks';
-import { ITask } from '../../tasks/interfaces/ITask';
 
 @Injectable({
   providedIn: 'root',

@@ -1,10 +1,10 @@
-import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectsService } from '../../services/projects.service';
 import { CardProjectComponent } from '../../components/card-project/card-project.component';
-import { IProject } from '../../interfaces/Iprojects';
+
 import { CardAddProjectStaticComponent } from '../../components/card-add-project-static/card-add-project-static.component';
-import { HttpErrorResponse } from '@angular/common/http';
+
 import { HandleErrorComponent } from '../../components/handle-error/handle-error.component';
 import { EmptyProjectCardComponent } from '../../components/empty-project-card/empty-project-card.component';
 import { ProjectCardSkelttonComponent } from '../../components/project-card-skeltton/project-card-skeltton.component';
