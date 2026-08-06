@@ -1,10 +1,19 @@
-import { Component, computed, HostListener, inject, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, OnDestroy, signal } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CardEpicComponent } from '../../components/card-epic/card-epic.component';
-import { combineLatest, distinctUntilChanged, filter, map, Subject, tap, debounceTime } from 'rxjs';
+import {
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  map,
+  Subject,
+  tap,
+  debounceTime,
+  takeUntil,
+} from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ProjectsService } from '../../../projects/services/projects.service';
+
 import { ViewportScroller } from '@angular/common';
 import { EpicSkelltoneComponent } from '../../components/epic-skelltone/epic-skelltone.component';
 import { EmptyEpicsComponent } from '../../components/empty-epics/empty-epics.component';
@@ -30,7 +39,7 @@ import { EpicsService } from '../../services/epics.service';
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
 })
-export class EpicsComponent {
+export class EpicsComponent implements OnDestroy {
   private readonly activateRoute = inject(ActivatedRoute);
   private readonly epicsService = inject(EpicsService);
   showPoupDetail = this.epicsService.showPoupDetail;
@@ -182,36 +191,21 @@ export class EpicsComponent {
   }
   // epicsDetails
   epicsDetails(projectId: string, epicId: string) {
-    this.epicsService.getEpicsDetails(projectId, epicId).subscribe({
-      next: (resp) => {
-        console.log(resp);
-        this.epic.set(resp[0]);
-        console.log(this.epic());
-
-        this.showPoupDetail.set(true);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      },
-    });
-  }
-  // get epic Tasks
-  getEpicTasks(epicId: string) {
-    this.epicsService.isLoadingEpicTask.set(true);
-    this.epicsService.hasErrorEpicTask.set(false);
     this.epicsService
-      .getEpicTasks(epicId)
-      .pipe()
+      .getEpicsDetails(projectId, epicId)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
-          this.epicTasks.set(resp);
-          this.epicsService.isLoadingEpicTask.set(false);
-          this.epicsService.hasErrorEpicTask.set(false);
+          this.epic.set(resp[0]);
+
+          this.showPoupDetail.set(true);
         },
-        error: (error: HttpErrorResponse) => {
-          this.epicsService.isLoadingEpicTask.set(false);
-          this.epicsService.hasErrorEpicTask.set(true);
-        },
+        error: (error: HttpErrorResponse) => {},
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
