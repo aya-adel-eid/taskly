@@ -62,13 +62,4 @@ export class ProjectsService {
   updateProject(id: string, projectEdit: {}) {
     return this.httpClient.patch(`${APIS_KEYS.projects.editProject}?id=eq.${id}`, projectEdit);
   }
-  getInitials(name?: string): string {
-    if (!name) return '';
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase();
-  }
 }

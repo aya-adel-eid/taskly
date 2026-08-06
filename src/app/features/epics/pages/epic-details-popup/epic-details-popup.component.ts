@@ -15,6 +15,7 @@ import { ToastMassageComponent } from '../../../../shared/components/toast-massa
 import { EpicsService } from '../../services/epics.service';
 import { MembersService } from '../../../members/services/members.service';
 import { ProjectsService } from '../../../projects/services/projects.service';
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-epic-details-popup',
@@ -34,7 +35,7 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   epicsService = inject(EpicsService);
   private readonly memberService = inject(MembersService);
-  projectService = inject(ProjectsService);
+  SharedService = inject(SharedServiceService);
   errorMessage = signal<string>('');
   epic = input.required<IEpicDetails>();
   allMembers = signal<Member[]>([]);
