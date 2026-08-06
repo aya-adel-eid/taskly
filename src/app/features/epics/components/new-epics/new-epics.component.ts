@@ -18,7 +18,7 @@ import { MembersService } from '../../../members/services/members.service';
   templateUrl: './new-epics.component.html',
   styleUrl: './new-epics.component.css',
 })
-export class NewEpicsComponent implements OnInit, OnDestroy {
+export class NewEpicsComponent implements OnDestroy {
   private readonly epicServices = inject(EpicsService);
   private readonly activateRoute = inject(ActivatedRoute);
   private readonly membersService = inject(MembersService);
@@ -30,9 +30,10 @@ export class NewEpicsComponent implements OnInit, OnDestroy {
   // form
   today = new Date().toISOString().split('T')[0];
   private readonly fb = inject(FormBuilder);
-  ngOnInit(): void {
+  constructor() {
     this.activateRoute.paramMap.subscribe((param) => {
       this.projectId.set(param.get('projectId')!);
+      this.addNewEpics.patchValue({ project_id: this.projectId() });
       this.getAllMembers();
     });
   }
@@ -40,7 +41,7 @@ export class NewEpicsComponent implements OnInit, OnDestroy {
     title: [null, [Validators.required, Validators.minLength(3)]],
     description: ['', Validators.maxLength(500)],
     assignee_id: [null],
-    project_id: [sessionStorage.getItem(StORED_KEYS.projectId)],
+    project_id: [''],
     deadline: [
       null,
       (control: AbstractControl) => {
