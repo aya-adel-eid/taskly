@@ -80,7 +80,7 @@
           >Deadline</span
         >
         <p class="text-xs leading-4 tracking-normal text-[#041B3C] font-medium">
-          {{ epic()?.deadline | date: 'mediumDate' }}
+          {{ epic()?.deadline | date: 'd MMM y' }}
         </p>
       </div>
     }
@@ -129,7 +129,7 @@
               />
             </svg>
           </span>
-          <span>{{ epic()?.created_at | date: 'mediumDate' }}</span>
+          <span>{{ epic()?.created_at | date: 'd MMM y' }}</span>
         </div>
       </div>
     }
