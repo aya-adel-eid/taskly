@@ -48,7 +48,7 @@ export class ProjectFormComponent {
       this.projectServices.createNewProject(this.addProjectForm.value).subscribe({
         next: (resp) => {
           this.errorMsg.set('');
-          console.log(resp);
+
           this.toastMessage.set('Project created successfully');
           this.resetForm();
           interval(1000)
@@ -61,7 +61,6 @@ export class ProjectFormComponent {
         error: (error: HttpErrorResponse) => {
           this.toastMessage.set('');
           this.errorMsg.set(error.error.msg);
-          console.log(error);
         },
       });
     }
@@ -86,7 +85,6 @@ export class ProjectFormComponent {
               });
           },
           error: (error: HttpErrorResponse) => {
-            console.log(error);
             this.toastMessage.set('');
             this.errorMsg.set(error.error.msg);
           },
