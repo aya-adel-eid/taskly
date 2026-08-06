@@ -103,7 +103,7 @@
               <div
                 class="w-6 h-6 rounded-full bg-[#0B815A] text-white flex items-center justify-center text-[10px] font-semibold shrink-0"
               >
-                {{ getInitials(epic().created_by.name) }}
+                {{ projectService.getInitials(epic().created_by.name) }}
               </div>
               <span class="text-[13px] font-medium text-[#041B3C]">
                 {{ epic().created_by.name }}
@@ -127,7 +127,7 @@
                 <div
                   class="w-6 h-6 rounded-full bg-[#0052CC] text-white flex items-center justify-center text-[10px] font-semibold shrink-0"
                 >
-                  {{ getInitials(assignee.metadata.name) }}
+                  {{ projectService.getInitials(assignee.metadata.name) }}
                 </div>
 
                 <span class="text-[13px] font-medium text-[#041B3C] truncate">
@@ -209,7 +209,7 @@
                     <div
                       class="w-6 h-6 rounded-full bg-[#0052CC] text-white flex items-center justify-center text-[10px] font-semibold shrink-0"
                     >
-                      {{ getInitials(member.metadata.name) }}
+                      {{ projectService.getInitials(member.metadata.name) }}
                     </div>
 
                     <span class="text-[13px] text-[#041B3C] truncate">

@@ -14,6 +14,7 @@ import { ToastMassageComponent } from '../../../../shared/components/toast-massa
 
 import { EpicsService } from '../../services/epics.service';
 import { MembersService } from '../../../members/services/members.service';
+import { ProjectsService } from '../../../projects/services/projects.service';
 
 @Component({
   selector: 'app-epic-details-popup',
@@ -33,9 +34,11 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   epicsService = inject(EpicsService);
   private readonly memberService = inject(MembersService);
+  projectService = inject(ProjectsService);
   errorMessage = signal<string>('');
   epic = input.required<IEpicDetails>();
   allMembers = signal<Member[]>([]);
+
   currentAssignee = signal<Member | null>(null);
   today: string = new Date().toISOString().split('T')[0];
   private destroy$ = new Subject<void>();
@@ -175,31 +178,18 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
     this.epicsService.showPoupDetail.set(false);
   }
 
-  getInitials(name?: string): string {
-    if (!name) return '';
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase();
-  }
-
   getAllMembers() {
     this.memberService
       .getAllMembers(this.epic().project_id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
-          console.log(resp);
           this.allMembers.set(resp);
           const assignee = resp.find((m) => m.user_id === this.epic().assignee?.sub);
 
           this.currentAssignee.set(assignee ?? null);
         },
-        error: (error: HttpErrorResponse) => {
-          console.log(error);
-        },
+        error: (error: HttpErrorResponse) => {},
       });
   }
   // get epic Tasks
