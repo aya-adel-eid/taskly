@@ -159,7 +159,7 @@
           <button
             (click)="changePage(page() - 1)"
             [disabled]="page() === 1"
-            class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+            class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D] bg-white disabled:opacity-50 transition"
           >
             <svg
               width="5"
@@ -179,7 +179,7 @@
           @for (pageNumber of pages; track pageNumber) {
             <button
               (click)="changePage(pageNumber)"
-              class="w-8 h-8 pt-[6.5px] pb-[7.5ppx] rounded-xs border transition cursor-pointer border-[#C3C6D64D]/30"
+              class="size-8 pt-[6.5px] pb-[7.5px] rounded-xs border transition cursor-pointer border-[#C3C6D64D] flex items-center justify-center"
               [class.bg-primary]="page() === pageNumber"
               [class.text-white]="page() === pageNumber"
               [class.bg-white]="page() !== pageNumber"
@@ -193,7 +193,7 @@
           <button
             (click)="changePage(page() + 1)"
             [disabled]="page() === pages.length"
-            class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+            class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D] bg-white disabled:opacity-50 transition"
           >
             <svg
               width="5"
