@@ -3,7 +3,7 @@ import { RusableInputComponent } from '../../../auth/components/rusable-input/ru
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProjectsService } from '../../../projects/services/projects.service';
 import { Member } from '../../../members/interfaces/IMembers';
-import { interval, Subject, take, takeUntil } from 'rxjs';
+import { interval, Subject, take, takeUntil, timer } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
@@ -61,12 +61,10 @@ export class NewEpicsComponent implements OnDestroy {
           console.log(resp);
           this.successMessage.set('Your epic has been created successfully.');
           this.addNewEpics.reset();
-          interval(1000)
-            .pipe(take(3))
-            .subscribe(() => {
-              this.successMessage.set('');
-              this.route.navigateByUrl(`/project/${this.projectId()}/epics`);
-            });
+          timer(3000).subscribe(() => {
+            this.successMessage.set('');
+            this.route.navigateByUrl(`/project/${this.projectId()}/epics`);
+          });
         },
         error: (error: HttpErrorResponse) => {
           console.log(error);
