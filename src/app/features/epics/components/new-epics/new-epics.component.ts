@@ -1,12 +1,12 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
-import { RusableInputComponent } from '../../../auth/components/rusable-input/rusable-input.component';
+import { Component, inject, signal, OnDestroy } from '@angular/core';
+
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProjectsService } from '../../../projects/services/projects.service';
+
 import { Member } from '../../../members/interfaces/IMembers';
-import { interval, Subject, take, takeUntil, timer } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
+
 import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { EpicsService } from '../../services/epics.service';
 import { MembersService } from '../../../members/services/members.service';
@@ -14,7 +14,7 @@ import { MembersService } from '../../../members/services/members.service';
 @Component({
   selector: 'app-new-epics',
   standalone: true,
-  imports: [RusableInputComponent, RouterLink, ReactiveFormsModule, ToastMassageComponent],
+  imports: [RouterLink, ReactiveFormsModule, ToastMassageComponent],
   templateUrl: './new-epics.component.html',
   styleUrl: './new-epics.component.css',
 })
@@ -58,7 +58,6 @@ export class NewEpicsComponent implements OnDestroy {
     if (this.addNewEpics.valid) {
       this.epicServices.addNewEpics(this.addNewEpics.value).subscribe({
         next: (resp) => {
-          console.log(resp);
           this.successMessage.set('Your epic has been created successfully.');
           this.addNewEpics.reset();
           timer(3000).subscribe(() => {
@@ -67,7 +66,6 @@ export class NewEpicsComponent implements OnDestroy {
           });
         },
         error: (error: HttpErrorResponse) => {
-          console.log(error);
           this.successMessage.set(error.error.msg);
         },
       });
@@ -80,7 +78,6 @@ export class NewEpicsComponent implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
-          console.log(resp);
           this.allMembers.set(resp);
         },
         error: (error: HttpErrorResponse) => {},
