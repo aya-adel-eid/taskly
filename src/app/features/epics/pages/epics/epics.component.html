@@ -116,7 +116,7 @@
             </p>
           } @else {
             @for (epic of allEpics(); track epic.epic_id) {
-              <a (click)="epicsDetails(projectId(), epic.id); getEpicTasks(epic.id)">
+              <a (click)="epicsDetails(projectId(), epic.id)">
                 <app-card-epic [epic]="epic"></app-card-epic>
               </a>
             }
@@ -214,5 +214,5 @@
   </section>
 }
 @if (showPoupDetail() && epic() !== null) {
-  <app-epic-details-popup [epic]="epic()!" [epicTasks]="epicTasks()!"></app-epic-details-popup>
+  <app-epic-details-popup [epic]="epic()!"></app-epic-details-popup>
 }

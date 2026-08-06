@@ -5,7 +5,7 @@ import { Member } from '../../../members/interfaces/IMembers';
 import { DatePipe } from '@angular/common';
 import { IEpicDetails } from '../../interfaces/IEpicDetails';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { IEpicTasks } from '../../../tasks/interfaces/IEpicTasks';
 import { TaskCardComponent } from '../../../tasks/components/task-card/task-card.component';
@@ -40,8 +40,9 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   today: string = new Date().toISOString().split('T')[0];
   private destroy$ = new Subject<void>();
   projectId = signal<string>('');
+  succesEpicMessage = signal<string>('');
 
-  epicTasks = input<IEpicTasks[]>([]);
+  epicTasks = signal<IEpicTasks[] | null>(null);
 
   isEditingAssignee = signal(false);
 
@@ -68,6 +69,7 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
     });
 
     this.getAllMembers();
+    this.getEpicTasks(this.epic().id);
   }
 
   // ---------- Title ----------
@@ -146,13 +148,25 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
 
   // ---------- Generic update + rollback ----------
   updateEpic(partial: Record<string, any>, field: string, oldValue: any) {
+    this.succesEpicMessage.set('');
+    this.errorMessage.set('');
     this.epicsService.updateEpic(partial, this.epic().id).subscribe({
       next: () => {
         this.epicsService.patchLocalEpic(this.epic().id, partial);
+        this.succesEpicMessage.set('Epic updated successfully.');
+        timer(2000).subscribe(() => {
+          this.succesEpicMessage.set('');
+        });
+
+        this.errorMessage.set('');
       },
       error: () => {
         this.epicForm.get(field)?.setValue(oldValue ?? (field === 'assignee_id' ? null : ''));
         this.errorMessage.set('Failed to update epic. Please try again.');
+        timer(2000).subscribe(() => {
+          this.errorMessage.set('');
+        });
+        this.succesEpicMessage.set('');
       },
     });
   }
@@ -188,6 +202,26 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
         },
       });
   }
+  // get epic Tasks
+  getEpicTasks(epicId: string) {
+    this.epicsService.isLoadingEpicTask.set(true);
+    this.epicsService.hasErrorEpicTask.set(false);
+    this.epicsService
+      .getEpicTasks(epicId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (resp) => {
+          this.epicTasks.set(resp);
+          this.epicsService.isLoadingEpicTask.set(false);
+          this.epicsService.hasErrorEpicTask.set(false);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.epicsService.isLoadingEpicTask.set(false);
+          this.epicsService.hasErrorEpicTask.set(true);
+        },
+      });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
