@@ -95,18 +95,6 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ---------- Assignee ----------
-  // onAssigneeChange() {
-  //   const control = this.epicForm.get('assignee_id')!;
-  //   const newAssigneeId = control.value;
-  //   const oldAssigneeId = this.epic().assignee.sub;
-
-  //   this.isEditingAssignee.set(false);
-
-  //   if (newAssigneeId !== oldAssigneeId) {
-  //     this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
-  //   }
-  // }
   selectAssignee(member: Member | null) {
     const control = this.epicForm.get('assignee_id')!;
 
@@ -120,7 +108,6 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
 
     control.setValue(newAssigneeId);
 
-    // 👇 هنا فقط
     this.currentAssignee.set(member);
 
     this.isEditingAssignee.set(false);
@@ -173,28 +160,6 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   closeModal() {
     this.epicsService.showPoupDetail.set(false);
   }
-
-  // selectAssignee(member: Member | null) {
-  //   const newAssigneeId = member?.user_id ?? null;
-  //   const oldAssigneeId = this.epic().assignee?.sub ?? null;
-  //   this.epicForm.get('assignee_id')?.setValue(newAssigneeId);
-  //   this.isEditingAssignee.set(false);
-
-  //   if (newAssigneeId !== oldAssigneeId) {
-  //     this.updateEpic({ assignee_id: newAssigneeId }, 'assignee_id', oldAssigneeId);
-
-  //     this.projectService.patchLocalEpic(this.epic().id, {
-  //       assignee: member
-  //         ? {
-  //             sub: member.user_id,
-  //             name: member.metadata.name,
-  //             email: member.metadata.email,
-  //             department: member.metadata.department,
-  //           }
-  //         : undefined,
-  //     });
-  //   }
-  // }
 
   getInitials(name?: string): string {
     if (!name) return '';
