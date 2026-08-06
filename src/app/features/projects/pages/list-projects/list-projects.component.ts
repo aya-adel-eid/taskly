@@ -25,7 +25,7 @@ import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
   templateUrl: './list-projects.component.html',
   styleUrl: './list-projects.component.css',
 })
-export class ListProjectsComponent implements OnInit {
+export class ListProjectsComponent {
   private readonly projectsService = inject(ProjectsService);
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly viewPortScroller = inject(ViewportScroller);
@@ -56,10 +56,6 @@ export class ListProjectsComponent implements OnInit {
         this.page.set(offset / this.limit() + 1);
         this.getAllProjects();
       });
-  }
-
-  ngOnInit(): void {
-    this.getAllProjects();
   }
 
   @HostListener('window:resize')
@@ -101,11 +97,7 @@ export class ListProjectsComponent implements OnInit {
   }
 
   getAllProjects() {
-    this.projectsService.getAllProjects(
-      this.limit(),
-      this.page(),
-      false // استبدال، مش إضافة
-    );
+    this.projectsService.getAllProjects(this.limit(), this.page(), false);
   }
 
   changePage(page: number) {

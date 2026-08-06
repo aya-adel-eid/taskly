@@ -15,7 +15,7 @@
       </h3>
       <a
         class="cursor-pointer hover:opacity-100 opacity-70 transition"
-        (click)="editProject(project()!)"
+        (click)="$event.stopPropagation(); editProject(project()!)"
         [routerLink]="['/project', project()?.id, 'edit']"
       >
         <svg
@@ -44,7 +44,7 @@
       <span class="lg:hidden">
         <i class="fa-regular fa-calendar"></i>
       </span>
-      {{ project()?.created_at | date: 'mediumDate' }}</span
+      {{ project()?.created_at | date: 'd MMM y' }}</span
     >
   </div>
 </div>

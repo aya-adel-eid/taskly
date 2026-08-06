@@ -23,7 +23,7 @@ export class ProjectFormComponent {
   title = input<string>('');
   titleButton = input('');
   constructor() {
-    if (this.projectServices.selectedProjectId() && this.projectServices.projectEdit()) {
+    if (this.projectServices.projectEdit()) {
       this.isEdit.set(true);
       this.addProjectForm.patchValue({
         name: this.projectServices.projectEdit()?.name ?? null,

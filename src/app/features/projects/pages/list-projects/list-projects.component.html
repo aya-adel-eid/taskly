@@ -5,8 +5,8 @@
   @if (allProjects() !== null && allProjects()?.length === 0) {
     <app-empty-project-card></app-empty-project-card>
   } @else {
-    <section>
-      <div class="p-8 flex flex-col gap-10">
+    <section class="mb-8">
+      <div class="flex flex-col gap-10">
         <!-- header -->
         <div class="flex justify-between items-center">
           <div>
@@ -19,11 +19,11 @@
               Manage and curate your projects
             </p>
           </div>
-          @if (allProjects()) {
+          @if (!isLoading()) {
             <a
               (click)="addNewProject()"
               routerLink="/project/add"
-              class="btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center flex"
+              class="fixed z-10 lg:static bottom-20 inset-e-3 g:static btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center lg:flex"
             >
               <svg
                 width="11"
@@ -34,11 +34,11 @@
               >
                 <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
               </svg>
-              <span class="hidden lg:block">Create New Project</span>
+              <span class="lg:block hidden">Create New Project</span>
             </a>
           } @else {
             <div
-              class="animate-pulse bg-skeleton rounded-md py-3 px-6 w-40 h-10.5 hidden lg:inline"
+              class="animate-pulse bg-[#E8EDFF] rounded-md py-3 px-6 w-52.25 h-10 hidden lg:inline"
             ></div>
           }
         </div>
@@ -70,16 +70,16 @@
               <span class="text-[#041B3C] font-semibold">{{ allProjects()?.length }}</span>
               of
               <span class="text-[#041B3C] font-semibold">{{ totalCount() }}</span>
-              epics
+              active projects
             </p>
           </div>
 
-          <div class="lg:flex items-center justify-end gap-2 p-8 mb-4">
+          <div class="lg:flex items-center justify-end gap-2 pt-12 px-8 pb-8 mb-4">
             <!-- Previous -->
             <button
               (click)="changePage(page() - 1)"
               [disabled]="page() === 1"
-              class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+              class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D] bg-white disabled:opacity-50 transition"
             >
               <svg
                 width="5"
@@ -99,7 +99,7 @@
             @for (pageNumber of pages; track pageNumber) {
               <button
                 (click)="changePage(pageNumber)"
-                class="w-8 h-8 pt-[6.5px] pb-[7.5ppx] rounded-xs border transition cursor-pointer border-[#C3C6D64D]/30"
+                class="size-8 pt-[6.5px] pb-[7.5px] rounded-xs border transition cursor-pointer border-[#C3C6D64D] flex items-center justify-center"
                 [class.bg-primary]="page() === pageNumber"
                 [class.text-white]="page() === pageNumber"
                 [class.bg-white]="page() !== pageNumber"
@@ -113,7 +113,7 @@
             <button
               (click)="changePage(page() + 1)"
               [disabled]="page() === pages.length"
-              class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D]/30 bg-white disabled:opacity-50 hover:bg-gray-50 transition"
+              class="size-8 flex justify-center items-center cursor-pointer rounded-xs border border-[#C3C6D64D] bg-white disabled:opacity-50 transition"
             >
               <svg
                 width="5"
