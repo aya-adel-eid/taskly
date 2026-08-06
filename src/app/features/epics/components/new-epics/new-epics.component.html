@@ -1,6 +1,6 @@
 <app-toast-massage [message]="successMessage()" [flag]="true"></app-toast-massage>
 <div
-  class="pt-2 lg:pb-4 w-full lg:border lg:border-[#C3C6D61A]/10 rounded-lg lg:shadow-lg lg:shadow-[#041B3C0F]/6 bg-transparent lg:bg-white"
+  class="lg:pb-4 w-full lg:border lg:border-[#C3C6D61A]/10 rounded-lg lg:shadow-lg lg:shadow-[#041B3C0F]/6 bg-transparent lg:bg-white"
 >
   <form
     class="w-full lg:p-8 flex flex-col gap-6 lg:gap-8"
@@ -70,7 +70,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-2 lg:gap-6">
       <div class="lg:col-span-1">
         <label class="label-input" for="descrip">Description</label>
-        <span class="text-[10px] leading-3.5 ps-1 text-[#434654] block">Optional</span>
+        <span class="text-[10px] leading-3.5 ps-1 text-[#434654]/50 block">Optional</span>
       </div>
       <div class="lg:col-span-3 relative">
         <textarea
@@ -172,6 +172,11 @@
     >
       <button
         type="submit"
+        style="
+          box-shadow:
+            0px 4px 6px -4px rgba(0, 61, 155, 0.2),
+            0px 10px 15px -3px rgba(0, 61, 155, 0.2);
+        "
         class="bg-linear-to-r from-primary to-primary-container btn-Primary order-1 lg:order-2 leading-5 py-3 px-10"
       >
         Create Epic
