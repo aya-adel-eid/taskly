@@ -1,11 +1,12 @@
 @if (toastMessage()) {
   <app-toast-massage [message]="toastMessage()" [flag]="true"></app-toast-massage>
 }
+<app-toast-massage [flag]="false" [message]="errorMsg()"></app-toast-massage>
 
 <div class="lg:bg-white rounded-lg w-full lg:w-2xl">
   <!-- title -->
   <div class="lg:border-b lg:border-gray-100">
-    <div class="flex items-center gap-4 pt-8 px-8 pb-10">
+    <div class="flex items-center gap-4 pt-8 lg:px-8 pb-10">
       <div class="w-11.5 h-11 bg-main-600/10 rounded-xs hidden lg:block">
         <svg
           width="46"
@@ -32,8 +33,8 @@
     </div>
   </div>
   <!-- project name -->
-  <div class="p-8">
-    <form class="w-full" [formGroup]="addProjectForm">
+  <div class="p-0 lg:p-8">
+    <form class="w-full flex flex-col gap-8" [formGroup]="addProjectForm">
       <div class="mb-4">
         <label for="projectTitle" class="label-input"
           >Project TITLE <span class="text-red-600">*</span></label
@@ -102,7 +103,10 @@
       <div class="mb-4">
         <label for="projectdescription" class="label-input flex justify-between py-1">
           <span>Description</span>
-          <span class="text-[#4F5F7B99] text-[11px]">Optional</span>
+          <span
+            class="text-[#4F5F7B99] text-[11px] leading-[16.5px] tracking-normal hidden lg:block"
+            >Optional</span
+          >
         </label>
         <textarea
           formControlName="description"
@@ -137,35 +141,49 @@
           }
         }
       </div>
+      <!-- acctions -->
       <div class="pt-4 flex flex-col lg:flex-row lg:justify-between items-center gap-4">
-        <button>
-          <a
-            routerLink="/project"
-            class="text-[#4F5F7B] order-2 lg:order-1 font-bold text-sm leading-5 tracking-normal"
-            >Back</a
-          >
-        </button>
+        <a
+          routerLink="/project"
+          class="text-[#4F5F7B] order-2 lg:order-1 font-bold text-sm leading-5 tracking-normal w-full text-center lg:w-fit"
+          >Back</a
+        >
+
         <button
           type="button"
-          class="btn-Primary bg-linear-to-r from-primary to-primary-container flex gap-2 pt-3 order-1 lg:order-2 px-7"
+          class="btn-Primary bg-linear-to-r from-primary to-primary-container text-center block gap-2 pt-3 order-1 lg:order-2 px-7 w-full lg:w-fit"
           (click)="submitData()"
         >
           {{ titleButton() }}
         </button>
       </div>
-      @if (errorMsg()) {
-        <p class="alert-error">{{ errorMsg() }}</p>
-      }
     </form>
   </div>
-  <div class="bg-[#F1F3FF] p-4 lg:p-6">
-    <p class="text-[#4F5F7B] text-xs">
-      <span><i class="fa-regular fa-lightbulb"></i></span>
-      <span class="font-semibold">Pro Tip:</span>
-      <span
-        >You can invite project members and assign epics immediately after the initial creation
-        process.</span
-      >
-    </p>
+  <div class="pt-12 lg:pt-0">
+    <div class="bg-[#F1F3FF] p-4 lg:p-6">
+      <p class="text-[#4F5F7B] text-xs flex gap-3">
+        <span class="hidden lg:block"
+          ><svg
+            width="12"
+            height="15"
+            viewBox="0 0 12 15"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5.625 15C5.2125 15 4.85938 14.8531 4.56563 14.5594C4.27188 14.2656 4.125 13.9125 4.125 13.5H7.125C7.125 13.9125 6.97812 14.2656 6.68437 14.5594C6.39062 14.8531 6.0375 15 5.625 15ZM2.625 12.75V11.25H8.625V12.75H2.625ZM2.8125 10.5C1.95 9.9875 1.26562 9.3 0.759375 8.4375C0.253125 7.575 0 6.6375 0 5.625C0 4.0625 0.546875 2.73438 1.64062 1.64062C2.73438 0.546875 4.0625 0 5.625 0C7.1875 0 8.51562 0.546875 9.60938 1.64062C10.7031 2.73438 11.25 4.0625 11.25 5.625C11.25 6.6375 10.9969 7.575 10.4906 8.4375C9.98438 9.3 9.3 9.9875 8.4375 10.5H2.8125ZM3.2625 9H7.9875C8.55 8.6 8.98438 8.10625 9.29062 7.51875C9.59687 6.93125 9.75 6.3 9.75 5.625C9.75 4.475 9.35 3.5 8.55 2.7C7.75 1.9 6.775 1.5 5.625 1.5C4.475 1.5 3.5 1.9 2.7 2.7C1.9 3.5 1.5 4.475 1.5 5.625C1.5 6.3 1.65313 6.93125 1.95938 7.51875C2.26562 8.10625 2.7 8.6 3.2625 9Z"
+              fill="#4F5F7B"
+            />
+          </svg>
+        </span>
+        <span>
+          <span class="font-semibold">Pro Tip:</span>
+          <span
+            >You can invite project members and assign epics immediately after the initial creation
+            process.</span
+          >
+        </span>
+      </p>
+    </div>
   </div>
 </div>
