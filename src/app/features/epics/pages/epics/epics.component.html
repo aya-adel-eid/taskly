@@ -82,7 +82,7 @@
 
           <a
             [routerLink]="['/project', projectId(), 'epics', 'new']"
-            class="btn-Primary bg-linear-to-r from-primary to-primary-container hidden lg:flex justify-center items-center gap-2 py-3 shrink-0"
+            class="fixed z-10 lg:static bottom-20 inset-e-3 g:static btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center lg:flex"
           >
             <span class=""
               ><svg
@@ -123,21 +123,6 @@
           }
         }
       </div>
-
-      <a
-        [routerLink]="['/project', projectId(), 'epics', 'new']"
-        class="lg:hidden mt-6 ml-auto w-14 h-14 rounded-lg bg-linear-to-r from-primary to-primary-container flex justify-center items-center shadow-lg"
-      >
-        <svg
-          width="14"
-          height="14"
-          viewBox="0 0 11 11"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
-        </svg>
-      </a>
     </div>
 
     @if (allEpics() && allEpics()!.length > 0) {
