@@ -1,41 +1,53 @@
-<div class="w-full">
-  <div
-    class="bg-neutral-primary-soft shadow-xs rounded-xl border w-full lg:max-w-195 px-2 border-default"
-  >
-    <!-- Header - lg only -->
-    <div
-      class="bg-[#E0E8FF4D] border-b border-default grid-cols-[2fr_1fr_1fr] px-6 py-3 hidden lg:grid"
-    >
-      <div class="h-3 w-16 bg-gray-200 rounded animate-pulse"></div>
-      <div class="h-3 w-10 bg-gray-200 rounded animate-pulse"></div>
-      <div class="h-3 w-10 bg-gray-200 rounded animate-pulse"></div>
-    </div>
+<!-- Desktop Skeleton -->
+<div class="hidden lg:block bg-white rounded-xl shadow-2xs overflow-hidden">
+  <div class="grid grid-cols-[2fr_1fr_60px] bg-[#E0E8FF4D] px-6 py-3">
+    <div class="h-4 w-20 bg-gray-200 rounded animate-pulse"></div>
+    <div class="h-4 w-16 bg-gray-200 rounded animate-pulse"></div>
+    <div class="h-4 w-12 bg-gray-200 rounded animate-pulse justify-self-center"></div>
+  </div>
 
-    <!-- Row -->
-    @for (item of [1, 2, 3, 4]; track $index) {
-      <div
-        class="border-b border-[#E8EDFF] px-6 py-4 flex items-center justify-between lg:grid lg:grid-cols-[2fr_1fr_1fr]"
-      >
-        <!-- Name -->
-        <div class="flex gap-4 items-center">
-          <div class="bg-gray-200 rounded-xl w-12 h-12 shrink-0 animate-pulse"></div>
-          <div class="flex flex-col gap-2">
-            <div class="h-3 w-32 bg-gray-200 rounded animate-pulse"></div>
-            <div class="h-2.5 w-44 bg-gray-200 rounded animate-pulse"></div>
-          </div>
-        </div>
-
-        <!-- Role + Actions -->
-        <div class="lg:contents flex flex-row items-center gap-4">
-          <!-- Role -->
-          <div class="h-5 w-14 bg-gray-200 rounded-full animate-pulse"></div>
-
-          <!-- Actions -->
-          <div class="lg:flex lg:justify-center">
-            <div class="h-4 w-1 bg-gray-200 rounded animate-pulse"></div>
-          </div>
+  @for (item of [1, 2, 3]; track $index) {
+    <div class="grid grid-cols-[2fr_1fr_60px] items-center px-6 py-4 border-b border-[#E8EDFF]">
+      <!-- Member Skeleton -->
+      <div class="flex items-center gap-4">
+        <div class="size-12 rounded-xl bg-gray-200 animate-pulse shrink-0"></div>
+        <div class="space-y-2">
+          <div class="h-4 w-32 bg-gray-200 rounded animate-pulse"></div>
+          <div class="h-3 w-48 bg-gray-200 rounded animate-pulse"></div>
         </div>
       </div>
-    }
-  </div>
+
+      <!-- Role Skeleton -->
+      <div>
+        <div class="h-6 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+      </div>
+
+      <!-- Action Skeleton -->
+      <div class="flex justify-center">
+        <div class="size-8 rounded-md bg-gray-200 animate-pulse"></div>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Mobile Skeleton -->
+<div class="lg:hidden space-y-3">
+  @for (item of [1, 2, 3]; track $index) {
+    <div class="bg-white rounded-xl p-4 shadow-xs">
+      <div class="flex justify-between items-center">
+        <div class="flex gap-3">
+          <div class="size-12 rounded-xl bg-gray-200 animate-pulse shrink-0"></div>
+          <div class="space-y-2">
+            <div class="h-4 w-28 bg-gray-200 rounded animate-pulse"></div>
+            <div class="h-3 w-40 bg-gray-200 rounded animate-pulse"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-end gap-3">
+          <div class="h-6 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+          <div class="size-6 bg-gray-200 rounded animate-pulse"></div>
+        </div>
+      </div>
+    </div>
+  }
 </div>

@@ -29,6 +29,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   private readonly activateRoute = inject(ActivatedRoute);
   allMembers = signal<Member[] | null>(null);
   hassError = signal<boolean>(false);
+  isLoading = signal<boolean>(false);
   private destroy$ = new Subject<void>();
   projectId = '';
 
@@ -44,17 +45,18 @@ export class MembersComponent implements OnInit, OnDestroy {
   ];
   getAllMembers() {
     this.hassError.set(false);
-
+    this.isLoading.set(true);
     this.memberServices
       .getAllMembers(this.projectId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
-          console.log(resp);
+          this.isLoading.set(false);
           this.allMembers.set(resp);
         },
         error: (error: HttpErrorResponse) => {
           this.hassError.set(true);
+          this.isLoading.set(false);
         },
       });
   }
