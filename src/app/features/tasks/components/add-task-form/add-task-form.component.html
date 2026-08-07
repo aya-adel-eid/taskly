@@ -120,7 +120,7 @@
           formControlName="epic_id"
           id="epic"
         >
-          <option [ngValue]="null" disabled selected>Select Epic</option>
+          <option value="" disabled selected>Select Epic</option>
           @for (epic of allEpics(); track $index) {
             <option [value]="epic.id">{{ epic.epic_id }} {{ truncate(epic.title) }}</option>
           }
