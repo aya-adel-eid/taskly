@@ -41,7 +41,7 @@
         </div>
         <div class="flex justify-between gap-2">
           <a
-            [routerLink]="['/project', projectId(), 'epics', 'new']"
+            [routerLink]="['/project', projectId(), 'tasks', 'new']"
             class="btn-Primary w-full bg-linear-to-r from-primary to-primary-container gap-2 py-2 px-4 flex justify-center items-center lg:hidden"
             ><span
               ><svg
@@ -186,76 +186,4 @@
       <app-board-view></app-board-view>
     }
   </div>
-  <!-- <div class="lg:hidden flex flex-col gap-3 py-4 mb-6">
-    @for (task of allTasks(); track task.task_id) {
-      <div class="bg-white shadow shadow-[#041B3C0A]/4 rounded-lg p-4 flex flex-col gap-3">
-        <div>
-          <div class="flex items-center justify-between">
-            <span
-              class="text-[11px] font-bold text-[#43465480]/50 uppercase tracking-[-0.55px] leading-[16.5px]"
-            >
-              {{ task.task_id }}
-            </span>
-
-            <span
-              class="status-badge"
-              [class.status-todo]="task.status === 'TO_DO'"
-              [class.status-in-progress]="task.status === 'IN_PROGRESS'"
-              [class.status-completed]="task.status === 'COMPLETED'"
-              [class.status-blocked]="task.status === 'BLOCKED'"
-              [class.status-urgent]="task.status === 'URGENT'"
-              [class.status-ready-for-qa]="task.status === 'READY_FOR_QA'"
-              [class.status-ready-for-production]="task.status === 'READY_FOR_PRODUCTION'"
-              [class.status-reopened]="task.status === 'REOPENED'"
-              class="inline-flex items-center justify-center text-[11px] font-bold uppercase bg-[#CDDDFF] text-[#374763] px-2 py-0.5 rounded-xs leading-[16.5px] tracking-normal"
-            >
-              {{ task.status.replaceAll('_', ' ') }}
-            </span>
-          </div>
-
-          <h3 class="text-[18px] font-medium text-[#041B3C] leading-[24.75px] tracking-normal">
-            {{ task.title }}
-          </h3>
-        </div>
-
-        <div class="flex items-center justify-between pt-1">
-          <div class="flex items-center gap-2">
-            @if (task.assignee) {
-              <div
-                class="size-7 rounded-xl bg-[#D8DEFF] flex items-center justify-center text-[11px] font-bold text-[#041B3C] shrink-0 leading-[100%] tracking-normal"
-              >
-                {{ projectservice.getInitials(task.assignee.name) }}
-              </div>
-            }
-            <div>
-              <p
-                class="text-[11px] font-bold text-[#434654B2]/70 uppercase tracking-normal leading-[16.5px] mb-0.5"
-              >
-                Due Date
-              </p>
-              <p class="text-xs leading-4 tracking-normal font-medium text-[#041B3C]">
-                {{ task.due_date ? (task.due_date | date: 'd MMM yyyy') : '_' }}
-              </p>
-            </div>
-          </div>
-
-          <button type="button" class="text-[#94A3B8] p-1 cursor-pointer" aria-label="More options">
-            <svg
-              width="4"
-              height="16"
-              viewBox="0 0 4 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14C0 13.45 0.195833 12.9792 0.5875 12.5875C0.979167 12.1958 1.45 12 2 12C2.55 12 3.02083 12.1958 3.4125 12.5875C3.80417 12.9792 4 13.45 4 14C4 14.55 3.80417 15.0208 3.4125 15.4125C3.02083 15.8042 2.55 16 2 16ZM2 10C1.45 10 0.979167 9.80417 0.5875 9.4125C0.195833 9.02083 0 8.55 0 8C0 7.45 0.195833 6.97917 0.5875 6.5875C0.979167 6.19583 1.45 6 2 6C2.55 6 3.02083 6.19583 3.4125 6.5875C3.80417 6.97917 4 7.45 4 8C4 8.55 3.80417 9.02083 3.4125 9.4125C3.02083 9.80417 2.55 10 2 10ZM2 4C1.45 4 0.979167 3.80417 0.5875 3.4125C0.195833 3.02083 0 2.55 0 2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0C2.55 0 3.02083 0.195833 3.4125 0.5875C3.80417 0.979167 4 1.45 4 2C4 2.55 3.80417 3.02083 3.4125 3.4125C3.02083 3.80417 2.55 4 2 4Z"
-                fill="#434654"
-                fill-opacity="0.4"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-    }
-  </div> -->
 </section>

@@ -10,8 +10,8 @@ import {
   computed,
 } from '@angular/core';
 import { ITask } from '../../interfaces/ITask';
-import { Epic, IEpicTasks } from '../../interfaces/IEpicTasks';
-import { ProjectsService } from '../../../projects/services/projects.service';
+import { Epic } from '../../interfaces/IEpicTasks';
+
 import { Subject, takeUntil } from 'rxjs';
 import { Member } from '../../../members/interfaces/IMembers';
 import { IEpicsProject } from '../../../epics/interfaces/IEpicsProject';
@@ -78,16 +78,12 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     effect(
       () => {
         this.selectedStatus.set(this.task()?.status ?? '');
-        // this.currentEpic.set(this.task()?.epic??null)
       },
       { allowSignalWrites: true }
     );
   }
-
   ngOnInit() {
     if (this.task()) {
-      console.log('current', this.task());
-
       const taskData = this.task();
       this.taskDetails.patchValue({
         title: this.task()?.title ?? '',
@@ -103,6 +99,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     //
     console.log('form detaisl', this.taskDetails.value);
   }
+
   formatDateForInput(dateString: string | Date | undefined) {
     if (!dateString) return '';
     const d = new Date(dateString);
@@ -128,9 +125,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
           const assignee = resp.find((m) => m.user_id === this.task()?.assignee?.id);
           this.currentAssignee.set(assignee ?? null);
         },
-        error: (error: HttpErrorResponse) => {
-          console.log(error);
-        },
+        error: (error: HttpErrorResponse) => {},
       });
   }
 
@@ -159,15 +154,10 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
             email: member.metadata.email,
             department: member.metadata.department,
           }
-        : null, // ⬅️ null بدل undefined
+        : null,
     });
   }
 
-  //   selectEpic(epic: Epic | IEpicsProject | null) {
-  //   this.currentEpic.set(epic as Epic);
-  //   this.isEditingEpic.set(false);
-  //   this.taskDetails.patchValue({ epic_id: epic?.id ?? '' });
-  // }
   selectEpic(epic: Epic | IEpicsProject | null) {
     const control = this.taskDetails.get('epic_id')!;
 
@@ -220,16 +210,12 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
 
   //  update title
   onTitleBlur() {
-    console.log('blur fired', this.taskDetails.get('title')?.value);
-    console.log('🔵 onTitleBlur CALLED'); // ⬅️ ضيف السطر ده
-    console.log('blur fired', this.taskDetails.get('title')?.value);
     const control = this.taskDetails.get('title')!;
     if (control.invalid) {
       control.setValue(this.task()?.title!);
       return;
     }
     const newValue = control.value!.trim();
-    console.log('newValue:', newValue, 'oldValue:', this.task()?.title);
 
     if (newValue !== this.task()?.title) {
       this.updateTask({ title: newValue }, 'title', this.task()?.title);
@@ -294,14 +280,13 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     this.tasksServices.updateTask(partial, this.task()?.id!).subscribe({
       next: () => {
         this.tasksServices.patchLocalTask(this.task()?.id!, partial);
-        console.log(partial);
+
         console.log('done');
       },
       error: () => {
         this.taskDetails
           .get(field)
           ?.setValue(oldValue ?? (field === 'assignee_id' || field === 'epic_id' ? null : ''));
-        // this.errorMessage.set('Failed to update task. Please try again.');
       },
     });
   }

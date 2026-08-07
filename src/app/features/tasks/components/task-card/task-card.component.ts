@@ -35,8 +35,4 @@ export class TaskCardComponent {
     today.setHours(0, 0, 0, 0);
     return due < today;
   }
-
-  // statusConfig(): StatusConfig {
-  //   return STATUSES.find((s) => s.value === this.task()?.status) ?? DEFAULT_STATUS;
-  // }
 }

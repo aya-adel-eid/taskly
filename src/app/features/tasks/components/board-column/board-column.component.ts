@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
 import { CardTaskViewComponent } from '../card-task-view/card-task-view.component';
 import { ITask, ITaskStatusConfig } from '../../interfaces/ITask';
-import { ProjectsService } from '../../../projects/services/projects.service';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
