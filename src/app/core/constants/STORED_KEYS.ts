@@ -4,4 +4,5 @@ export const StORED_KEYS = {
   rememberMeExpiry: 'rememberMeExpiry',
   projectId: 'ProjectID',
   projectName: 'ProjectName',
+  project: 'Project',
 };

@@ -39,7 +39,13 @@
         <label for="projectTitle" class="label-input"
           >Project TITLE <span class="text-red-600">*</span></label
         >
-        <input type="text" id="projectTitle" class="input-control w-full" formControlName="name" />
+        <input
+          type="text"
+          id="projectTitle"
+          class="input-control w-full"
+          formControlName="name"
+          placeholder="project name.."
+        />
         @if (addProjectForm.get('name')?.touched && addProjectForm.get('name')?.invalid) {
           <!-- requried -->
           @if (addProjectForm.get('name')?.hasError('required')) {

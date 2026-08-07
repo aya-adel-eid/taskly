@@ -1,10 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, input, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { interval, take } from 'rxjs';
+import { interval, take, timer } from 'rxjs';
 import { ProjectsService } from '../../services/projects.service';
 import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { Router, RouterLink } from '@angular/router';
+import { IProject } from '../../interfaces/Iprojects';
+import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 
 @Component({
   selector: 'app-project-form',
@@ -22,12 +24,14 @@ export class ProjectFormComponent {
   toastMessage = signal('');
   title = input<string>('');
   titleButton = input('');
+  projectSelected = signal<IProject | null>(null);
   constructor() {
-    if (this.projectServices.projectEdit()) {
+    this.projectSelected.set(JSON.parse(sessionStorage.getItem(StORED_KEYS.project)!));
+    if (this.projectSelected()) {
       this.isEdit.set(true);
       this.addProjectForm.patchValue({
-        name: this.projectServices.projectEdit()?.name ?? null,
-        description: this.projectServices.projectEdit()?.description!,
+        name: this.projectSelected()?.name ?? null,
+        description: this.projectSelected()?.description,
       });
     }
   }
@@ -51,16 +55,18 @@ export class ProjectFormComponent {
 
           this.toastMessage.set('Project created successfully');
           this.resetForm();
-          interval(1000)
-            .pipe(take(5))
-            .subscribe(() => {
-              this.toastMessage.set('');
-              this.route.navigateByUrl(`/project`);
-            });
+          timer(2000).subscribe(() => {
+            this.toastMessage.set('');
+            this.route.navigateByUrl(`/project`);
+          });
         },
         error: (error: HttpErrorResponse) => {
           this.toastMessage.set('');
+
           this.errorMsg.set(error.error.msg);
+          timer(2000).subscribe(() => {
+            this.errorMsg.set('');
+          });
         },
       });
     }
@@ -70,7 +76,7 @@ export class ProjectFormComponent {
     this.errorMsg.set('');
     if (this.addProjectForm.valid) {
       this.projectServices
-        .updateProject(this.projectServices.projectEdit()?.id!, this.addProjectForm.value)
+        .updateProject(this.projectSelected()?.id!, this.addProjectForm.value)
         .subscribe({
           next: (resp) => {
             this.isEdit.set(false);
@@ -78,15 +84,17 @@ export class ProjectFormComponent {
 
             this.toastMessage.set('Project Edit successfully');
             this.resetForm();
-            interval(1000)
-              .pipe(take(5))
-              .subscribe(() => {
-                this.toastMessage.set('');
-              });
+            timer(2000).subscribe(() => {
+              this.toastMessage.set('');
+              this.route.navigateByUrl('/project');
+            });
           },
           error: (error: HttpErrorResponse) => {
             this.toastMessage.set('');
             this.errorMsg.set(error.error.msg);
+            timer(2000).subscribe(() => {
+              this.errorMsg.set('');
+            });
           },
         });
     }
