@@ -20,6 +20,7 @@ export class EpicsService {
   epicTasks = signal<IEpicTasks[] | null>(null);
   isLoadingEpicTask = signal<boolean>(false);
   hasErrorEpicTask = signal<boolean>(false);
+  slectedEpicId = signal<string>('');
   // new epics
   addNewEpics(epicData: {}) {
     return this.httpClient.post(APIS_KEYS.projects.NewEpics, epicData);

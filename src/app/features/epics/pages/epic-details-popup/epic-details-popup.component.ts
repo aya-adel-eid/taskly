@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { IEpicDetails } from '../../interfaces/IEpicDetails';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Subject, takeUntil, timer } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IEpicTasks } from '../../../tasks/interfaces/IEpicTasks';
 import { TaskCardComponent } from '../../../tasks/components/task-card/task-card.component';
 import { TaskSkelltoneComponent } from '../../../tasks/components/task-skelltone/task-skelltone.component';
@@ -35,6 +35,7 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   epicsService = inject(EpicsService);
   private readonly memberService = inject(MembersService);
+  private readonly route = inject(Router);
   SharedService = inject(SharedServiceService);
   errorMessage = signal<string>('');
   epic = input.required<IEpicDetails>();
@@ -211,6 +212,11 @@ export class EpicDetailsPopupComponent implements OnInit, OnDestroy {
           this.epicsService.hasErrorEpicTask.set(true);
         },
       });
+  }
+  addTask() {
+    this.route.navigate(['/project', this.epic().project_id, 'tasks', 'new'], {
+      queryParams: { epicId: this.epic().id },
+    });
   }
 
   ngOnDestroy(): void {

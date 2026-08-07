@@ -26,6 +26,8 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   private readonly memberService = inject(MembersService);
   private readonly epicService = inject(EpicsService);
   private readonly tasksService = inject(TasksService);
+  epic_Id = signal<string>('');
+  status = signal<string>('');
   private readonly route = inject(Router);
   successMessage = signal<string>('');
   allMembers = signal<Member[] | null>(null);
@@ -36,17 +38,25 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe((param) => {
       this.projectId.set(param.get('projectId')!);
+
       this.getAllMembers();
       this.epicService.getEpicsProject(this.projectId());
     });
-    const status = this.activateRoute.snapshot.queryParamMap.get('status');
-    if (status) {
-      this.addNewTask.patchValue({ status });
+    this.activateRoute.queryParamMap.subscribe((param) => {
+      this.epic_Id.set(param.get('epicId')!);
+      this.status.set(param.get('status')!);
+    });
+
+    if (this.status()) {
+      this.addNewTask.patchValue({ status: this.status() });
+    }
+    if (this.epic_Id()) {
+      this.addNewTask.patchValue({ epic_id: this.epic_Id() });
     }
   }
   addNewTask = this.fb.group({
     project_id: [sessionStorage.getItem(StORED_KEYS.projectId), Validators.required],
-    epic_id: [null],
+    epic_id: [''],
     title: [null, [Validators.required]],
     description: [null],
     assignee_id: [null],

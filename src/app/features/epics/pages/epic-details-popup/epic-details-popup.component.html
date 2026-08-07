@@ -308,8 +308,8 @@
         >
           Tasks
         </h4>
-        <a
-          [routerLink]="['/project', epic().project_id, 'tasks', 'new']"
+        <button
+          (click)="addTask()"
           class="hidden lg:flex items-center gap-1.5 text-[13px] font-semibold text-[#0052CC] hover:text-[#003D9B] cursor-pointer"
         >
           <svg
@@ -322,7 +322,7 @@
             <path d="M5 6.5H0V5.5H5V0H6V5.5H11V6.5H6V12H5V6.5Z" fill="currentColor" />
           </svg>
           Add Task
-        </a>
+        </button>
         <button
           class="bg-[#E0E8FF] py-0.5 px-2 rounded-xl lg:hidden font-bold text-[10px] leading-3.75 text-[#434654] tracking-normal"
         >
@@ -407,9 +407,9 @@
               @for (task of epicTasks(); track task.id) {
                 <app-task-card [task]="task"></app-task-card>
               }
-              <a
-                [routerLink]="['/project', epic().project_id, 'tasks', 'new']"
-                class="lg:hidden border-2 border-dashed border-[#C3C6D64D]/70 py-4 flex gap-2 justify-center"
+              <button
+                (click)="addTask()"
+                class="lg:hidden border-2 border-dashed border-[#C3C6D64D]/70 py-4 flex gap-2 justify-center cursor-pointer"
               >
                 <span
                   ><svg
@@ -430,7 +430,7 @@
                   class="uppercase text-[12px] leading-4 font-bold tracking-[1.2px] text-[#43465499]/60"
                   >Add New Task</span
                 >
-              </a>
+              </button>
             }
           </div>
         }
