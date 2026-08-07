@@ -82,11 +82,8 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
       { allowSignalWrites: true }
     );
   }
-
   ngOnInit() {
     if (this.task()) {
-      console.log('current', this.task());
-
       const taskData = this.task();
       this.taskDetails.patchValue({
         title: this.task()?.title ?? '',
@@ -102,6 +99,7 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
     //
     console.log('form detaisl', this.taskDetails.value);
   }
+
   formatDateForInput(dateString: string | Date | undefined) {
     if (!dateString) return '';
     const d = new Date(dateString);

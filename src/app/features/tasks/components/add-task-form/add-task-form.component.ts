@@ -6,7 +6,6 @@ import { Member } from '../../../members/interfaces/IMembers';
 import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 import { MembersService } from '../../../members/services/members.service';
 import { EpicsService } from '../../../epics/services/epics.service';
@@ -32,12 +31,14 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   successMessage = signal<string>('');
   allMembers = signal<Member[] | null>(null);
   allEpics = this.epicService.epics;
+  errorMessage = signal<string>('');
 
   private destroy$ = new Subject<void>();
   projectId = signal<string>('');
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe((param) => {
       this.projectId.set(param.get('projectId')!);
+      this.addNewTask.patchValue({ project_id: this.projectId() });
 
       this.getAllMembers();
       this.epicService.getEpicsProject(this.projectId());
@@ -55,8 +56,8 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
     }
   }
   addNewTask = this.fb.group({
-    project_id: [sessionStorage.getItem(StORED_KEYS.projectId), Validators.required],
-    epic_id: [''],
+    project_id: ['', Validators.required],
+    epic_id: ['', Validators.required],
     title: [null, [Validators.required]],
     description: [null],
     assignee_id: [null],
@@ -118,8 +119,9 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   createNewTask() {
-    console.log(this.addNewTask.value);
+    this.addNewTask.markAllAsTouched();
     this.successMessage.set('');
+    this.errorMessage.set('');
     if (this.addNewTask.valid) {
       this.tasksService.createNewtTask(this.addNewTask.value).subscribe({
         next: (resp) => {
@@ -133,6 +135,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
         },
         error: (error: HttpErrorResponse) => {
           this.successMessage.set('');
+          this.errorMessage.set('Failed to add task. Please try again.');
         },
       });
     }
