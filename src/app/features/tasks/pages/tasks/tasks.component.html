@@ -39,126 +39,127 @@
             </svg>
           </span>
         </div>
-        <a
-          [routerLink]="['/project', projectId(), 'epics', 'new']"
-          class="btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 py-2 px-4 flex justify-center items-center lg:hidden"
-          ><span
-            ><svg
-              width="9"
-              height="9"
-              viewBox="0 0 9 9"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3.5 4.66667H0V3.5H3.5V0H4.66667V3.5H8.16667V4.66667H4.66667V8.16667H3.5V4.66667Z"
-                fill="white"
-              />
-            </svg>
-          </span>
-          <span>Create Task</span></a
-        >
-        <!-- select -->
-        <!-- View switcher (inline in the page, not a separate component) -->
-        <div class="relative lg:w-[156.83px] lg:block hidden">
-          <button
-            type="button"
-            (click)="toggleViewMenu()"
-            class="w-full flex items-center justify-between gap-2 border border-[#C3C6D633]/20 bg-white py-2 px-4 rounded-sm text-[14px] text-[#434654] cursor-pointer shadow shadow-[#0000000D]"
-          >
-            <span class="flex items-center gap-2">
-              @if (selectedView() === 'list') {
-                <svg
-                  width="14"
-                  height="6"
-                  viewBox="0 0 14 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4.08333 1.16667V0H12.25V1.16667H4.08333ZM4.08333 3.5V2.33333H12.25V3.5H4.08333ZM4.08333 5.83333V4.66667H12.25V5.83333H4.08333ZM2.33333 1.16667C2.16806 1.16667 2.02951 1.11076 1.91771 0.998958C1.8059 0.887153 1.75 0.748611 1.75 0.583333C1.75 0.418056 1.8059 0.279514 1.91771 0.167708C2.02951 0.0559028 2.16806 0 2.33333 0C2.49861 0 2.63715 0.0559028 2.74896 0.167708C2.86076 0.279514 2.91667 0.418056 2.91667 0.583333C2.91667 0.748611 2.86076 0.887153 2.74896 0.998958C2.63715 1.11076 2.49861 1.16667 2.33333 1.16667ZM2.33333 3.5C2.16806 3.5 2.02951 3.4441 1.91771 3.33229C1.8059 3.22049 1.75 3.08194 1.75 2.91667C1.75 2.75139 1.8059 2.61285 1.91771 2.50104C2.02951 2.38924 2.16806 2.33333 2.33333 2.33333C2.49861 2.33333 2.63715 2.38924 2.74896 2.50104C2.86076 2.61285 2.91667 2.75139 2.91667 2.91667C2.91667 3.08194 2.86076 3.22049 2.74896 3.33229C2.63715 3.4441 2.49861 3.5 2.33333 3.5ZM2.33333 5.83333C2.16806 5.83333 2.02951 5.77743 1.91771 5.66563C1.8059 5.55382 1.75 5.41528 1.75 5.25C1.75 5.08472 1.8059 4.94618 1.91771 4.83437C2.02951 4.72257 2.16806 4.66667 2.33333 4.66667C2.49861 4.66667 2.63715 4.72257 2.74896 4.83437C2.86076 4.94618 2.91667 5.08472 2.91667 5.25C2.91667 5.41528 2.86076 5.55382 2.74896 5.66563C2.63715 5.77743 2.49861 5.83333 2.33333 5.83333Z"
-                    fill="#003D9B"
-                  />
-                </svg>
-              } @else {
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0 6V0H6V6H0ZM0 13.5V7.5H6V13.5H0ZM7.5 6V0H13.5V6H7.5ZM7.5 13.5V7.5H13.5V13.5H7.5ZM1.5 4.5H4.5V1.5H1.5V4.5ZM9 4.5H12V1.5H9V4.5ZM9 12H12V9H9V12ZM1.5 12H4.5V9H1.5V12Z"
-                    fill="#041B3C"
-                  />
-                </svg>
-              }
-              {{ selectedViewLabel }}
+        <div class="flex justify-between gap-2">
+          <a
+            [routerLink]="['/project', projectId(), 'epics', 'new']"
+            class="btn-Primary w-full bg-linear-to-r from-primary to-primary-container gap-2 py-2 px-4 flex justify-center items-center lg:hidden"
+            ><span
+              ><svg
+                width="9"
+                height="9"
+                viewBox="0 0 9 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M3.5 4.66667H0V3.5H3.5V0H4.66667V3.5H8.16667V4.66667H4.66667V8.16667H3.5V4.66667Z"
+                  fill="white"
+                />
+              </svg>
             </span>
-
-            <svg
-              width="17"
-              height="6"
-              viewBox="0 0 17 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <span>Create Task</span></a
+          >
+          <!-- select -->
+          <!-- View switcher (inline in the page, not a separate component) -->
+          <div class="relative lg:w-[156.83px] lg:block w-full">
+            <button
+              type="button"
+              (click)="toggleViewMenu()"
+              class="w-full flex items-center justify-between gap-2 border border-[#C3C6D633]/20 bg-white py-2 px-4 rounded-sm text-[14px] text-[#434654] cursor-pointer shadow shadow-[#0000000D]"
             >
-              <path
-                d="M12.5 5.55L8 1.05L9.05 0L12.5 3.45L15.95 0L17 1.05L12.5 5.55Z"
-                fill="#041B3C"
-              />
-            </svg>
-          </button>
+              <span class="flex items-center gap-2">
+                @if (selectedView() === 'list') {
+                  <svg
+                    width="14"
+                    height="6"
+                    viewBox="0 0 14 6"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M4.08333 1.16667V0H12.25V1.16667H4.08333ZM4.08333 3.5V2.33333H12.25V3.5H4.08333ZM4.08333 5.83333V4.66667H12.25V5.83333H4.08333ZM2.33333 1.16667C2.16806 1.16667 2.02951 1.11076 1.91771 0.998958C1.8059 0.887153 1.75 0.748611 1.75 0.583333C1.75 0.418056 1.8059 0.279514 1.91771 0.167708C2.02951 0.0559028 2.16806 0 2.33333 0C2.49861 0 2.63715 0.0559028 2.74896 0.167708C2.86076 0.279514 2.91667 0.418056 2.91667 0.583333C2.91667 0.748611 2.86076 0.887153 2.74896 0.998958C2.63715 1.11076 2.49861 1.16667 2.33333 1.16667ZM2.33333 3.5C2.16806 3.5 2.02951 3.4441 1.91771 3.33229C1.8059 3.22049 1.75 3.08194 1.75 2.91667C1.75 2.75139 1.8059 2.61285 1.91771 2.50104C2.02951 2.38924 2.16806 2.33333 2.33333 2.33333C2.49861 2.33333 2.63715 2.38924 2.74896 2.50104C2.86076 2.61285 2.91667 2.75139 2.91667 2.91667C2.91667 3.08194 2.86076 3.22049 2.74896 3.33229C2.63715 3.4441 2.49861 3.5 2.33333 3.5ZM2.33333 5.83333C2.16806 5.83333 2.02951 5.77743 1.91771 5.66563C1.8059 5.55382 1.75 5.41528 1.75 5.25C1.75 5.08472 1.8059 4.94618 1.91771 4.83437C2.02951 4.72257 2.16806 4.66667 2.33333 4.66667C2.49861 4.66667 2.63715 4.72257 2.74896 4.83437C2.86076 4.94618 2.91667 5.08472 2.91667 5.25C2.91667 5.41528 2.86076 5.55382 2.74896 5.66563C2.63715 5.77743 2.49861 5.83333 2.33333 5.83333Z"
+                      fill="#003D9B"
+                    />
+                  </svg>
+                } @else {
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M0 6V0H6V6H0ZM0 13.5V7.5H6V13.5H0ZM7.5 6V0H13.5V6H7.5ZM7.5 13.5V7.5H13.5V13.5H7.5ZM1.5 4.5H4.5V1.5H1.5V4.5ZM9 4.5H12V1.5H9V4.5ZM9 12H12V9H9V12ZM1.5 12H4.5V9H1.5V12Z"
+                      fill="#041B3C"
+                    />
+                  </svg>
+                }
+                {{ selectedViewLabel }}
+              </span>
 
-          @if (isViewMenuOpen()) {
-            <ul
-              class="absolute z-10 mt-1 w-full bg-white border border-[#C3C6D633]/20 rounded-sm shadow-md overflow-hidden"
-            >
-              @for (option of viewOptions; track option.value) {
-                <li
-                  role="option"
-                  [attr.aria-selected]="selectedView() === option.value"
-                  (click)="selectView(option.value)"
-                  [class]="
-                    'flex items-center gap-2 py-2 px-4 text-[14px] cursor-pointer transition ' +
-                    viewOptionClasses(option.value)
-                  "
-                >
-                  @if (option.value === 'list') {
-                    <svg
-                      width="14"
-                      height="6"
-                      viewBox="0 0 14 6"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4.08333 1.16667V0H12.25V1.16667H4.08333ZM4.08333 3.5V2.33333H12.25V3.5H4.08333ZM4.08333 5.83333V4.66667H12.25V5.83333H4.08333ZM2.33333 1.16667C2.16806 1.16667 2.02951 1.11076 1.91771 0.998958C1.8059 0.887153 1.75 0.748611 1.75 0.583333C1.75 0.418056 1.8059 0.279514 1.91771 0.167708C2.02951 0.0559028 2.16806 0 2.33333 0C2.49861 0 2.63715 0.0559028 2.74896 0.167708C2.86076 0.279514 2.91667 0.418056 2.91667 0.583333C2.91667 0.748611 2.86076 0.887153 2.74896 0.998958C2.63715 1.11076 2.49861 1.16667 2.33333 1.16667ZM2.33333 3.5C2.16806 3.5 2.02951 3.4441 1.91771 3.33229C1.8059 3.22049 1.75 3.08194 1.75 2.91667C1.75 2.75139 1.8059 2.61285 1.91771 2.50104C2.02951 2.38924 2.16806 2.33333 2.33333 2.33333C2.49861 2.33333 2.63715 2.38924 2.74896 2.50104C2.86076 2.61285 2.91667 2.75139 2.91667 2.91667C2.91667 3.08194 2.86076 3.22049 2.74896 3.33229C2.63715 3.4441 2.49861 3.5 2.33333 3.5ZM2.33333 5.83333C2.16806 5.83333 2.02951 5.77743 1.91771 5.66563C1.8059 5.55382 1.75 5.41528 1.75 5.25C1.75 5.08472 1.8059 4.94618 1.91771 4.83437C2.02951 4.72257 2.16806 4.66667 2.33333 4.66667C2.49861 4.66667 2.63715 4.72257 2.74896 4.83437C2.86076 4.94618 2.91667 5.08472 2.91667 5.25C2.91667 5.41528 2.86076 5.55382 2.74896 5.66563C2.63715 5.77743 2.49861 5.83333 2.33333 5.83333Z"
-                        fill="#003D9B"
-                      />
-                    </svg>
-                  } @else {
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M0 6V0H6V6H0ZM0 13.5V7.5H6V13.5H0ZM7.5 6V0H13.5V6H7.5ZM7.5 13.5V7.5H13.5V13.5H7.5ZM1.5 4.5H4.5V1.5H1.5V4.5ZM9 4.5H12V1.5H9V4.5ZM9 12H12V9H9V12ZM1.5 12H4.5V9H1.5V12Z"
-                        fill="#041B3C"
-                      />
-                    </svg>
-                  }
-                  {{ option.label }}
-                </li>
-              }
-            </ul>
-          }
+              <svg
+                width="17"
+                height="6"
+                viewBox="0 0 17 6"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.5 5.55L8 1.05L9.05 0L12.5 3.45L15.95 0L17 1.05L12.5 5.55Z"
+                  fill="#041B3C"
+                />
+              </svg>
+            </button>
+
+            @if (isViewMenuOpen()) {
+              <ul
+                class="absolute z-10 mt-1 w-full bg-white border border-[#C3C6D633]/20 rounded-sm shadow-md overflow-hidden"
+              >
+                @for (option of viewOptions; track option.value) {
+                  <li
+                    role="option"
+                    [attr.aria-selected]="selectedView() === option.value"
+                    (click)="selectView(option.value)"
+                    [class]="
+                      'flex items-center gap-2 py-2 px-4 text-[14px] cursor-pointer transition ' +
+                      viewOptionClasses(option.value)
+                    "
+                  >
+                    @if (option.value === 'list') {
+                      <svg
+                        width="14"
+                        height="6"
+                        viewBox="0 0 14 6"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M4.08333 1.16667V0H12.25V1.16667H4.08333ZM4.08333 3.5V2.33333H12.25V3.5H4.08333ZM4.08333 5.83333V4.66667H12.25V5.83333H4.08333ZM2.33333 1.16667C2.16806 1.16667 2.02951 1.11076 1.91771 0.998958C1.8059 0.887153 1.75 0.748611 1.75 0.583333C1.75 0.418056 1.8059 0.279514 1.91771 0.167708C2.02951 0.0559028 2.16806 0 2.33333 0C2.49861 0 2.63715 0.0559028 2.74896 0.167708C2.86076 0.279514 2.91667 0.418056 2.91667 0.583333C2.91667 0.748611 2.86076 0.887153 2.74896 0.998958C2.63715 1.11076 2.49861 1.16667 2.33333 1.16667ZM2.33333 3.5C2.16806 3.5 2.02951 3.4441 1.91771 3.33229C1.8059 3.22049 1.75 3.08194 1.75 2.91667C1.75 2.75139 1.8059 2.61285 1.91771 2.50104C2.02951 2.38924 2.16806 2.33333 2.33333 2.33333C2.49861 2.33333 2.63715 2.38924 2.74896 2.50104C2.86076 2.61285 2.91667 2.75139 2.91667 2.91667C2.91667 3.08194 2.86076 3.22049 2.74896 3.33229C2.63715 3.4441 2.49861 3.5 2.33333 3.5ZM2.33333 5.83333C2.16806 5.83333 2.02951 5.77743 1.91771 5.66563C1.8059 5.55382 1.75 5.41528 1.75 5.25C1.75 5.08472 1.8059 4.94618 1.91771 4.83437C2.02951 4.72257 2.16806 4.66667 2.33333 4.66667C2.49861 4.66667 2.63715 4.72257 2.74896 4.83437C2.86076 4.94618 2.91667 5.08472 2.91667 5.25C2.91667 5.41528 2.86076 5.55382 2.74896 5.66563C2.63715 5.77743 2.49861 5.83333 2.33333 5.83333Z"
+                          fill="#003D9B"
+                        />
+                      </svg>
+                    } @else {
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 14 14"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M0 6V0H6V6H0ZM0 13.5V7.5H6V13.5H0ZM7.5 6V0H13.5V6H7.5ZM7.5 13.5V7.5H13.5V13.5H7.5ZM1.5 4.5H4.5V1.5H1.5V4.5ZM9 4.5H12V1.5H9V4.5ZM9 12H12V9H9V12ZM1.5 12H4.5V9H1.5V12Z"
+                          fill="#041B3C"
+                        />
+                      </svg>
+                    }
+                    {{ option.label }}
+                  </li>
+                }
+              </ul>
+            }
+          </div>
         </div>
-
         <button
           type="button"
           class="w-8.5 h-7 justify-center items-center rounded-sm bg-[#D7E2FF] lg:flex hidden"
@@ -178,7 +179,7 @@
       </div>
     </div>
   </div>
-  <div class="">
+  <div class="py-3">
     @if (selectedView() === 'list') {
       <app-list-view></app-list-view>
     } @else {

@@ -53,8 +53,8 @@ export class TasksComponent {
 
   // --- view switcher state (was app-view-switcher, now inline) ---
   viewOptions: IViewOption[] = [
-    { value: 'list', label: 'List View' },
-    { value: 'board', label: 'Board View' },
+    { value: 'list', label: 'List ' },
+    { value: 'board', label: 'Board ' },
   ];
   selectedView = signal<TasksView>('board'); // default per spec
   isViewMenuOpen = signal(false);
