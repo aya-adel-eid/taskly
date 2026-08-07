@@ -62,11 +62,8 @@ export class CardTaskViewComponent {
         this.taskDetails.set(resp[0]);
 
         this.showDetails.set(true);
-        console.log(this.taskDetails(), 444);
       },
-      error: (error: HttpErrorResponse) => {
-        console.log(error);
-      },
+      error: (error: HttpErrorResponse) => {},
     });
   }
 }

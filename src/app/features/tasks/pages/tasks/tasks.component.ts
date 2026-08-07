@@ -2,11 +2,10 @@ import { Component, computed, ElementRef, HostListener, inject, signal } from '@
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { BoardViewComponent } from '../board-view/board-view.component';
 import { ListViewComponent } from '../list-view/list-view.component';
-// import { ProjectsService } from '../../services/projects.service';
-// import { combineLatest, distinctUntilChanged, filter, map, tap } from 'rxjs';
+
 import { DatePipe } from '@angular/common';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 type TasksView = 'list' | 'board';
 
@@ -17,7 +16,7 @@ interface IViewOption {
 
 interface IBoardStatusConfig {
   label: string;
-  status: string; // TODO: match exactly to your backend's status enum values
+  status: string;
   dotColor: string;
 }
 @Component({
@@ -60,7 +59,7 @@ export class TasksComponent {
   isViewMenuOpen = signal(false);
 
   // --- board columns config ---
-  // TODO: confirm the exact `status` values your API expects (case/format)
+
   columns: IBoardStatusConfig[] = [
     { label: 'TO DO', status: 'TO_DO', dotColor: '#737685' },
     { label: 'IN PROGRESS', status: 'IN_PROGRESS', dotColor: '#2F6FED' },
@@ -84,15 +83,14 @@ export class TasksComponent {
     const initialSearch = this.route.snapshot.queryParamMap.get('search') ?? '';
     this.searchControl.setValue(initialSearch, { emitEvent: false });
 
-    // 2. تحديث الـ URL عند الكتابة بعد 400ms
     this.searchControl.valueChanges
       .pipe(debounceTime(400), distinctUntilChanged())
       .subscribe((term) => {
         this.router.navigate([], {
           relativeTo: this.route,
           queryParams: {
-            search: term.trim() ? term.trim() : null, // لو فاضي بيمسحه من الـ URL
-            offset: 0, // Reset offset عند كل بحث جديد
+            search: term.trim() ? term.trim() : null,
+            offset: 0,
           },
           queryParamsHandling: 'merge',
         });
@@ -130,96 +128,4 @@ export class TasksComponent {
       this.isViewMenuOpen.set(false);
     }
   }
-
-  // projectservice = inject(ProjectsService);
-
-  // allTasks = this.projectservice.allTasks;
-  // totalCount = this.projectservice.totalCountTasks;
-  // hasError = this.projectservice.tasksError;
-  // isLoading = this.projectservice.tasksIsLoading;
-  // page = signal(1);
-  // limit = signal(5);
-  // isMobile = signal(window.innerWidth < 1024);
-
-  // constructor() {
-  //   combineLatest([this.route.paramMap, this.route.queryParamMap])
-  //     .pipe(
-  //       tap(([params]) => {
-  //         // projectId is a route param (/project/:projectId/tasks), not a query param
-  //         this.projectId.set(params.get('projectId')!);
-  //       }),
-  //       map(([, queryParams]) => +(queryParams.get('offset') ?? 0)),
-  //       distinctUntilChanged(),
-  //       filter(() => !!this.projectId())
-  //     )
-  //     .subscribe((offset) => {
-  //       this.page.set(offset / this.limit() + 1);
-  //       this.getAllTasks();
-  //     });
-  // }
-
-  // getAllTasks() {
-  //   this.projectservice.getAllTasks(this.projectId(), this.limit(), this.page(), false);
-  // }
-
-  // changePage(page: number) {
-  //   this.page.set(page);
-
-  //   this.router.navigate([], {
-  //     queryParams: {
-  //       offset: (page - 1) * this.limit(),
-  //     },
-  //     queryParamsHandling: 'merge',
-  //   });
-
-  //   window.scrollTo({
-  //     top: 0,
-  //     behavior: 'smooth',
-  //   });
-  // }
-
-  // get pages(): number[] {
-  //   return Array.from({ length: Math.ceil(this.totalCount() / this.limit()) }, (_, i) => i + 1);
-  // }
-
-  // @HostListener('window:resize')
-  // onResize() {
-  //   const wasMobile = this.isMobile();
-  //   this.isMobile.set(window.innerWidth < 1024);
-  //   const isNowDesktop = wasMobile && !this.isMobile();
-
-  //   if (isNowDesktop) {
-  //     this.page.set(1);
-
-  //     this.router.navigate([], {
-  //       queryParams: { offset: 0 },
-  //       queryParamsHandling: 'merge',
-  //     });
-
-  //     this.getAllTasks(); // append = false
-  //   }
-  // }
-
-  // @HostListener('window:scroll')
-  // onScroll() {
-  //   // يشتغل على الموبايل فقط
-  //   if (!this.isMobile()) return;
-
-  //   // لو لسه بيحمل بيانات
-  //   if (this.isLoading()) return;
-
-  //   const reachedBottom =
-  //     window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
-
-  //   if (reachedBottom && this.page() < this.pages.length) {
-  //     this.page.update((p) => p + 1);
-
-  //     this.projectservice.getAllTasks(
-  //       this.projectId(),
-  //       this.limit(),
-  //       this.page(),
-  //       true // append
-  //     );
-  //   }
-  // }
 }

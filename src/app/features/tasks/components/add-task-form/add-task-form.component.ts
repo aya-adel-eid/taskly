@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProjectsService } from '../../../projects/services/projects.service';
+
 import { Member } from '../../../members/interfaces/IMembers';
 import { interval, Subject, take, takeUntil } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -22,7 +22,7 @@ import { TasksService } from '../../services/tasks.service';
 export class AddTaskFormComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly activateRoute = inject(ActivatedRoute);
-  private readonly projectServices = inject(ProjectsService);
+
   private readonly memberService = inject(MembersService);
   private readonly epicService = inject(EpicsService);
   private readonly tasksService = inject(TasksService);
@@ -107,7 +107,6 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
-          console.log(resp);
           this.allMembers.set(resp);
         },
         error: (error: HttpErrorResponse) => {},
@@ -124,7 +123,6 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
     if (this.addNewTask.valid) {
       this.tasksService.createNewtTask(this.addNewTask.value).subscribe({
         next: (resp) => {
-          console.log(resp);
           this.successMessage.set('Your epic has been created successfully.');
           interval(1000)
             .pipe(take(3))
@@ -134,7 +132,6 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
             });
         },
         error: (error: HttpErrorResponse) => {
-          console.log(error);
           this.successMessage.set('');
         },
       });
