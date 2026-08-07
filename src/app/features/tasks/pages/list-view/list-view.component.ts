@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { combineLatest, distinctUntilChanged, filter, map, tap } from 'rxjs';
 import { TaskDetailsPageComponent } from '../task-details-page/task-details-page.component';
@@ -13,7 +13,7 @@ import { SharedServiceService } from '../../../../shared/shared-service.service'
 @Component({
   selector: 'app-list-view',
   standalone: true,
-  imports: [DatePipe, TaskDetailsPageComponent],
+  imports: [DatePipe, TaskDetailsPageComponent, RouterLink],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css',
 })

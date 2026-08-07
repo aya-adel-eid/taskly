@@ -1,5 +1,21 @@
 <div class="w-full overflow-x-auto hidden lg:block">
-  <table class="w-full text-left border-collapse">
+  <a
+    [routerLink]="['/project', projectId(), 'tasks', 'new']"
+    class="fixed z-10 bottom-2 inset-e-8 btn-Primary bg-linear-to-r from-primary to-primary-container gap-2 pt-3 px-6 items-center lg:flex"
+  >
+    <span class=""
+      ><svg
+        width="11"
+        height="11"
+        viewBox="0 0 11 11"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M4.5 6H0V4.5H4.5V0H6V4.5H10.5V6H6V10.5H4.5V6Z" fill="white" />
+      </svg>
+    </span>
+  </a>
+  <table class="w-full text-left border-collapse h-[42.5dvh]">
     <!-- Table Header -->
     <thead>
       <tr class="bg-[#F1F3FF80] border-b border-[#F1F3FF]">
