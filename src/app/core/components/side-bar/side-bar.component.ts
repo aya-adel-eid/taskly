@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { AsidBarService } from '../../services/helper/asid-bar.service';
-import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServicesService } from '../../../features/auth/services/auth-services.service';
 import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
@@ -28,31 +28,24 @@ import { SharedServiceService } from '../../../shared/shared-service.service';
 export class SideBarComponent implements OnInit, OnDestroy {
   private readonly asidBar = inject(AsidBarService);
   private readonly authService = inject(AuthServicesService);
-  private readonly activeRoute = inject(ActivatedRoute);
+
   private readonly projectServices = inject(ProjectsService);
   sharedService = inject(SharedServiceService);
   private destroy$ = new Subject<void>();
   isMobileMenuOpen = false;
   isCollapsed = this.asidBar.isCollapsed;
+  isMenuOpen = signal(false);
 
+  private elementRef = inject(ElementRef);
   private isDesktopView = typeof window !== 'undefined' && window.innerWidth >= 1024;
   user = signal<UserInfo | null>(null);
 
   projectId = computed(() => this.projectServices.selectedProjectId());
 
-  route = inject(ActivatedRoute);
-
-  private readonly router = inject(Router);
-
   selectedItem = signal('Projects');
 
   unSelecteProject() {
     this.sharedService.unSelecteProject();
-  }
-
-  isActive(route: string | null): boolean {
-    if (!route) return false;
-    return this.router.url.startsWith(route);
   }
 
   ngOnInit(): void {
@@ -96,19 +89,9 @@ export class SideBarComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$), shareReplay())
       .subscribe({
         next: (resp: UserInfo) => {
-          // this.userName = resp.user_metadata.name;
-          // this.userDepartment = resp.user_metadata.job_title;
-          // const words = resp.user_metadata.name.split(/\s+/);
-          // if (words.length >= 2) {
-          //   this.userInitials = words[0][0] + words[1][0];
-          // } else {
-          //   this.userInitials = resp.user_metadata.name.substring(0, 2).toUpperCase();
-          // }
           this.user.set(resp);
         },
-        error: (error: HttpErrorResponse) => {
-          console.error('getUserInfo failed:', error.status, error.error);
-        },
+        error: (error: HttpErrorResponse) => {},
       });
   }
 
@@ -117,23 +100,19 @@ export class SideBarComponent implements OnInit, OnDestroy {
     this.isMenuOpen.set(false);
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-  isMenuOpen = signal(false);
-
   toggleMenu(event: Event) {
     event.stopPropagation();
     this.isMenuOpen.update((v) => !v);
   }
-
-  private elementRef = inject(ElementRef);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.isMenuOpen.set(false);
     }
+  }
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
