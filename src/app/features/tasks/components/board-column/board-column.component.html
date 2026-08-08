@@ -1,4 +1,6 @@
 <app-toast-massage [message]="errorMessage()" [flag]="false"></app-toast-massage>
+<app-toast-massage [message]="successMsg()" [flag]="true"></app-toast-massage>
+
 <div
   class="flex flex-col gap-4 w-[288px] shrink-0 rounded-lg p-3 transition-colors h-full"
   [class.bg-[#F7F8FA]]="dragOverStatus() !== statu().value"
