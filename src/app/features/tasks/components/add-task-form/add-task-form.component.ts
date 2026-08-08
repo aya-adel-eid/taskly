@@ -25,7 +25,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   private readonly memberService = inject(MembersService);
   private readonly epicService = inject(EpicsService);
   private readonly tasksService = inject(TasksService);
-  epic_Id = signal<string>('');
+  epic_Id = signal<string | null>(null);
   status = signal<string>('');
   private readonly route = inject(Router);
   successMessage = signal<string>('');
@@ -57,7 +57,7 @@ export class AddTaskFormComponent implements OnInit, OnDestroy {
   }
   addNewTask = this.fb.group({
     project_id: ['', Validators.required],
-    epic_id: ['', Validators.required],
+    epic_id: [null as string | null],
     title: [null, [Validators.required]],
     description: [null],
     assignee_id: [null],
