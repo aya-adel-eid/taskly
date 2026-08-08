@@ -11,6 +11,8 @@ import { ProjectCardSkelttonComponent } from '../../components/project-card-skel
 import { ViewportScroller } from '@angular/common';
 import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { InfiniteScrollDirective } from '../../../../shared/directives/infinite-scroll.directive';
 
 @Component({
   selector: 'app-list-projects',
@@ -22,6 +24,8 @@ import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
     HandleErrorComponent,
     EmptyProjectCardComponent,
     ProjectCardSkelttonComponent,
+    PaginationComponent,
+    InfiniteScrollDirective,
   ],
   templateUrl: './list-projects.component.html',
   styleUrl: './list-projects.component.css',
@@ -77,26 +81,20 @@ export class ListProjectsComponent {
     }
   }
 
-  @HostListener('window:scroll')
-  onScroll() {
-    if (!this.isMobile()) return;
-
+  onInfiniteScroll() {
     if (this.isLoading()) return;
 
-    const reachedBottom =
-      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+    const totalPages = Math.ceil(this.totalCount() / this.limit());
+    if (this.page() >= totalPages) return;
 
-    if (reachedBottom && this.page() < this.pages.length) {
-      this.page.update((p) => p + 1);
+    this.page.update((p) => p + 1);
 
-      this.projectsService.getAllProjects(
-        this.limit(),
-        this.page(),
-        true // append
-      );
-    }
+    this.projectsService.getAllProjects(
+      this.limit(),
+      this.page(),
+      true // append
+    );
   }
-
   getAllProjects() {
     this.projectsService.getAllProjects(this.limit(), this.page(), false);
   }
