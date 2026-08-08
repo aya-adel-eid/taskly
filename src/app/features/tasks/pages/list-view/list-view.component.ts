@@ -81,7 +81,7 @@ export class ListViewComponent {
       this.limit(),
       this.page(),
       append,
-      this.searchTerm() // تمرير كلمة البحث للسيرفيس
+      this.searchTerm()
     );
   }
 
