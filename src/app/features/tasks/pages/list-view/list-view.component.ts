@@ -10,11 +10,18 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TasksService } from '../../services/tasks.service';
 import { SharedServiceService } from '../../../../shared/shared-service.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { InfiniteScrollDirective } from '../../../../shared/directives/infinite-scroll.directive';
 
 @Component({
   selector: 'app-list-view',
   standalone: true,
-  imports: [DatePipe, TaskDetailsPageComponent, RouterLink, PaginationComponent],
+  imports: [
+    DatePipe,
+    TaskDetailsPageComponent,
+    RouterLink,
+    PaginationComponent,
+    InfiniteScrollDirective,
+  ],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css',
 })
@@ -115,21 +122,14 @@ export class ListViewComponent {
       this.getAllTasks(false); // append = false
     }
   }
-
-  @HostListener('window:scroll')
-  onScroll() {
-    if (!this.isMobile()) return;
-
+  onInfiniteScroll() {
     if (this.isLoading()) return;
 
-    const reachedBottom =
-      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+    const totalPages = Math.ceil(this.totalCount() / this.limit());
+    if (this.page() >= totalPages) return;
 
-    if (reachedBottom && this.page() < this.pages.length) {
-      this.page.update((p) => p + 1);
-
-      this.getAllTasks(true);
-    }
+    this.page.update((p) => p + 1);
+    this.getAllTasks(true);
   }
 
   getTaskDetails(projectId: string, taskId: string) {

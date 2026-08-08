@@ -40,7 +40,12 @@
     </thead>
 
     <!-- Table Body -->
-    <tbody class="divide-y divide-[#F1F3FF]">
+    <tbody
+      class="divide-y divide-[#F1F3FF]"
+      appInfiniteScroll
+      [disabled]="!isMobile()"
+      (scrolled)="onInfiniteScroll()"
+    >
       @if (isLoading()) {
         <!-- Table Rows Skeleton Loading -->
         @for (i of [1, 2, 3, 4, 5]; track i) {
