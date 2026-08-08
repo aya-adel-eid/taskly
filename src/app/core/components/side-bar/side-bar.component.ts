@@ -13,7 +13,7 @@ import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/r
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServicesService } from '../../../features/auth/services/auth-services.service';
 import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
-import { Subject, takeUntil } from 'rxjs';
+import { shareReplay, Subject, takeUntil } from 'rxjs';
 import { ProjectsService } from '../../../features/projects/services/projects.service';
 import { StORED_KEYS } from '../../constants/STORED_KEYS';
 import { SharedServiceService } from '../../../shared/shared-service.service';
@@ -30,18 +30,14 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthServicesService);
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly projectServices = inject(ProjectsService);
-  private readonly sharedService = inject(SharedServiceService);
+  sharedService = inject(SharedServiceService);
   private destroy$ = new Subject<void>();
   isMobileMenuOpen = false;
   isCollapsed = this.asidBar.isCollapsed;
 
   private isDesktopView = typeof window !== 'undefined' && window.innerWidth >= 1024;
+  user = signal<UserInfo | null>(null);
 
-  userName!: string;
-  userInitials!: string;
-  userDepartment!: string;
-
-  // بقت computed جاي من الـ service مباشرة، مش signal منفصل
   projectId = computed(() => this.projectServices.selectedProjectId());
 
   route = inject(ActivatedRoute);
@@ -97,17 +93,18 @@ export class SideBarComponent implements OnInit, OnDestroy {
   getUserInfo() {
     this.authService
       .getUserInfo()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(this.destroy$), shareReplay())
       .subscribe({
         next: (resp: UserInfo) => {
-          this.userName = resp.user_metadata.name;
-          this.userDepartment = resp.user_metadata.job_title;
-          const words = resp.user_metadata.name.split(/\s+/);
-          if (words.length >= 2) {
-            this.userInitials = words[0][0] + words[1][0];
-          } else {
-            this.userInitials = resp.user_metadata.name.substring(0, 2).toUpperCase();
-          }
+          // this.userName = resp.user_metadata.name;
+          // this.userDepartment = resp.user_metadata.job_title;
+          // const words = resp.user_metadata.name.split(/\s+/);
+          // if (words.length >= 2) {
+          //   this.userInitials = words[0][0] + words[1][0];
+          // } else {
+          //   this.userInitials = resp.user_metadata.name.substring(0, 2).toUpperCase();
+          // }
+          this.user.set(resp);
         },
         error: (error: HttpErrorResponse) => {
           console.error('getUserInfo failed:', error.status, error.error);
