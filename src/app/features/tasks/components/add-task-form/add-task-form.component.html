@@ -6,7 +6,7 @@
   <form class="w-full flex flex-col gap-8" [formGroup]="addNewTask" (ngSubmit)="createNewTask()">
     <div>
       <label for="projectTitle" class="label-input"
-        >Project TITLE <span class="text-red-600">*</span></label
+        >Project TITLE <span class="text-red-600 text-lg">*</span></label
       >
       <input
         type="text"
@@ -41,7 +41,9 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <!-- status -->
       <div>
-        <label class="label-input" for="status">Status*</label>
+        <label class="label-input" for="status"
+          >Status<span class="text-red-600 text-lg">*</span></label
+        >
         <div class="relative">
           <select
             class="input-control appearance-none cursor-pointer w-full"
@@ -114,7 +116,7 @@
     </div>
     <div>
       <!-- epic Id -->
-      <label class="label-input" for="epic">Epic</label>
+      <label class="label-input" for="epic">Epic<span class="text-red-600 text-lg">*</span></label>
       <div class="relative">
         <select
           class="input-control appearance-none cursor-pointer w-full"

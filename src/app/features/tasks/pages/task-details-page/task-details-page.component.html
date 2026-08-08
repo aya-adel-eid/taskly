@@ -1,3 +1,6 @@
+<app-toast-massage [flag]="true" [message]="successMsg()"></app-toast-massage>
+<app-toast-massage [flag]="false" [message]="errorMsg()"></app-toast-massage>
+
 <div
   class="fixed inset-0 bg-[#041B3C66]/50 flex items-end md:items-center md:justify-center z-50 lg:p-4"
   (click)="close()"

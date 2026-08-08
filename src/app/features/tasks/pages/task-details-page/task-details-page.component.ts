@@ -12,7 +12,7 @@ import {
 import { ITask } from '../../interfaces/ITask';
 import { Epic } from '../../interfaces/IEpicTasks';
 
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, timer } from 'rxjs';
 import { Member } from '../../../members/interfaces/IMembers';
 import { IEpicsProject } from '../../../epics/interfaces/IEpicsProject';
 import { DatePipe } from '@angular/common';
@@ -23,11 +23,12 @@ import { MembersService } from '../../../members/services/members.service';
 import { EpicsService } from '../../../epics/services/epics.service';
 import { TasksService } from '../../services/tasks.service';
 import { SharedServiceService } from '../../../../shared/shared-service.service';
+import { ToastMassageComponent } from '../../../../shared/components/toast-massage/toast-massage.component';
 
 @Component({
   selector: 'app-task-details-page',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [DatePipe, ReactiveFormsModule, ToastMassageComponent],
   templateUrl: './task-details-page.component.html',
   styleUrl: './task-details-page.component.css',
 })
@@ -39,6 +40,8 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
   sharedService = inject(SharedServiceService);
   todayDateString = new Date().toISOString().split('T')[0];
   task = input<ITask>();
+  successMsg = signal<string>('');
+  errorMsg = signal<string>('');
 
   private destroy$ = new Subject<void>();
 
@@ -277,16 +280,25 @@ export class TaskDetailsPageComponent implements OnInit, OnDestroy {
 
   // ---------- Generic update + rollback ----------
   updateTask(partial: Record<string, any>, field: string, oldValue: any) {
+    this.successMsg.set('');
+    this.errorMsg.set('');
     this.tasksServices.updateTask(partial, this.task()?.id!).subscribe({
       next: () => {
         this.tasksServices.patchLocalTask(this.task()?.id!, partial);
 
-        console.log('done');
+        this.successMsg.set('task updated successfully.');
+        timer(3000).subscribe(() => {
+          this.successMsg.set('');
+        });
       },
       error: () => {
         this.taskDetails
           .get(field)
           ?.setValue(oldValue ?? (field === 'assignee_id' || field === 'epic_id' ? null : ''));
+        this.errorMsg.set('Failed to update task. Please try again.');
+        timer(3000).subscribe(() => {
+          this.errorMsg.set('');
+        });
       },
     });
   }

@@ -37,6 +37,7 @@ export class BoardColumnComponent implements OnInit {
   draggedTask = this.tasksService.draggedTask;
   draggedFromStatus = this.tasksService.draggedFromStatus;
   dragOverStatus = this.tasksService.dragOverStatus;
+  successMsg = signal<string>('');
 
   readonly limit = 5;
   page = signal(1);
@@ -156,6 +157,7 @@ export class BoardColumnComponent implements OnInit {
     this.tasksService.updateTask({ status: targetStatus }, task.id).subscribe({
       next: () => {
         this.errorMessage.set('');
+        this.successMsg.set('Task moved successfully.');
       },
       error: (error: HttpErrorResponse) => {
         this.tasksService.tasksByStatus.update((byStatus) => {
