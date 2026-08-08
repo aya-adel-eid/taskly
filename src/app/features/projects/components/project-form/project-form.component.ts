@@ -7,6 +7,7 @@ import { ToastMassageComponent } from '../../../../shared/components/toast-massa
 import { Router, RouterLink } from '@angular/router';
 import { IProject } from '../../interfaces/Iprojects';
 import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
+import { SharedServiceService } from '../../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-project-form',
@@ -18,6 +19,7 @@ import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 export class ProjectFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly projectServices = inject(ProjectsService);
+  private readonly sharedService = inject(SharedServiceService);
   private readonly route = inject(Router);
   isEdit = signal<boolean>(false);
   errorMsg = signal<string>('');
@@ -57,6 +59,7 @@ export class ProjectFormComponent {
           this.resetForm();
           timer(2000).subscribe(() => {
             this.toastMessage.set('');
+            this.sharedService.unSelecteProject();
             this.route.navigateByUrl(`/project`);
           });
         },
@@ -81,11 +84,11 @@ export class ProjectFormComponent {
           next: (resp) => {
             this.isEdit.set(false);
             this.projectServices.projectEdit.set(null);
-
             this.toastMessage.set('Project Edit successfully');
             this.resetForm();
             timer(2000).subscribe(() => {
               this.toastMessage.set('');
+              this.sharedService.unSelecteProject();
               this.route.navigateByUrl('/project');
             });
           },
