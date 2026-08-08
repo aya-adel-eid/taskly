@@ -21,17 +21,17 @@
         <div class="flex items-center gap-4">
           <div class="size-12 rounded-xl bg-[#DAE2FF] flex items-center justify-center">
             <span class="text-main-500 font-semibold">
-              {{ sharedService.getInitials(member.metadata?.name ?? '') }}
+              {{ sharedService.getInitials(member.metadata.name) }}
             </span>
           </div>
 
           <div>
             <h3 class="font-semibold text-sm text-[#041B3C]">
-              {{ member.metadata?.name }}
+              {{ member.metadata.name }}
             </h3>
 
             <p class="text-xs text-[#434654]">
-              {{ member.metadata?.email }}
+              {{ member.metadata.email }}
             </p>
           </div>
         </div>
@@ -75,17 +75,17 @@
           <div class="flex gap-3">
             <div class="size-12 rounded-xl bg-[#DAE2FF] flex items-center justify-center">
               <span class="text-main-500 font-semibold">
-                {{ sharedService.getInitials(member.metadata?.name ?? '') }}
+                {{ sharedService.getInitials(member.metadata.name) }}
               </span>
             </div>
 
             <div>
               <h3 class="font-semibold text-sm text-[#041B3C]">
-                {{ member.metadata?.name }}
+                {{ member.metadata.name }}
               </h3>
 
               <p class="text-xs text-[#434654]">
-                {{ member.metadata?.email }}
+                {{ member.metadata.email }}
               </p>
             </div>
           </div>
