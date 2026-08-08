@@ -54,12 +54,12 @@ export class ProjectFormComponent {
       this.projectServices.createNewProject(this.addProjectForm.value).subscribe({
         next: (resp) => {
           this.errorMsg.set('');
-          this.sharedService.unSelecteProject();
 
           this.toastMessage.set('Project created successfully');
           this.resetForm();
           timer(2000).subscribe(() => {
             this.toastMessage.set('');
+            this.sharedService.unSelecteProject();
             this.route.navigateByUrl(`/project`);
           });
         },
@@ -84,11 +84,11 @@ export class ProjectFormComponent {
           next: (resp) => {
             this.isEdit.set(false);
             this.projectServices.projectEdit.set(null);
-            this.sharedService.unSelecteProject();
             this.toastMessage.set('Project Edit successfully');
             this.resetForm();
             timer(2000).subscribe(() => {
               this.toastMessage.set('');
+              this.sharedService.unSelecteProject();
               this.route.navigateByUrl('/project');
             });
           },
