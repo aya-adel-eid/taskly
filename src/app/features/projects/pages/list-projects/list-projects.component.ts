@@ -10,6 +10,7 @@ import { EmptyProjectCardComponent } from '../../components/empty-project-card/e
 import { ProjectCardSkelttonComponent } from '../../components/project-card-skeltton/project-card-skeltton.component';
 import { ViewportScroller } from '@angular/common';
 import { distinctUntilChanged, map, Subject, tap } from 'rxjs';
+import { StORED_KEYS } from '../../../../core/constants/STORED_KEYS';
 
 @Component({
   selector: 'app-list-projects',
@@ -121,5 +122,6 @@ export class ListProjectsComponent {
   }
   addNewProject() {
     this.projectsService.projectEdit.set(null);
+    sessionStorage.removeItem(StORED_KEYS.project);
   }
 }
