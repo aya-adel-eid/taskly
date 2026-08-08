@@ -9,11 +9,12 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TasksService } from '../../services/tasks.service';
 import { SharedServiceService } from '../../../../shared/shared-service.service';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-list-view',
   standalone: true,
-  imports: [DatePipe, TaskDetailsPageComponent, RouterLink],
+  imports: [DatePipe, TaskDetailsPageComponent, RouterLink, PaginationComponent],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css',
 })
