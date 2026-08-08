@@ -51,6 +51,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   unSelecteProject() {
     sessionStorage.removeItem(StORED_KEYS.projectId);
     this.projectServices.selectedProjectId.set('');
+    sessionStorage.removeItem(StORED_KEYS.project);
   }
 
   isActive(route: string | null): boolean {
