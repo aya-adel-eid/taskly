@@ -22,6 +22,7 @@ import { HandleErrorComponent } from '../../../projects/components/handle-error/
 import { HttpErrorResponse } from '@angular/common/http';
 import { EpicDetailsPopupComponent } from '../epic-details-popup/epic-details-popup.component';
 import { EpicsService } from '../../services/epics.service';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-epics',
@@ -35,6 +36,7 @@ import { EpicsService } from '../../services/epics.service';
     EmptyEpicsComponent,
     HandleErrorComponent,
     EpicDetailsPopupComponent,
+    PaginationComponent,
   ],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
