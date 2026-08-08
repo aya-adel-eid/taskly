@@ -18,12 +18,12 @@ export class TaskFormPageComponent implements OnInit {
   }
   arrPaths = computed(() => [
     {
-      label: 'Epics',
-      path: `/project/${this.projectId()}/ epics`,
+      label: 'Tasks',
+      path: `/project/${this.projectId()}/tasks`,
     },
     {
-      label: 'New Epics',
-      path: `/project/${this.projectId()}/epics/new`,
+      label: 'New Tasks',
+      path: `/project/${this.projectId()}/tasks/new`,
     },
   ]);
 }
