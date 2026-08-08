@@ -16,6 +16,7 @@ import { UserInfo } from '../../../features/auth/interfaces/UserInfo';
 import { Subject, takeUntil } from 'rxjs';
 import { ProjectsService } from '../../../features/projects/services/projects.service';
 import { StORED_KEYS } from '../../constants/STORED_KEYS';
+import { SharedServiceService } from '../../../shared/shared-service.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -29,6 +30,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthServicesService);
   private readonly activeRoute = inject(ActivatedRoute);
   private readonly projectServices = inject(ProjectsService);
+  private readonly sharedService = inject(SharedServiceService);
   private destroy$ = new Subject<void>();
   isMobileMenuOpen = false;
   isCollapsed = this.asidBar.isCollapsed;
@@ -49,9 +51,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
   selectedItem = signal('Projects');
 
   unSelecteProject() {
-    sessionStorage.removeItem(StORED_KEYS.projectId);
-    this.projectServices.selectedProjectId.set('');
-    sessionStorage.removeItem(StORED_KEYS.project);
+    this.sharedService.unSelecteProject();
   }
 
   isActive(route: string | null): boolean {
