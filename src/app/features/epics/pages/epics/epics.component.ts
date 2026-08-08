@@ -22,6 +22,8 @@ import { HandleErrorComponent } from '../../../projects/components/handle-error/
 import { HttpErrorResponse } from '@angular/common/http';
 import { EpicDetailsPopupComponent } from '../epic-details-popup/epic-details-popup.component';
 import { EpicsService } from '../../services/epics.service';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
+import { InfiniteScrollDirective } from '../../../../shared/directives/infinite-scroll.directive';
 
 @Component({
   selector: 'app-epics',
@@ -35,6 +37,8 @@ import { EpicsService } from '../../services/epics.service';
     EmptyEpicsComponent,
     HandleErrorComponent,
     EpicDetailsPopupComponent,
+    PaginationComponent,
+    InfiniteScrollDirective,
   ],
   templateUrl: './epics.component.html',
   styleUrl: './epics.component.css',
@@ -134,26 +138,21 @@ export class EpicsComponent implements OnDestroy {
     }
   }
 
-  @HostListener('window:scroll')
-  onScroll() {
-    if (!this.isMobile()) return;
-
+  onInfiniteScroll() {
     if (this.isLoading()) return;
 
-    const reachedBottom =
-      window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 150;
+    const totalPages = Math.ceil(this.totalCount() / this.limit());
+    if (this.page() >= totalPages) return;
 
-    if (reachedBottom && this.page() < this.pages.length) {
-      this.page.update((p) => p + 1);
+    this.page.update((p) => p + 1);
 
-      this.epicsService.getAllEpics(
-        this.limit(),
-        this.page(),
-        true,
-        this.projectId(),
-        this.searchTerm()
-      );
-    }
+    this.epicsService.getAllEpics(
+      this.limit(),
+      this.page(),
+      true,
+      this.projectId(),
+      this.searchTerm()
+    );
   }
 
   getAllEpics() {
