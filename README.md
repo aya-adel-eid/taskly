@@ -123,16 +123,6 @@ Taskly uses a **feature-based architecture** with clear separation of concerns:
 - **Tasks** — Organized into dedicated pages, components, and services for better maintainability.
 - **Assets** — Images and global styling resources.
 
-### Architecture
-
-Taskly follows a **feature-based architecture** to keep the application modular, scalable, and maintainable.
-
-- **Core** — Global services, guards, interceptors, layout, and shared application logic.
-- **Features** — Business features such as Authentication, Projects, Tasks, Epics, Members, and Statistics.
-- **Shared** — Reusable components and utilities across the application.
-- **Assets** — Static images and application assets.
-- **Environments** — Environment-specific configuration.
-
 ## 📂 Main Sections
 
 - Projects
@@ -182,6 +172,15 @@ Open your browser and visit:
 ```text
 http://localhost:3000
 ```
+
+## 🔐 Demo Credentials
+
+Use the following credentials to test the application:
+
+**Email:** `ayaadel.dev9@gmail.com`
+**Password:** `oya1235Aya$`
+
+> This account is provided for demonstration and testing purposes.
 
 ## 👩‍💻 Author
 
