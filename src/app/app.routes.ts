@@ -27,5 +27,6 @@ export const routes: Routes = [
       import('./features/members/pages/accept-invitation/accept-invitation.component').then(
         (c) => c.AcceptInvitationComponent
       ),
+    title: 'InviteMember',
   },
 ];

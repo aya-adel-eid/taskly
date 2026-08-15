@@ -12,11 +12,13 @@ export const PROJECTS_ROUtES: Routes = [
           import('./pages/list-projects/list-projects.component').then(
             (c) => c.ListProjectsComponent
           ),
+        title: 'Projects',
       },
       {
         path: 'add',
         loadComponent: () =>
           import('./pages/add-project/add-project.component').then((c) => c.AddProjectComponent),
+        title: 'NewProject',
       },
       {
         path: 'my-statistics',
@@ -24,6 +26,7 @@ export const PROJECTS_ROUtES: Routes = [
           import('../../features/statistics/pages/statistics-page/statistics-page.component').then(
             (c) => c.StatisticsPageComponent
           ),
+        title: 'Statistics',
       },
 
       {
@@ -33,25 +36,19 @@ export const PROJECTS_ROUtES: Routes = [
             path: 'tasks',
             loadComponent: () =>
               import('../tasks/pages/tasks/tasks.component').then((c) => c.TasksComponent),
+            title: 'Tasks',
           },
           {
             path: 'members',
             loadComponent: () =>
               import('../members/pages/members/members.component').then((c) => c.MembersComponent),
+            title: 'Members',
           },
           {
             path: 'epics',
             loadComponent: () =>
               import('../epics/pages/epics/epics.component').then((c) => c.EpicsComponent),
-            // children: [
-            //   {
-            //     path: 'new',
-            //     loadComponent: () =>
-            //       import('./pages/add-new-epics-page/add-new-epics-page.component').then(
-            //         (c) => c.AddNewEpicsPageComponent
-            //       ),
-            //   },
-            // ],
+            title: 'Epics',
           },
           {
             path: 'epics/new',
@@ -59,6 +56,7 @@ export const PROJECTS_ROUtES: Routes = [
               import('../epics/pages/add-new-epics-page/add-new-epics-page.component').then(
                 (c) => c.AddNewEpicsPageComponent
               ),
+            title: 'NewEpic',
           },
           {
             path: 'tasks/new',
@@ -66,10 +64,12 @@ export const PROJECTS_ROUtES: Routes = [
               import('../tasks/pages/task-form-page/task-form-page.component').then(
                 (c) => c.TaskFormPageComponent
               ),
+            title: 'NewTask',
           },
           {
             path: 'edit',
             loadComponent: () => import('./pages/edit/edit.component').then((c) => c.EditComponent),
+            title: 'EditProject',
           },
         ],
       },

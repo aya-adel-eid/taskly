@@ -8,17 +8,20 @@ export const AUTH_ROUTES: Routes = [
     path: '',
     loadComponent: () =>
       import('./pages/login-page/login-page.component').then((c) => c.LoginPageComponent),
+    title: 'Signin',
   },
   {
     canActivate: [recoveryPassGuard],
     path: 'login',
     loadComponent: () =>
       import('./pages/login-page/login-page.component').then((c) => c.LoginPageComponent),
+    title: 'Signin',
   },
   {
     path: 'sign-up',
     loadComponent: () =>
       import('./pages/signup-page/signup-page.component').then((c) => c.SignupPageComponent),
+    title: 'Sign-Up',
   },
   {
     path: 'forgot-password',
@@ -26,6 +29,7 @@ export const AUTH_ROUTES: Routes = [
       import('./pages/forget-password-page/forget-password-page.component').then(
         (c) => c.ForgetPasswordPageComponent
       ),
+    title: 'ForgetPassword',
   },
   {
     canActivate: [resetPassGuard],
@@ -34,5 +38,6 @@ export const AUTH_ROUTES: Routes = [
       import('./pages/reset-password-page/reset-password-page.component').then(
         (c) => c.ResetPasswordPageComponent
       ),
+    title: 'RestPassword',
   },
 ];
